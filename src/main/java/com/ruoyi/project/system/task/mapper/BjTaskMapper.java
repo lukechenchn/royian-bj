@@ -2,6 +2,7 @@ package com.ruoyi.project.system.task.mapper;
 
 import java.util.List;
 import com.ruoyi.project.system.task.domain.BjTask;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * bj任务Mapper接口
@@ -58,4 +59,11 @@ public interface BjTaskMapper
      * @return 结果
      */
     public int deleteBjTaskByIds(String[] ids);
+
+    // 检查是否存在状态为2的任务080
+    int countCompletedTask080(@Param("agvNo") String agvNo);
+
+    // 删除指定AGV的所有任务
+    void deleteTasksByAgvNo(@Param("agvNo") String agvNo);
+
 }

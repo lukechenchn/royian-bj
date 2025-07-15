@@ -110,4 +110,21 @@
         </foreach>
     </delete>
 
+
+    <!-- 检查是否存在已完成的 080 任务 -->
+    <select id="countCompletedTask080" resultType="int">
+        SELECT COUNT(*) FROM bj_task
+        WHERE agv_no = #{agvNo}
+        AND sign_no = '080'
+        AND task_status = '2'
+        AND is_deleted = 0  <!-- 假设字段 is_deleted 表示是否已删除 -->
+    </select>
+
+    <!-- 删除某 AGV 的所有任务 -->
+    <delete id="deleteTasksByAgvNo">
+--         DELETE FROM bj_task
+--         WHERE agv_no = #{agvNo}
+    </delete>
+
+
 </mapper>

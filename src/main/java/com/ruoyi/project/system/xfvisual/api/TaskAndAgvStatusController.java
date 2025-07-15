@@ -20,6 +20,9 @@ import static com.ruoyi.project.system.xfvisual.util.BjUtil.getPreviousTaskNo;
 @CrossOrigin(origins = "*") // 允许跨域请求
 public class TaskAndAgvStatusController {
 
+    @Autowired
+    private BjTaskServiceImpl taskService;
+
     // 模拟生成任务结果的接口
     @PostMapping("/tasks_with_result")
     public ResponseEntity<Map<String, Object>> createTaskWithResult(@RequestBody Map<String, String> data) {
@@ -37,7 +40,7 @@ public class TaskAndAgvStatusController {
 //        逻辑
         String taskNo = "01-005";
         Map<String, String> fields = BjUtil.splitTaskNo(taskNo);
-        String agvNo = fields.get("agv_no");     // "01"
+        String agvNo = fields.get("agv_no");       // "01"
         String taskNoOnly = fields.get("task_no"); // "005"
 
         if (canExecuteCurrentTask(agvNo, taskNoOnly)) {
@@ -45,8 +48,6 @@ public class TaskAndAgvStatusController {
         } else {
             System.out.println("当前任务不能执行，前一个任务未完成");
         }
-
-
 
 
 
@@ -170,8 +171,7 @@ public class TaskAndAgvStatusController {
 
 
 
-    @Autowired
-    private BjTaskServiceImpl taskService;
+
 
     @GetMapping("/test1")
     public BjTask test()
@@ -193,17 +193,34 @@ public class TaskAndAgvStatusController {
 
         System.out.println("[服务器日志] 客户端发送的 JSON 数据: " + data);
 
+        Map<String, String> taskFields = BjUtil.splitTaskNo(data.get("task_no"));
+        System.out.println("agv_no: " + taskFields.get("agv_no")); // 输出: 01
+        System.out.println("task_no: " + taskFields.get("task_no")); // 输出: 001
+
+
         Map<String, Object> response = new HashMap<>();
         response.put("status_code", "01");
         response.put("message", "接收收到");
-        response.put("task_no", "01-005");
+        response.put("task_no", "01-005.1");
 
 
         Map<String, Object> taskResponse = new HashMap<>();
-        taskResponse.put("task_status", 2);
+        taskResponse.put("task_status", 1);
         taskResponse.put("time_stamp", "1751799627");
-        taskResponse.put("time_consumption", "20s");
-        taskResponse.put("remark", "执行完成");
+//        taskResponse.put("time_consumption", "20s");
+        taskResponse.put("remark", "执行中");
+
+        //保存到数据库,状态为执行中
+        BjTask bjTask = new BjTask();
+
+        bjTask.setTaskNo(data.get("task_no"));
+        bjTask.setAgvNo(taskFields.get("agv_no"));
+        bjTask.setUavNo(taskFields.get("agv_no"));
+        bjTask.setContainerNo(taskFields.get("agv_no"));
+        bjTask.setSignNo(taskFields.get("sign_no"));
+        bjTask.setTaskStatus(1L);
+//        bjTask.setSign(data.get("sign"));
+        taskService.insertBjTask(bjTask);
 
         response.put("response", taskResponse);
 
@@ -259,4 +276,34 @@ public class TaskAndAgvStatusController {
 //        return taskMapper.isTaskCompleted(agvNo, previousTaskNo);
         return true;
     }
+
+
+
+
+
+    @PostMapping("/deleteTasks")
+    public ResponseEntity<Map<String, Object>> deleteTasks(@RequestBody Map<String, String> data) {
+        if (data.get("task_no") == null || data.get("result") == null) {
+            // 错误处理...
+        }
+        String taskNo = data.get("task_no");
+        Map<String, String> fields = BjUtil.splitTaskNo(taskNo);
+        String agvNo = fields.get("agv_no");
+        String taskNoOnly = fields.get("task_no");
+        if (canExecuteCurrentTask(agvNo, taskNoOnly)) {
+            System.out.println("当前任务可以执行");
+
+            // 判断是否是任务 080 且执行成功
+            if ("080".equals(taskNoOnly) && "2".equals(data.get("result"))) {
+                // 删除该 AGV 所有任务
+//                taskService.deleteTasksByAgvNo(agvNo);
+                System.out.println("AGV: " + agvNo + " 的所有任务已删除");
+            }
+        } else {
+            System.out.println("当前任务不能执行，前一个任务未完成");
+        }
+        // 返回响应...
+        return null;
+    }
+
 }
