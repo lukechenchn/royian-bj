@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.system.task.mapper.BjTaskMapper">
+
+    <resultMap type="BjTask" id="BjTaskResult">
+        <result property="id"    column="id"    />
+        <result property="taskNo"    column="task_no"    />
+        <result property="agvNo"    column="agv_no"    />
+        <result property="uavNo"    column="uav_no"    />
+        <result property="containerNo"    column="container_no"    />
+        <result property="sign"    column="sign"    />
+        <result property="signNo"    column="sign_no"    />
+        <result property="taskStatus"    column="task_status"    />
+        <result property="remark1"    column="remark1"    />
+        <result property="remark2"    column="remark2"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectBjTaskVo">
+        select id, task_no, agv_no, uav_no, container_no, sign, sign_no, task_status, remark1, remark2, create_by, create_time, update_by, update_time from bj_task
+    </sql>
+
+    <select id="selectBjTaskList" parameterType="BjTask" resultMap="BjTaskResult">
+        <include refid="selectBjTaskVo"/>
+        <where>
+            <if test="taskNo != null  and taskNo != ''"> and task_no = #{taskNo}</if>
+            <if test="agvNo != null  and agvNo != ''"> and agv_no = #{agvNo}</if>
+            <if test="uavNo != null  and uavNo != ''"> and uav_no = #{uavNo}</if>
+            <if test="containerNo != null  and containerNo != ''"> and container_no = #{containerNo}</if>
+            <if test="sign != null  and sign != ''"> and sign = #{sign}</if>
+            <if test="signNo != null  and signNo != ''"> and sign_no = #{signNo}</if>
+            <if test="taskStatus != null "> and task_status = #{taskStatus}</if>
+            <if test="remark1 != null  and remark1 != ''"> and remark1 = #{remark1}</if>
+            <if test="remark2 != null  and remark2 != ''"> and remark2 = #{remark2}</if>
+        </where>
+    </select>
+
+    <select id="selectBjTaskById" parameterType="Long" resultMap="BjTaskResult">
+        <include refid="selectBjTaskVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertBjTask" parameterType="BjTask" useGeneratedKeys="true" keyProperty="id">
+        insert into bj_task
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="taskNo != null">task_no,</if>
+            <if test="agvNo != null">agv_no,</if>
+            <if test="uavNo != null">uav_no,</if>
+            <if test="containerNo != null">container_no,</if>
+            <if test="sign != null">sign,</if>
+            <if test="signNo != null">sign_no,</if>
+            <if test="taskStatus != null">task_status,</if>
+            <if test="remark1 != null">remark1,</if>
+            <if test="remark2 != null">remark2,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="taskNo != null">#{taskNo},</if>
+            <if test="agvNo != null">#{agvNo},</if>
+            <if test="uavNo != null">#{uavNo},</if>
+            <if test="containerNo != null">#{containerNo},</if>
+            <if test="sign != null">#{sign},</if>
+            <if test="signNo != null">#{signNo},</if>
+            <if test="taskStatus != null">#{taskStatus},</if>
+            <if test="remark1 != null">#{remark1},</if>
+            <if test="remark2 != null">#{remark2},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateBjTask" parameterType="BjTask">
+        update bj_task
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="taskNo != null">task_no = #{taskNo},</if>
+            <if test="agvNo != null">agv_no = #{agvNo},</if>
+            <if test="uavNo != null">uav_no = #{uavNo},</if>
+            <if test="containerNo != null">container_no = #{containerNo},</if>
+            <if test="sign != null">sign = #{sign},</if>
+            <if test="signNo != null">sign_no = #{signNo},</if>
+            <if test="taskStatus != null">task_status = #{taskStatus},</if>
+            <if test="remark1 != null">remark1 = #{remark1},</if>
+            <if test="remark2 != null">remark2 = #{remark2},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBjTaskById" parameterType="Long">
+        delete from bj_task where id = #{id}
+    </delete>
+
+    <delete id="deleteBjTaskByIds" parameterType="String">
+        delete from bj_task where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

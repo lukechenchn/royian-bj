@@ -25,4 +25,9 @@ public class RyTask
     {
         System.out.println("执行无参方法");
     }
+
+    public void ryNoParamsBj()
+    {
+        System.out.println("bj定时任务");
+    }
 }

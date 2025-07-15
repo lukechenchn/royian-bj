@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('新增bj任务')" />
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-task-add">
+        <div class="col-xs-12">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">任务号：</label>
+                <div class="col-sm-8">
+                    <input name="taskNo" class="form-control" type="text">
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">agv号：</label>
+                <div class="col-sm-8">
+                    <input name="agvNo" class="form-control" type="text">
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">无人机号：</label>
+                <div class="col-sm-8">
+                    <input name="uavNo" class="form-control" type="text">
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">集装箱号：</label>
+                <div class="col-sm-8">
+                    <input name="containerNo" class="form-control" type="text">
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">任务信号：</label>
+                <div class="col-sm-8">
+                    <input name="sign" class="form-control" type="text">
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">短任务号：</label>
+                <div class="col-sm-8">
+                    <input name="signNo" class="form-control" type="text">
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">备注1：</label>
+                <div class="col-sm-8">
+                    <input name="remark1" class="form-control" type="text">
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">备注2：</label>
+                <div class="col-sm-8">
+                    <input name="remark2" class="form-control" type="text">
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<th:block th:include="include :: footer" />
+<script th:inline="javascript">
+    var prefix = ctx + "system/task"
+    $("#form-task-add").validate({
+        focusCleanup: true
+    });
+
+    function submitHandler() {
+        if ($.validate.form()) {
+            $.operate.save(prefix + "/add", $('#form-task-add').serialize());
+        }
+    }
+</script>
+</body>
+</html>

@@ -3,13 +3,13 @@
         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.ruoyi</groupId>
-    <artifactId>ruoyi</artifactId>
+    <groupId>com.royian</groupId>
+    <artifactId>royian</artifactId>
     <version>4.8.1</version>
     <packaging>jar</packaging>
 
-    <name>ruoyi</name>
-    <url>http://www.ruoyi.vip</url>
+    <name>royian</name>
+    <url>http://www.baidu.com</url>
     <description>若依管理系统</description>
 
     <parent>
@@ -233,6 +233,13 @@
             <groupId>org.apache.poi</groupId>
             <artifactId>poi-ooxml</artifactId>
             <version>${poi.version}</version>
+        </dependency>
+
+        <!--hutool-->
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+            <version>5.8.38</version>
         </dependency>
 
     </dependencies>

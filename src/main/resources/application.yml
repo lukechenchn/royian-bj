@@ -9,14 +9,14 @@ ruoyi:
   # 实例演示开关
   demoEnabled: true
   # 文件路径 示例（ Windows配置D:/ruoyi/uploadPath，Linux配置 /home/ruoyi/uploadPath）
-  profile: D:/ruoyi/uploadPath
+  profile: D:/royian/uploadPath
   # 获取ip地址开关
   addressEnabled: false
 
 # 开发环境配置
 server:
   # 服务器的HTTP端口，默认为80
-  port: 80
+  port: 8005
   servlet:
     # 应用的访问路径
     context-path: /
@@ -72,6 +72,12 @@ spring:
     restart:
       # 热部署开关
       enabled: true
+#  web:
+#    cors:
+#      allowed-origins: "*"
+#      allowed-methods: "GET,POST,PUT,DELETE"
+#      allowed-headers: "*"
+#      max-age: 3600
 
 # MyBatis
 mybatis:
@@ -98,7 +104,7 @@ shiro:
     # 首页地址
     indexUrl: /index
     # 验证码开关
-    captchaEnabled: true
+    captchaEnabled: false
     # 验证码类型 math 数字计算 char 字符验证
     captchaType: math
   cookie:
@@ -114,7 +120,7 @@ shiro:
     cipherKey:
   session:
     # Session超时时间，-1代表永不过期（默认30分钟）
-    expireTime: 30
+    expireTime: 240
     # 同步session到数据库的周期（默认1分钟）
     dbSyncPeriod: 1
     # 相隔多久检查一次session的有效性，默认就是10分钟
