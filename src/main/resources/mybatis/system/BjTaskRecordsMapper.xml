@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.system.records.mapper.BjTaskRecordsMapper">
+    
+    <resultMap type="BjTaskRecords" id="BjTaskRecordsResult">
+        <result property="id"    column="id"    />
+        <result property="taskNo"    column="task_no"    />
+        <result property="sign"    column="sign"    />
+        <result property="signNo"    column="sign_no"    />
+        <result property="record"    column="record"    />
+        <result property="remark1"    column="remark1"    />
+        <result property="remark2"    column="remark2"    />
+        <result property="isDeleted"    column="is_deleted"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectBjTaskRecordsVo">
+        select id, task_no, sign, sign_no, record, remark1, remark2, is_deleted, create_by, create_time, update_by, update_time from bj_task_records
+    </sql>
+
+    <select id="selectBjTaskRecordsList" parameterType="BjTaskRecords" resultMap="BjTaskRecordsResult">
+        <include refid="selectBjTaskRecordsVo"/>
+        <where>  
+            <if test="taskNo != null  and taskNo != ''"> and task_no = #{taskNo}</if>
+            <if test="sign != null  and sign != ''"> and sign = #{sign}</if>
+            <if test="signNo != null  and signNo != ''"> and sign_no = #{signNo}</if>
+            <if test="record != null  and record != ''"> and record = #{record}</if>
+            <if test="remark1 != null  and remark1 != ''"> and remark1 = #{remark1}</if>
+            <if test="remark2 != null  and remark2 != ''"> and remark2 = #{remark2}</if>
+            <if test="isDeleted != null "> and is_deleted = #{isDeleted}</if>
+        </where>
+    </select>
+    
+    <select id="selectBjTaskRecordsById" parameterType="Long" resultMap="BjTaskRecordsResult">
+        <include refid="selectBjTaskRecordsVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertBjTaskRecords" parameterType="BjTaskRecords" useGeneratedKeys="true" keyProperty="id">
+        insert into bj_task_records
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="taskNo != null">task_no,</if>
+            <if test="sign != null">sign,</if>
+            <if test="signNo != null">sign_no,</if>
+            <if test="record != null">record,</if>
+            <if test="remark1 != null">remark1,</if>
+            <if test="remark2 != null">remark2,</if>
+            <if test="isDeleted != null">is_deleted,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="taskNo != null">#{taskNo},</if>
+            <if test="sign != null">#{sign},</if>
+            <if test="signNo != null">#{signNo},</if>
+            <if test="record != null">#{record},</if>
+            <if test="remark1 != null">#{remark1},</if>
+            <if test="remark2 != null">#{remark2},</if>
+            <if test="isDeleted != null">#{isDeleted},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBjTaskRecords" parameterType="BjTaskRecords">
+        update bj_task_records
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="taskNo != null">task_no = #{taskNo},</if>
+            <if test="sign != null">sign = #{sign},</if>
+            <if test="signNo != null">sign_no = #{signNo},</if>
+            <if test="record != null">record = #{record},</if>
+            <if test="remark1 != null">remark1 = #{remark1},</if>
+            <if test="remark2 != null">remark2 = #{remark2},</if>
+            <if test="isDeleted != null">is_deleted = #{isDeleted},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBjTaskRecordsById" parameterType="Long">
+        delete from bj_task_records where id = #{id}
+    </delete>
+
+    <delete id="deleteBjTaskRecordsByIds" parameterType="String">
+        delete from bj_task_records where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

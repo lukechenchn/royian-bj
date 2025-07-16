@@ -13,16 +13,19 @@
         <result property="sign"    column="sign"    />
         <result property="signNo"    column="sign_no"    />
         <result property="taskStatus"    column="task_status"    />
-        <result property="remark1"    column="remark1"    />
-        <result property="remark2"    column="remark2"    />
+        <result property="isDeleted"    column="is_deleted"    />
         <result property="createBy"    column="create_by"    />
         <result property="createTime"    column="create_time"    />
         <result property="updateBy"    column="update_by"    />
         <result property="updateTime"    column="update_time"    />
+        <result property="finishTime"    column="finish_time"    />
+        <result property="isFeedback"    column="is_feedback"    />
+        <result property="remark1"    column="remark1"    />
+        <result property="remark2"    column="remark2"    />
     </resultMap>
 
     <sql id="selectBjTaskVo">
-        select id, task_no, agv_no, uav_no, container_no, sign, sign_no, task_status, remark1, remark2, create_by, create_time, update_by, update_time from bj_task
+        select id, task_no, agv_no, uav_no, container_no, sign, sign_no, task_status, is_deleted, create_by, create_time, update_by, update_time, finish_time, is_feedback, remark1, remark2 from bj_task
     </sql>
 
     <select id="selectBjTaskList" parameterType="BjTask" resultMap="BjTaskResult">
@@ -35,6 +38,9 @@
             <if test="sign != null  and sign != ''"> and sign = #{sign}</if>
             <if test="signNo != null  and signNo != ''"> and sign_no = #{signNo}</if>
             <if test="taskStatus != null "> and task_status = #{taskStatus}</if>
+            <if test="isDeleted != null "> and is_deleted = #{isDeleted}</if>
+            <if test="finishTime != null "> and finish_time = #{finishTime}</if>
+            <if test="isFeedback != null "> and is_feedback = #{isFeedback}</if>
             <if test="remark1 != null  and remark1 != ''"> and remark1 = #{remark1}</if>
             <if test="remark2 != null  and remark2 != ''"> and remark2 = #{remark2}</if>
         </where>
@@ -55,12 +61,15 @@
             <if test="sign != null">sign,</if>
             <if test="signNo != null">sign_no,</if>
             <if test="taskStatus != null">task_status,</if>
-            <if test="remark1 != null">remark1,</if>
-            <if test="remark2 != null">remark2,</if>
+            <if test="isDeleted != null">is_deleted,</if>
             <if test="createBy != null">create_by,</if>
             <if test="createTime != null">create_time,</if>
             <if test="updateBy != null">update_by,</if>
             <if test="updateTime != null">update_time,</if>
+            <if test="finishTime != null">finish_time,</if>
+            <if test="isFeedback != null">is_feedback,</if>
+            <if test="remark1 != null">remark1,</if>
+            <if test="remark2 != null">remark2,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="taskNo != null">#{taskNo},</if>
@@ -70,12 +79,15 @@
             <if test="sign != null">#{sign},</if>
             <if test="signNo != null">#{signNo},</if>
             <if test="taskStatus != null">#{taskStatus},</if>
-            <if test="remark1 != null">#{remark1},</if>
-            <if test="remark2 != null">#{remark2},</if>
+            <if test="isDeleted != null">#{isDeleted},</if>
             <if test="createBy != null">#{createBy},</if>
             <if test="createTime != null">#{createTime},</if>
             <if test="updateBy != null">#{updateBy},</if>
             <if test="updateTime != null">#{updateTime},</if>
+            <if test="finishTime != null">#{finishTime},</if>
+            <if test="isFeedback != null">#{isFeedback},</if>
+            <if test="remark1 != null">#{remark1},</if>
+            <if test="remark2 != null">#{remark2},</if>
         </trim>
     </insert>
 
@@ -89,12 +101,15 @@
             <if test="sign != null">sign = #{sign},</if>
             <if test="signNo != null">sign_no = #{signNo},</if>
             <if test="taskStatus != null">task_status = #{taskStatus},</if>
-            <if test="remark1 != null">remark1 = #{remark1},</if>
-            <if test="remark2 != null">remark2 = #{remark2},</if>
+            <if test="isDeleted != null">is_deleted = #{isDeleted},</if>
             <if test="createBy != null">create_by = #{createBy},</if>
             <if test="createTime != null">create_time = #{createTime},</if>
             <if test="updateBy != null">update_by = #{updateBy},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="finishTime != null">finish_time = #{finishTime},</if>
+            <if test="isFeedback != null">is_feedback = #{isFeedback},</if>
+            <if test="remark1 != null">remark1 = #{remark1},</if>
+            <if test="remark2 != null">remark2 = #{remark2},</if>
         </trim>
         where id = #{id}
     </update>
@@ -110,21 +125,34 @@
         </foreach>
     </delete>
 
-
+<!--    自定义sql-->
     <!-- 检查是否存在已完成的 080 任务 -->
     <select id="countCompletedTask080" resultType="int">
         SELECT COUNT(*) FROM bj_task
         WHERE agv_no = #{agvNo}
         AND sign_no = '080'
         AND task_status = '2'
-        AND is_deleted = 0  <!-- 假设字段 is_deleted 表示是否已删除 -->
+        AND is_deleted = 0 <!-- 假设字段 is_deleted 表示是否已删除 -->
     </select>
 
     <!-- 删除某 AGV 的所有任务 -->
     <delete id="deleteTasksByAgvNo">
---         DELETE FROM bj_task
---         WHERE agv_no = #{agvNo}
+        -- DELETE FROM bj_task
+-- WHERE agv_no = #{agvNo}
     </delete>
 
+
+    <update id="finishTask">
+            UPDATE bj_task
+            SET task_status = '2', is_feedback = '1' , finish_time = now()
+        WHERE task_no = #{taskNo};
+    </update>
+
+
+
+    <select id = "selectBjTaskByTaskNo" parameterType="String" resultMap="BjTaskResult">
+        <include refid="selectBjTaskVo"/>
+        where task_no = #{taskNo}
+    </select>
 
 </mapper>

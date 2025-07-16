@@ -1,5 +1,7 @@
 package com.ruoyi.project.system.task.domain;
 
+import java.util.Date;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.framework.aspectj.lang.annotation.Excel;
@@ -9,13 +11,13 @@ import com.ruoyi.framework.web.domain.BaseEntity;
  * bj任务对象 bj_task
  *
  * @author ruoyi
- * @date 2025-07-15
+ * @date 2025-07-16
  */
 public class BjTask extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
-    /** $column.columnComment */
+    /**  */
     private Long id;
 
     /** 任务号 */
@@ -45,6 +47,19 @@ public class BjTask extends BaseEntity
     /** 任务状态 */
     @Excel(name = "任务状态")
     private Long taskStatus;
+
+    /** 是否删除 */
+    @Excel(name = "是否删除")
+    private Long isDeleted;
+
+    /** 结束时间 */
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+    @Excel(name = "结束时间", width = 30, dateFormat = "yyyy-MM-dd")
+    private Date finishTime;
+
+    /** 是否已反馈 */
+    @Excel(name = "是否已反馈")
+    private Long isFeedback;
 
     /** 备注1 */
     @Excel(name = "备注1")
@@ -134,6 +149,36 @@ public class BjTask extends BaseEntity
         return taskStatus;
     }
 
+    public void setIsDeleted(Long isDeleted)
+    {
+        this.isDeleted = isDeleted;
+    }
+
+    public Long getIsDeleted()
+    {
+        return isDeleted;
+    }
+
+    public void setFinishTime(Date finishTime)
+    {
+        this.finishTime = finishTime;
+    }
+
+    public Date getFinishTime()
+    {
+        return finishTime;
+    }
+
+    public void setIsFeedback(Long isFeedback)
+    {
+        this.isFeedback = isFeedback;
+    }
+
+    public Long getIsFeedback()
+    {
+        return isFeedback;
+    }
+
     public void setRemark1(String remark1)
     {
         this.remark1 = remark1;
@@ -165,12 +210,15 @@ public class BjTask extends BaseEntity
                 .append("sign", getSign())
                 .append("signNo", getSignNo())
                 .append("taskStatus", getTaskStatus())
-                .append("remark1", getRemark1())
-                .append("remark2", getRemark2())
+                .append("isDeleted", getIsDeleted())
                 .append("createBy", getCreateBy())
                 .append("createTime", getCreateTime())
                 .append("updateBy", getUpdateBy())
                 .append("updateTime", getUpdateTime())
+                .append("finishTime", getFinishTime())
+                .append("isFeedback", getIsFeedback())
+                .append("remark1", getRemark1())
+                .append("remark2", getRemark2())
                 .toString();
     }
 }

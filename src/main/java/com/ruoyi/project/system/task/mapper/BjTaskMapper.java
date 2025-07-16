@@ -66,4 +66,7 @@ public interface BjTaskMapper
     // 删除指定AGV的所有任务
     void deleteTasksByAgvNo(@Param("agvNo") String agvNo);
 
+    void finishTask(String taskNo);
+
+    BjTask selectBjTaskByTaskNo(@Param("taskNo")String taskNo);
 }

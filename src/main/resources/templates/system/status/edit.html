@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改AGV状态')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-status-edit" th:object="${bjAgvStatus}">
+            <input name="id" th:field="*{id}" type="hidden">
+            <div class="col-xs-12">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">agv号：</label>
+                    <div class="col-sm-8">
+                        <input name="agvNo" th:field="*{agvNo}" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">当前任务号：</label>
+                    <div class="col-sm-8">
+                        <input name="taskNo" th:field="*{taskNo}" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">短任务号：</label>
+                    <div class="col-sm-8">
+                        <input name="signNo" th:field="*{signNo}" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">agv电量：</label>
+                    <div class="col-sm-8">
+                        <input name="batteryLevel" th:field="*{batteryLevel}" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">agv位置：</label>
+                    <div class="col-sm-8">
+                        <input name="currentPosition" th:field="*{currentPosition}" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">无人机号：</label>
+                    <div class="col-sm-8">
+                        <input name="uavNo" th:field="*{uavNo}" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">油量：</label>
+                    <div class="col-sm-8">
+                        <input name="oilQuantity" th:field="*{oilQuantity}" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">挂弹型号1：</label>
+                    <div class="col-sm-8">
+                        <input name="model1" th:field="*{model1}" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">挂弹数量1：</label>
+                    <div class="col-sm-8">
+                        <input name="quantity1" th:field="*{quantity1}" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">挂弹型号2：</label>
+                    <div class="col-sm-8">
+                        <input name="model2" th:field="*{model2}" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">挂弹数量2：</label>
+                    <div class="col-sm-8">
+                        <input name="quantity2" th:field="*{quantity2}" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">挂弹型号3：</label>
+                    <div class="col-sm-8">
+                        <input name="model3" th:field="*{model3}" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">挂弹数量3：</label>
+                    <div class="col-sm-8">
+                        <input name="quantity3" th:field="*{quantity3}" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">挂弹型号4：</label>
+                    <div class="col-sm-8">
+                        <input name="model4" th:field="*{model4}" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">挂弹数量4：</label>
+                    <div class="col-sm-8">
+                        <input name="quantity4" th:field="*{quantity4}" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">挂单型号5：</label>
+                    <div class="col-sm-8">
+                        <input name="model5" th:field="*{model5}" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">挂弹数量5：</label>
+                    <div class="col-sm-8">
+                        <input name="quantity5" th:field="*{quantity5}" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">集装箱号：</label>
+                    <div class="col-sm-8">
+                        <input name="containerNo" th:field="*{containerNo}" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">备注1：</label>
+                    <div class="col-sm-8">
+                        <input name="remark1" th:field="*{remark1}" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">备注2：</label>
+                    <div class="col-sm-8">
+                        <input name="remark2" th:field="*{remark2}" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var prefix = ctx + "system/status";
+        $("#form-status-edit").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/edit", $('#form-status-edit').serialize());
+            }
+        }
+    </script>
+</body>
+</html>

@@ -35,6 +35,18 @@
                             <input type="text" name="signNo"/>
                         </li>
                         <li>
+                            <label>是否删除：</label>
+                            <input type="text" name="isDeleted"/>
+                        </li>
+                        <li>
+                            <label>结束时间：</label>
+                            <input type="text" class="time-input" placeholder="请选择结束时间" name="finishTime"/>
+                        </li>
+                        <li>
+                            <label>是否已反馈：</label>
+                            <input type="text" name="isFeedback"/>
+                        </li>
+                        <li>
                             <label>备注1：</label>
                             <input type="text" name="remark1"/>
                         </li>
@@ -89,7 +101,7 @@
             },
                 {
                     field: 'id',
-                    title: '${comment}',
+                    title: '',
                     visible: false
                 },
                 {
@@ -119,6 +131,18 @@
                 {
                     field: 'taskStatus',
                     title: '任务状态'
+                },
+                {
+                    field: 'isDeleted',
+                    title: '是否删除'
+                },
+                {
+                    field: 'finishTime',
+                    title: '结束时间'
+                },
+                {
+                    field: 'isFeedback',
+                    title: '是否已反馈'
                 },
                 {
                     field: 'remark1',

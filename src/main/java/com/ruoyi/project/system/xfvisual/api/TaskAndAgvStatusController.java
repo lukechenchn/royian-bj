@@ -8,10 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.*;
 import java.util.stream.Collectors;
-
 import static com.ruoyi.project.system.xfvisual.util.BjUtil.getPreviousTaskNo;
 
 @RestController
@@ -49,8 +47,6 @@ public class TaskAndAgvStatusController {
             System.out.println("当前任务不能执行，前一个任务未完成");
         }
 
-
-
         Map<String, Object> response = new HashMap<>();
         response.put("status", "01");
         response.put("message", "接收收到");
@@ -70,7 +66,6 @@ public class TaskAndAgvStatusController {
             errorResponse.put("error", "Missing required fields (task_no)");
             return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
         }
-
         System.out.println("[服务器日志] 客户端发送的 JSON 数据: " + data);
 
         Map<String, Object> response = new HashMap<>();
@@ -172,18 +167,9 @@ public class TaskAndAgvStatusController {
 
 
 
-
-    @GetMapping("/test1")
-    public BjTask test()
-    {
-        return taskService.test(1L);
-//        return null;
-    }
-
     /** 新增任务至数据库*/
     @PostMapping("/addTask")
     public ResponseEntity<Map<String, Object>> addTask(@RequestBody Map<String, String> data) {
-
         if (data.get("task_no") == null) {
             System.out.println("[服务器日志] 错误：缺少必要字段 (task_no)");
             Map<String, Object> errorResponse = new HashMap<>();
@@ -197,33 +183,31 @@ public class TaskAndAgvStatusController {
         System.out.println("agv_no: " + taskFields.get("agv_no")); // 输出: 01
         System.out.println("task_no: " + taskFields.get("task_no")); // 输出: 001
 
-
         Map<String, Object> response = new HashMap<>();
         response.put("status_code", "01");
         response.put("message", "接收收到");
-        response.put("task_no", "01-005.1");
+        response.put("task_no", data.get("task_no")+".1");
 
-
+        long currentTimestamp = System.currentTimeMillis();
         Map<String, Object> taskResponse = new HashMap<>();
+        //检查当前AGV存不存在执行中的任务,存在则状态为0,不存在才返回1执行中
         taskResponse.put("task_status", 1);
-        taskResponse.put("time_stamp", "1751799627");
+        taskResponse.put("time_stamp", currentTimestamp);
 //        taskResponse.put("time_consumption", "20s");
         taskResponse.put("remark", "执行中");
 
         //保存到数据库,状态为执行中
         BjTask bjTask = new BjTask();
-
         bjTask.setTaskNo(data.get("task_no"));
         bjTask.setAgvNo(taskFields.get("agv_no"));
         bjTask.setUavNo(taskFields.get("agv_no"));
         bjTask.setContainerNo(taskFields.get("agv_no"));
         bjTask.setSignNo(taskFields.get("sign_no"));
+        bjTask.setSign(data.get("sign"));
         bjTask.setTaskStatus(1L);
-//        bjTask.setSign(data.get("sign"));
         taskService.insertBjTask(bjTask);
 
         response.put("response", taskResponse);
-
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

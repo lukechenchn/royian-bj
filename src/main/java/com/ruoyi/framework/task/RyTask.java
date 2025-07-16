@@ -1,9 +1,12 @@
 package com.ruoyi.framework.task;
 
+import com.ruoyi.project.system.task.domain.BjTask;
 import com.ruoyi.project.system.task.mapper.BjTaskMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import com.ruoyi.common.utils.StringUtils;
+
+import java.util.List;
 
 /**
  * 定时任务调度测试
@@ -13,6 +16,10 @@ import com.ruoyi.common.utils.StringUtils;
 @Component("ryTask")
 public class RyTask
 {
+
+    @Autowired
+    private BjTaskMapper bjTaskMapper;
+
     public void ryMultipleParams(String s, Boolean b, Long l, Double d, Integer i)
     {
         System.out.println(StringUtils.format("执行多参方法： 字符串类型{}，布尔类型{}，长整型{}，浮点型{}，整形{}", s, b, l, d, i));
@@ -31,13 +38,30 @@ public class RyTask
     public void ryNoParamsBj()
     {
         //检查bj_task表中任务的执行状态,更新为已完成  (可先手动修改数据库)
+//        List<BjTask> list=  bjTaskMapper.selectBjTaskList( null);
         System.out.println("bj定时任务");
+//        System.out.println(list.toString());
+    }
+
+
+//定时反馈任务状态
+    public void ryParams()
+    {
+        //检查在执行中的任务
+
+        System.out.println("bj定时任务");
+//        System.out.println(list.toString());
     }
 
 
 
-    @Autowired
-    private BjTaskMapper bjTaskMapper;
+
+
+
+
+
+
+
 
     public void deleteTasks() {
         //agv一共有01、02、03、04、05、06、07、08、09、10这十个,检查bj_task表中是否存在某个AGV的任务是080且已经执行完成(状态为2),且未被删除,如果存在则执行删除当前AGV的所有任务
@@ -64,6 +88,10 @@ public class RyTask
             System.err.println("删除 AGV " + agvNo + " 的任务失败：" + e.getMessage());
         }
     }
+
+
+
+
 
 
 }

@@ -101,4 +101,13 @@ public class BjTaskServiceImpl implements IBjTaskService
     {
         return bjTaskMapper.deleteBjTaskById(id);
     }
+
+    public void finishTask(String taskNo) {
+        bjTaskMapper.finishTask(taskNo);
+    }
+
+    public BjTask selectBjTaskByTaskNo(String taskNo) {
+        BjTask task = bjTaskMapper.selectBjTaskByTaskNo(taskNo);
+        return task;
+    }
 }
