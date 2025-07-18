@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.system.container.mapper.BjOilContainerMapper">
+    
+    <resultMap type="BjOilContainer" id="BjOilContainerResult">
+        <result property="id"    column="id"    />
+        <result property="no"    column="no"    />
+        <result property="oilContainer"    column="oil_container"    />
+        <result property="oilType1"    column="oil_type1"    />
+        <result property="oilQuantity1"    column="oil_quantity1"    />
+        <result property="oilType2"    column="oil_type2"    />
+        <result property="oilQuantity2"    column="oil_quantity2"    />
+        <result property="oilType3"    column="oil_type3"    />
+        <result property="oilQuantity3"    column="oil_quantity3"    />
+        <result property="model1"    column="model1"    />
+        <result property="quantity1"    column="quantity1"    />
+        <result property="model2"    column="model2"    />
+        <result property="quantuty2"    column="quantuty2"    />
+        <result property="model3"    column="model3"    />
+        <result property="quantity3"    column="quantity3"    />
+        <result property="model4"    column="model4"    />
+        <result property="quantity4"    column="quantity4"    />
+        <result property="model5"    column="model5"    />
+        <result property="quantity5"    column="quantity5"    />
+    </resultMap>
+
+    <sql id="selectBjOilContainerVo">
+        select id, no, oil_container, oil_type1, oil_quantity1, oil_type2, oil_quantity2, oil_type3, oil_quantity3, model1, quantity1, model2, quantuty2, model3, quantity3, model4, quantity4, model5, quantity5 from bj_oil_container
+    </sql>
+
+    <select id="selectBjOilContainerList" parameterType="BjOilContainer" resultMap="BjOilContainerResult">
+        <include refid="selectBjOilContainerVo"/>
+        <where>  
+            <if test="no != null "> and no = #{no}</if>
+            <if test="oilContainer != null  and oilContainer != ''"> and oil_container = #{oilContainer}</if>
+            <if test="oilType1 != null  and oilType1 != ''"> and oil_type1 = #{oilType1}</if>
+            <if test="oilQuantity1 != null  and oilQuantity1 != ''"> and oil_quantity1 = #{oilQuantity1}</if>
+            <if test="oilType2 != null  and oilType2 != ''"> and oil_type2 = #{oilType2}</if>
+            <if test="oilQuantity2 != null  and oilQuantity2 != ''"> and oil_quantity2 = #{oilQuantity2}</if>
+            <if test="oilType3 != null  and oilType3 != ''"> and oil_type3 = #{oilType3}</if>
+            <if test="oilQuantity3 != null  and oilQuantity3 != ''"> and oil_quantity3 = #{oilQuantity3}</if>
+            <if test="model1 != null  and model1 != ''"> and model1 = #{model1}</if>
+            <if test="quantity1 != null  and quantity1 != ''"> and quantity1 = #{quantity1}</if>
+            <if test="model2 != null  and model2 != ''"> and model2 = #{model2}</if>
+            <if test="quantuty2 != null  and quantuty2 != ''"> and quantuty2 = #{quantuty2}</if>
+            <if test="model3 != null  and model3 != ''"> and model3 = #{model3}</if>
+            <if test="quantity3 != null  and quantity3 != ''"> and quantity3 = #{quantity3}</if>
+            <if test="model4 != null  and model4 != ''"> and model4 = #{model4}</if>
+            <if test="quantity4 != null  and quantity4 != ''"> and quantity4 = #{quantity4}</if>
+            <if test="model5 != null  and model5 != ''"> and model5 = #{model5}</if>
+            <if test="quantity5 != null  and quantity5 != ''"> and quantity5 = #{quantity5}</if>
+        </where>
+    </select>
+    
+    <select id="selectBjOilContainerById" parameterType="Long" resultMap="BjOilContainerResult">
+        <include refid="selectBjOilContainerVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertBjOilContainer" parameterType="BjOilContainer" useGeneratedKeys="true" keyProperty="id">
+        insert into bj_oil_container
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="no != null">no,</if>
+            <if test="oilContainer != null">oil_container,</if>
+            <if test="oilType1 != null">oil_type1,</if>
+            <if test="oilQuantity1 != null">oil_quantity1,</if>
+            <if test="oilType2 != null">oil_type2,</if>
+            <if test="oilQuantity2 != null">oil_quantity2,</if>
+            <if test="oilType3 != null">oil_type3,</if>
+            <if test="oilQuantity3 != null">oil_quantity3,</if>
+            <if test="model1 != null">model1,</if>
+            <if test="quantity1 != null">quantity1,</if>
+            <if test="model2 != null">model2,</if>
+            <if test="quantuty2 != null">quantuty2,</if>
+            <if test="model3 != null">model3,</if>
+            <if test="quantity3 != null">quantity3,</if>
+            <if test="model4 != null">model4,</if>
+            <if test="quantity4 != null">quantity4,</if>
+            <if test="model5 != null">model5,</if>
+            <if test="quantity5 != null">quantity5,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="no != null">#{no},</if>
+            <if test="oilContainer != null">#{oilContainer},</if>
+            <if test="oilType1 != null">#{oilType1},</if>
+            <if test="oilQuantity1 != null">#{oilQuantity1},</if>
+            <if test="oilType2 != null">#{oilType2},</if>
+            <if test="oilQuantity2 != null">#{oilQuantity2},</if>
+            <if test="oilType3 != null">#{oilType3},</if>
+            <if test="oilQuantity3 != null">#{oilQuantity3},</if>
+            <if test="model1 != null">#{model1},</if>
+            <if test="quantity1 != null">#{quantity1},</if>
+            <if test="model2 != null">#{model2},</if>
+            <if test="quantuty2 != null">#{quantuty2},</if>
+            <if test="model3 != null">#{model3},</if>
+            <if test="quantity3 != null">#{quantity3},</if>
+            <if test="model4 != null">#{model4},</if>
+            <if test="quantity4 != null">#{quantity4},</if>
+            <if test="model5 != null">#{model5},</if>
+            <if test="quantity5 != null">#{quantity5},</if>
+        </trim>
+    </insert>
+
+    <update id="updateBjOilContainer" parameterType="BjOilContainer">
+        update bj_oil_container
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="no != null">no = #{no},</if>
+            <if test="oilContainer != null">oil_container = #{oilContainer},</if>
+            <if test="oilType1 != null">oil_type1 = #{oilType1},</if>
+            <if test="oilQuantity1 != null">oil_quantity1 = #{oilQuantity1},</if>
+            <if test="oilType2 != null">oil_type2 = #{oilType2},</if>
+            <if test="oilQuantity2 != null">oil_quantity2 = #{oilQuantity2},</if>
+            <if test="oilType3 != null">oil_type3 = #{oilType3},</if>
+            <if test="oilQuantity3 != null">oil_quantity3 = #{oilQuantity3},</if>
+            <if test="model1 != null">model1 = #{model1},</if>
+            <if test="quantity1 != null">quantity1 = #{quantity1},</if>
+            <if test="model2 != null">model2 = #{model2},</if>
+            <if test="quantuty2 != null">quantuty2 = #{quantuty2},</if>
+            <if test="model3 != null">model3 = #{model3},</if>
+            <if test="quantity3 != null">quantity3 = #{quantity3},</if>
+            <if test="model4 != null">model4 = #{model4},</if>
+            <if test="quantity4 != null">quantity4 = #{quantity4},</if>
+            <if test="model5 != null">model5 = #{model5},</if>
+            <if test="quantity5 != null">quantity5 = #{quantity5},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <update id="receiveRefuelAmmoInfo">
+
+        update bj_oil_container
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="no != null">no = #{no},</if>
+            <if test="oilContainer != null">oil_container = #{oilContainer},</if>
+            <if test="oilType1 != null">oil_type1 = #{oilType1},</if>
+            <if test="oilQuantity1 != null">oil_quantity1 = #{oilQuantity1},</if>
+            <if test="oilType2 != null">oil_type2 = #{oilType2},</if>
+            <if test="oilQuantity2 != null">oil_quantity2 = #{oilQuantity2},</if>
+            <if test="oilType3 != null">oil_type3 = #{oilType3},</if>
+            <if test="oilQuantity3 != null">oil_quantity3 = #{oilQuantity3},</if>
+            <if test="model1 != null">model1 = #{model1},</if>
+            <if test="quantity1 != null">quantity1 = #{quantity1},</if>
+            <if test="model2 != null">model2 = #{model2},</if>
+            <if test="quantuty2 != null">quantuty2 = #{quantuty2},</if>
+            <if test="model3 != null">model3 = #{model3},</if>
+            <if test="quantity3 != null">quantity3 = #{quantity3},</if>
+            <if test="model4 != null">model4 = #{model4},</if>
+            <if test="quantity4 != null">quantity4 = #{quantity4},</if>
+            <if test="model5 != null">model5 = #{model5},</if>
+            <if test="quantity5 != null">quantity5 = #{quantity5},</if>
+        </trim>
+        where id = 1
+
+    </update>
+
+    <delete id="deleteBjOilContainerById" parameterType="Long">
+        delete from bj_oil_container where id = #{id}
+    </delete>
+
+    <delete id="deleteBjOilContainerByIds" parameterType="String">
+        delete from bj_oil_container where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

@@ -68,6 +68,8 @@ public class BjAgvStatusServiceImpl implements IBjAgvStatusService
         return bjAgvStatusMapper.updateBjAgvStatus(bjAgvStatus);
     }
 
+
+
     /**
      * 批量删除AGV状态
      * 
@@ -90,5 +92,17 @@ public class BjAgvStatusServiceImpl implements IBjAgvStatusService
     public int deleteBjAgvStatusById(Long id)
     {
         return bjAgvStatusMapper.deleteBjAgvStatusById(id);
+    }
+
+    public List<BjAgvStatus> feedAgvInfo(BjAgvStatus agvInfo) {
+        return bjAgvStatusMapper.selectBjAgvStatusListFeed(agvInfo);
+    }
+
+
+
+
+    public int updateBjAgvWithOilStatus(BjAgvStatus bjAgvStatus)
+    {
+        return bjAgvStatusMapper.updateBjAgvWithOilStatus(bjAgvStatus);
     }
 }

@@ -69,4 +69,13 @@ public interface BjTaskMapper
     void finishTask(String taskNo);
 
     BjTask selectBjTaskByTaskNo(@Param("taskNo")String taskNo);
+
+    int selectCountByTaskNo(@Param("taskNo")String taskNo);
+
+    void updateTaskInfo(@Param("taskNo")String taskNo, @Param("taskStatus")String taskStatus);
+
+    int isTaskCompleted(@Param("agvNo")String agvNo, @Param("signNo")String previousTaskNo);
+
+
+    public List<BjTask> selectBjTaskListFeed(BjTask bjTask);
 }

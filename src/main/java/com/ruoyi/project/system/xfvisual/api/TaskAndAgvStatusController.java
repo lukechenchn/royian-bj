@@ -177,38 +177,53 @@ public class TaskAndAgvStatusController {
             return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
         }
 
+
+
+
         System.out.println("[服务器日志] 客户端发送的 JSON 数据: " + data);
 
-        Map<String, String> taskFields = BjUtil.splitTaskNo(data.get("task_no"));
-        System.out.println("agv_no: " + taskFields.get("agv_no")); // 输出: 01
-        System.out.println("task_no: " + taskFields.get("task_no")); // 输出: 001
+        //检查当前AGV任务有没有重复
+        int count  = taskService.selectCountByTaskNo(data.get("task_no"));
+        if (count == 0){
+            Map<String, String> taskFields = BjUtil.splitTaskNo(data.get("task_no"));
+            System.out.println("agv_no: " + taskFields.get("agv_no")); // 输出: 01
+            System.out.println("task_no: " + taskFields.get("task_no")); // 输出: 001
 
-        Map<String, Object> response = new HashMap<>();
-        response.put("status_code", "01");
-        response.put("message", "接收收到");
-        response.put("task_no", data.get("task_no")+".1");
+            Map<String, Object> response = new HashMap<>();
+            response.put("status_code", "01");
+            response.put("message", "接收收到");
+            response.put("task_no", data.get("task_no")+".1");
 
-        long currentTimestamp = System.currentTimeMillis();
-        Map<String, Object> taskResponse = new HashMap<>();
-        //检查当前AGV存不存在执行中的任务,存在则状态为0,不存在才返回1执行中
-        taskResponse.put("task_status", 1);
-        taskResponse.put("time_stamp", currentTimestamp);
+            long currentTimestamp = System.currentTimeMillis();
+            Map<String, Object> taskResponse = new HashMap<>();
+            //检查当前AGV存不存在执行中的任务,存在则状态为0,不存在才返回1执行中
+            taskResponse.put("task_status", 1);
+            taskResponse.put("time_stamp", currentTimestamp);
 //        taskResponse.put("time_consumption", "20s");
-        taskResponse.put("remark", "执行中");
+            taskResponse.put("remark", "执行中");
 
-        //保存到数据库,状态为执行中
-        BjTask bjTask = new BjTask();
-        bjTask.setTaskNo(data.get("task_no"));
-        bjTask.setAgvNo(taskFields.get("agv_no"));
-        bjTask.setUavNo(taskFields.get("agv_no"));
-        bjTask.setContainerNo(taskFields.get("agv_no"));
-        bjTask.setSignNo(taskFields.get("sign_no"));
-        bjTask.setSign(data.get("sign"));
-        bjTask.setTaskStatus(1L);
-        taskService.insertBjTask(bjTask);
+            //保存到数据库,状态为执行中
+            BjTask bjTask = new BjTask();
+            bjTask.setTaskNo(data.get("task_no"));
+            bjTask.setAgvNo(taskFields.get("agv_no"));
+            bjTask.setUavNo(taskFields.get("agv_no"));
+            bjTask.setContainerNo(taskFields.get("agv_no"));
+            bjTask.setSignNo(taskFields.get("sign_no"));
+            bjTask.setSign(data.get("sign"));
+            bjTask.setTaskStatus(1L);
+            taskService.insertBjTask(bjTask);
 
-        response.put("response", taskResponse);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+            response.put("response", taskResponse);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }else {
+            Map<String, Object> response = new HashMap<>();
+            response.put("status_code", "error");
+            response.put("message", "任务已经重复,不可重复下发");
+            response.put("task_no", data.get("task_no")+".1");
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }
+
+
     }
 
 
@@ -230,6 +245,7 @@ public class TaskAndAgvStatusController {
 
         String previousTaskNo = getPreviousTaskNo(currentTaskNo);
 
+        System.out.println("上个任务短编号: " + previousTaskNo);
         // 如果没有前置任务，直接允许执行
         if (previousTaskNo == null) {
             return true;
@@ -240,6 +256,23 @@ public class TaskAndAgvStatusController {
     }
 
 
+    //    查询数据库中前一个任务是否完成（伪代码）
+    public boolean isPreviousTaskCompleted(String agvNo, String previousTaskNo) {
+        // 示例 SQL 查询：
+        // SELECT COUNT(*) FROM task_table WHERE agv_no = ? AND task_no = ? AND status = 'completed'
+        // 返回 true 表示已完成，false 表示未完成或不存在
+
+        // 这里需要替换为你自己的 DAO 或 Mapper 查询逻辑
+//        return taskMapper.isTaskCompleted(agvNo, previousTaskNo);
+        int isCom = taskService.isTaskCompleted(agvNo, previousTaskNo);
+        System.out.println(isCom);
+        if(isCom == 0){
+            return false;
+        }else{
+            return true;
+        }
+    }
+
     public static void main(String[] args) {
         String previousTaskNo = getPreviousTaskNo("070");
         // 如果没有前置任务，直接允许执行
@@ -249,19 +282,6 @@ public class TaskAndAgvStatusController {
             System.out.println(previousTaskNo);
         }
     }
-
-    //    查询数据库中前一个任务是否完成（伪代码）
-    public boolean isPreviousTaskCompleted(String agvNo, String previousTaskNo) {
-        // 示例 SQL 查询：
-        // SELECT COUNT(*) FROM task_table WHERE agv_no = ? AND task_no = ? AND status = 'completed'
-        // 返回 true 表示已完成，false 表示未完成或不存在
-
-        // 这里需要替换为你自己的 DAO 或 Mapper 查询逻辑
-//        return taskMapper.isTaskCompleted(agvNo, previousTaskNo);
-        return true;
-    }
-
-
 
 
 

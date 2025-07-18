@@ -145,14 +145,53 @@
     <update id="finishTask">
             UPDATE bj_task
             SET task_status = '2', is_feedback = '1' , finish_time = now()
-        WHERE task_no = #{taskNo};
+        WHERE task_no = #{taskNo} and is_deleted = 0;
     </update>
+
+
+
+    <update id="updateTaskInfo">
+        UPDATE bj_task
+        SET task_status = #{taskStatus}
+        WHERE task_no = #{taskNo} and is_deleted = 0;
+    </update>
+
+
 
 
 
     <select id = "selectBjTaskByTaskNo" parameterType="String" resultMap="BjTaskResult">
         <include refid="selectBjTaskVo"/>
-        where task_no = #{taskNo}
+        where task_no = #{taskNo} and is_deleted = 0
     </select>
 
+    <select id="selectCountByTaskNo" resultType="java.lang.Integer">
+        select count(*) from bj_task
+        where task_no = #{taskNo} and is_deleted = 0 and task_status != '2'
+    </select>
+
+    <select id="isTaskCompleted" resultType="java.lang.Integer">
+        select count(*) from bj_task
+        where agv_no = #{agvNo} and task_status = '2' and sign_no = #{signNo} and is_deleted = 0
+    </select>
+
+
+
+    <select id="selectBjTaskListFeed" parameterType="BjTask" resultMap="BjTaskResult">
+        <include refid="selectBjTaskVo"/>
+        <where>
+            <if test="taskNo != null  and taskNo != ''"> and task_no = #{taskNo}</if>
+            <if test="agvNo != null  and agvNo != ''"> and agv_no = #{agvNo}</if>
+            <if test="uavNo != null  and uavNo != ''"> and uav_no = #{uavNo}</if>
+            <if test="containerNo != null  and containerNo != ''"> and container_no = #{containerNo}</if>
+            <if test="sign != null  and sign != ''"> and sign = #{sign}</if>
+            <if test="signNo != null  and signNo != ''"> and sign_no = #{signNo}</if>
+            <if test="true"> and task_status != 2 </if>
+            <if test="isDeleted != null "> and is_deleted = #{isDeleted}</if>
+            <if test="finishTime != null "> and finish_time = #{finishTime}</if>
+            <if test="isFeedback != null "> and is_feedback = #{isFeedback}</if>
+            <if test="remark1 != null  and remark1 != ''"> and remark1 = #{remark1}</if>
+            <if test="remark2 != null  and remark2 != ''"> and remark2 = #{remark2}</if>
+        </where>
+    </select>
 </mapper>

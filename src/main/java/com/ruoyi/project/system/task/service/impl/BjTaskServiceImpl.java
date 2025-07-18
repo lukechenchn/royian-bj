@@ -110,4 +110,22 @@ public class BjTaskServiceImpl implements IBjTaskService
         BjTask task = bjTaskMapper.selectBjTaskByTaskNo(taskNo);
         return task;
     }
+
+    public int selectCountByTaskNo(String taskNo) {
+        return bjTaskMapper.selectCountByTaskNo(taskNo);
+    }
+
+    public void updateTaskInfo(String taskNo, String taskStatus) {
+        bjTaskMapper.updateTaskInfo(taskNo, taskStatus);
+    }
+
+    public int isTaskCompleted(String agvNo, String previousTaskNo) {
+        return bjTaskMapper.isTaskCompleted(agvNo, previousTaskNo);
+    }
+
+
+    public List<BjTask> feedTaskInfo(BjTask bjTask)
+    {
+        return bjTaskMapper.selectBjTaskListFeed(bjTask);
+    }
 }

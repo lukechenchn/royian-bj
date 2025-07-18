@@ -58,4 +58,12 @@ public interface BjAgvStatusMapper
      * @return 结果
      */
     public int deleteBjAgvStatusByIds(String[] ids);
+
+
+    public List<BjAgvStatus> selectBjAgvStatusListFeed(BjAgvStatus bjAgvStatus);
+
+
+
+
+    public int updateBjAgvWithOilStatus(BjAgvStatus bjAgvStatus);
 }

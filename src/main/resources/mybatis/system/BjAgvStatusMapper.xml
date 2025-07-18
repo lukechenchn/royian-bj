@@ -174,4 +174,70 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </foreach>
     </delete>
 
+
+    <select id="selectBjAgvStatusListFeed" parameterType="BjAgvStatus" resultMap="BjAgvStatusResult">
+        <include refid="selectBjAgvStatusVo"/>
+        <where>
+            <if test="agvNo != null  and agvNo != ''"> and agv_no = #{agvNo}</if>
+            <if test="taskNo != null  and taskNo != ''"> and task_no = #{taskNo}</if>
+            <if test="signNo != null  and signNo != ''"> and sign_no = #{signNo}</if>
+            <if test="taskStatus != null  and taskStatus != ''"> and task_status = #{taskStatus}</if>
+            <if test="agvStatus != null  and agvStatus != ''"> and agv_status = #{agvStatus}</if>
+            <if test="batteryLevel != null  and batteryLevel != ''"> and battery_level = #{batteryLevel}</if>
+            <if test="currentPosition != null  and currentPosition != ''"> and current_position = #{currentPosition}</if>
+            <if test="uavNo != null  and uavNo != ''"> and uav_no = #{uavNo}</if>
+            <if test="uavStatus != null  and uavStatus != ''"> and uav_status = #{uavStatus}</if>
+            <if test="oilQuantity != null  and oilQuantity != ''"> and oil_quantity = #{oilQuantity}</if>
+            <if test="oilType != null  and oilType != ''"> and oil_type = #{oilType}</if>
+            <if test="model1 != null  and model1 != ''"> and model1 = #{model1}</if>
+            <if test="quantity1 != null  and quantity1 != ''"> and quantity1 = #{quantity1}</if>
+            <if test="model2 != null  and model2 != ''"> and model2 = #{model2}</if>
+            <if test="quantity2 != null  and quantity2 != ''"> and quantity2 = #{quantity2}</if>
+            <if test="model3 != null  and model3 != ''"> and model3 = #{model3}</if>
+            <if test="quantity3 != null  and quantity3 != ''"> and quantity3 = #{quantity3}</if>
+            <if test="model4 != null  and model4 != ''"> and model4 = #{model4}</if>
+            <if test="quantity4 != null  and quantity4 != ''"> and quantity4 = #{quantity4}</if>
+            <if test="model5 != null  and model5 != ''"> and model5 = #{model5}</if>
+            <if test="quantity5 != null  and quantity5 != ''"> and quantity5 = #{quantity5}</if>
+            <if test="containerNo != null  and containerNo != ''"> and container_no = #{containerNo}</if>
+            <if test="containerStatus != null  and containerStatus != ''"> and container_status = #{containerStatus}</if>
+            <if test="remark1 != null  and remark1 != ''"> and remark1 = #{remark1}</if>
+            <if test="remark2 != null  and remark2 != ''"> and remark2 = #{remark2}</if>
+        </where>
+    </select>
+
+
+
+
+    <update id="updateBjAgvWithOilStatus" parameterType="BjAgvStatus">
+        update bj_agv_status
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="agvNo != null">agv_no = #{agvNo},</if>
+            <if test="taskNo != null">task_no = #{taskNo},</if>
+            <if test="signNo != null">sign_no = #{signNo},</if>
+            <if test="taskStatus != null">task_status = #{taskStatus},</if>
+            <if test="agvStatus != null">agv_status = #{agvStatus},</if>
+            <if test="batteryLevel != null">battery_level = #{batteryLevel},</if>
+            <if test="currentPosition != null">current_position = #{currentPosition},</if>
+            <if test="uavStatus != null">uav_status = #{uavStatus},</if>
+            <if test="oilQuantity != null">oil_quantity = #{oilQuantity},</if>
+            <if test="oilType != null">oil_type = #{oilType},</if>
+            <if test="model1 != null">model1 = #{model1},</if>
+            <if test="quantity1 != null">quantity1 = #{quantity1},</if>
+            <if test="model2 != null">model2 = #{model2},</if>
+            <if test="quantity2 != null">quantity2 = #{quantity2},</if>
+            <if test="model3 != null">model3 = #{model3},</if>
+            <if test="quantity3 != null">quantity3 = #{quantity3},</if>
+            <if test="model4 != null">model4 = #{model4},</if>
+            <if test="quantity4 != null">quantity4 = #{quantity4},</if>
+            <if test="model5 != null">model5 = #{model5},</if>
+            <if test="quantity5 != null">quantity5 = #{quantity5},</if>
+            <if test="containerNo != null">container_no = #{containerNo},</if>
+            <if test="containerStatus != null">container_status = #{containerStatus},</if>
+            <if test="remark1 != null">remark1 = #{remark1},</if>
+            <if test="remark2 != null">remark2 = #{remark2},</if>
+        </trim>
+        where uav_no = #{uavNo}
+    </update>
+
 </mapper>

@@ -2,6 +2,9 @@ package com.ruoyi.project.system.xfvisual.api.test;
 
 import com.alibaba.fastjson.JSON;
 import com.ruoyi.framework.aspectj.lang.annotation.Anonymous;
+import com.ruoyi.project.system.task.service.impl.BjTaskServiceImpl;
+import com.ruoyi.project.system.xfvisual.api.TaskAndAgvStatusController;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -12,6 +15,12 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api")
 public class BJApiController {
+
+    @Autowired
+    private BjTaskServiceImpl taskService;
+
+    @Autowired
+    TaskAndAgvStatusController tcontroller;
 
     @PostMapping("/post")
     public Map<String,String> test(@RequestBody String body)
@@ -39,10 +48,18 @@ public class BJApiController {
 //    @CrossOrigin
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     public Map<String, String> getUrlParam(@RequestParam String param) {
+
+        /*测试检查是否存在重复任务  测试完成,未发现bug*/
+//        int count  = taskService.selectCountByTaskNo("01-001");
+
+        /*检查当前任务是否可以执行*/
+        boolean x = tcontroller.canExecuteCurrentTask("03","002");
+
         Map<String, String> res = new HashMap<>();
         res.put("flag", "0");
         res.put("msg", "success");
-        res.put("receivedParam", param);
+        res.put("receivedParam", x+"");
+
         return res;
     }
 
