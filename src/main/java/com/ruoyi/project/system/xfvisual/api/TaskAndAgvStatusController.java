@@ -274,7 +274,7 @@ public class TaskAndAgvStatusController {
     }
 
     public static void main(String[] args) {
-        String previousTaskNo = getPreviousTaskNo("070");
+        String previousTaskNo = getPreviousTaskNo("080");
         // 如果没有前置任务，直接允许执行
         if (previousTaskNo == null) {
             System.out.println(true);
