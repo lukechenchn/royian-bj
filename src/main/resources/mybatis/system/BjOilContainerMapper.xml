@@ -126,6 +126,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="quantity5 != null">quantity5 = #{quantity5},</if>
         </trim>
         where id = #{id}
+
     </update>
 
     <update id="receiveRefuelAmmoInfo">

@@ -196,11 +196,11 @@ public class TaskAndAgvStatusController {
 
             long currentTimestamp = System.currentTimeMillis();
             Map<String, Object> taskResponse = new HashMap<>();
-            //检查当前AGV存不存在执行中的任务,存在则状态为0,不存在才返回1执行中
-            taskResponse.put("task_status", 1);
+            //todo  检查当前AGV存不存在执行中的任务,存在则状态为0,不存在才返回1执行中
+            taskResponse.put("task_status", 0);
             taskResponse.put("time_stamp", currentTimestamp);
 //        taskResponse.put("time_consumption", "20s");
-            taskResponse.put("remark", "执行中");
+            taskResponse.put("remark", "未执行");
 
             //保存到数据库,状态为执行中
             BjTask bjTask = new BjTask();
@@ -210,7 +210,7 @@ public class TaskAndAgvStatusController {
             bjTask.setContainerNo(taskFields.get("agv_no"));
             bjTask.setSignNo(taskFields.get("sign_no"));
             bjTask.setSign(data.get("sign"));
-            bjTask.setTaskStatus(1L);
+            bjTask.setTaskStatus(0L);
             taskService.insertBjTask(bjTask);
 
             response.put("response", taskResponse);
