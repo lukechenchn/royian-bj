@@ -7,9 +7,9 @@ import com.ruoyi.framework.web.domain.BaseEntity;
 
 /**
  * AGV状态对象 bj_agv_status
- * 
+ *
  * @author ruoyi
- * @date 2025-07-16
+ * @date 2025-08-23
  */
 public class BjAgvStatus extends BaseEntity
 {
@@ -53,6 +53,18 @@ public class BjAgvStatus extends BaseEntity
     /** 无人机状态 */
     @Excel(name = "无人机状态")
     private String uavStatus;
+
+    /** wrj工作状态(0:,准备中；1：待命中；2：装配中；3：任务中) */
+    @Excel(name = "wrj工作状态(0:,准备中；1：待命中；2：装配中；3：任务中)")
+    private String workStatus;
+
+    /** 电检状态 */
+    @Excel(name = "电检状态")
+    private String elecStatus;
+
+    /** 装配状态 */
+    @Excel(name = "装配状态")
+    private String zpStatus;
 
     /** 油量 */
     @Excel(name = "油量")
@@ -110,270 +122,300 @@ public class BjAgvStatus extends BaseEntity
     @Excel(name = "集装箱状态")
     private String containerStatus;
 
-    /** 备注1 */
-    @Excel(name = "备注1")
+    /** 备注1:是否出库0否1是 */
+    @Excel(name = "备注1:是否出库0否1是")
     private String remark1;
 
-    /** 备注2 */
-    @Excel(name = "备注2")
+    /** 备注2:无人机类型A\B\C */
+    @Excel(name = "备注2:无人机类型A B C")
     private String remark2;
 
-    public void setId(Long id) 
+    public void setId(Long id)
     {
         this.id = id;
     }
 
-    public Long getId() 
+    public Long getId()
     {
         return id;
     }
 
-    public void setAgvNo(String agvNo) 
+    public void setAgvNo(String agvNo)
     {
         this.agvNo = agvNo;
     }
 
-    public String getAgvNo() 
+    public String getAgvNo()
     {
         return agvNo;
     }
 
-    public void setTaskNo(String taskNo) 
+    public void setTaskNo(String taskNo)
     {
         this.taskNo = taskNo;
     }
 
-    public String getTaskNo() 
+    public String getTaskNo()
     {
         return taskNo;
     }
 
-    public void setSignNo(String signNo) 
+    public void setSignNo(String signNo)
     {
         this.signNo = signNo;
     }
 
-    public String getSignNo() 
+    public String getSignNo()
     {
         return signNo;
     }
 
-    public void setTaskStatus(String taskStatus) 
+    public void setTaskStatus(String taskStatus)
     {
         this.taskStatus = taskStatus;
     }
 
-    public String getTaskStatus() 
+    public String getTaskStatus()
     {
         return taskStatus;
     }
 
-    public void setAgvStatus(String agvStatus) 
+    public void setAgvStatus(String agvStatus)
     {
         this.agvStatus = agvStatus;
     }
 
-    public String getAgvStatus() 
+    public String getAgvStatus()
     {
         return agvStatus;
     }
 
-    public void setBatteryLevel(String batteryLevel) 
+    public void setBatteryLevel(String batteryLevel)
     {
         this.batteryLevel = batteryLevel;
     }
 
-    public String getBatteryLevel() 
+    public String getBatteryLevel()
     {
         return batteryLevel;
     }
 
-    public void setCurrentPosition(String currentPosition) 
+    public void setCurrentPosition(String currentPosition)
     {
         this.currentPosition = currentPosition;
     }
 
-    public String getCurrentPosition() 
+    public String getCurrentPosition()
     {
         return currentPosition;
     }
 
-    public void setUavNo(String uavNo) 
+    public void setUavNo(String uavNo)
     {
         this.uavNo = uavNo;
     }
 
-    public String getUavNo() 
+    public String getUavNo()
     {
         return uavNo;
     }
 
-    public void setUavStatus(String uavStatus) 
+    public void setUavStatus(String uavStatus)
     {
         this.uavStatus = uavStatus;
     }
 
-    public String getUavStatus() 
+    public String getUavStatus()
     {
         return uavStatus;
     }
 
-    public void setOilQuantity(String oilQuantity) 
+    public void setWorkStatus(String workStatus)
+    {
+        this.workStatus = workStatus;
+    }
+
+    public String getWorkStatus()
+    {
+        return workStatus;
+    }
+
+    public void setElecStatus(String elecStatus)
+    {
+        this.elecStatus = elecStatus;
+    }
+
+    public String getElecStatus()
+    {
+        return elecStatus;
+    }
+
+    public void setZpStatus(String zpStatus)
+    {
+        this.zpStatus = zpStatus;
+    }
+
+    public String getZpStatus()
+    {
+        return zpStatus;
+    }
+
+    public void setOilQuantity(String oilQuantity)
     {
         this.oilQuantity = oilQuantity;
     }
 
-    public String getOilQuantity() 
+    public String getOilQuantity()
     {
         return oilQuantity;
     }
 
-    public void setOilType(String oilType) 
+    public void setOilType(String oilType)
     {
         this.oilType = oilType;
     }
 
-    public String getOilType() 
+    public String getOilType()
     {
         return oilType;
     }
 
-    public void setModel1(String model1) 
+    public void setModel1(String model1)
     {
         this.model1 = model1;
     }
 
-    public String getModel1() 
+    public String getModel1()
     {
         return model1;
     }
 
-    public void setQuantity1(String quantity1) 
+    public void setQuantity1(String quantity1)
     {
         this.quantity1 = quantity1;
     }
 
-    public String getQuantity1() 
+    public String getQuantity1()
     {
         return quantity1;
     }
 
-    public void setModel2(String model2) 
+    public void setModel2(String model2)
     {
         this.model2 = model2;
     }
 
-    public String getModel2() 
+    public String getModel2()
     {
         return model2;
     }
 
-    public void setQuantity2(String quantity2) 
+    public void setQuantity2(String quantity2)
     {
         this.quantity2 = quantity2;
     }
 
-    public String getQuantity2() 
+    public String getQuantity2()
     {
         return quantity2;
     }
 
-    public void setModel3(String model3) 
+    public void setModel3(String model3)
     {
         this.model3 = model3;
     }
 
-    public String getModel3() 
+    public String getModel3()
     {
         return model3;
     }
 
-    public void setQuantity3(String quantity3) 
+    public void setQuantity3(String quantity3)
     {
         this.quantity3 = quantity3;
     }
 
-    public String getQuantity3() 
+    public String getQuantity3()
     {
         return quantity3;
     }
 
-    public void setModel4(String model4) 
+    public void setModel4(String model4)
     {
         this.model4 = model4;
     }
 
-    public String getModel4() 
+    public String getModel4()
     {
         return model4;
     }
 
-    public void setQuantity4(String quantity4) 
+    public void setQuantity4(String quantity4)
     {
         this.quantity4 = quantity4;
     }
 
-    public String getQuantity4() 
+    public String getQuantity4()
     {
         return quantity4;
     }
 
-    public void setModel5(String model5) 
+    public void setModel5(String model5)
     {
         this.model5 = model5;
     }
 
-    public String getModel5() 
+    public String getModel5()
     {
         return model5;
     }
 
-    public void setQuantity5(String quantity5) 
+    public void setQuantity5(String quantity5)
     {
         this.quantity5 = quantity5;
     }
 
-    public String getQuantity5() 
+    public String getQuantity5()
     {
         return quantity5;
     }
 
-    public void setContainerNo(String containerNo) 
+    public void setContainerNo(String containerNo)
     {
         this.containerNo = containerNo;
     }
 
-    public String getContainerNo() 
+    public String getContainerNo()
     {
         return containerNo;
     }
 
-    public void setContainerStatus(String containerStatus) 
+    public void setContainerStatus(String containerStatus)
     {
         this.containerStatus = containerStatus;
     }
 
-    public String getContainerStatus() 
+    public String getContainerStatus()
     {
         return containerStatus;
     }
 
-    public void setRemark1(String remark1) 
+    public void setRemark1(String remark1)
     {
         this.remark1 = remark1;
     }
 
-    public String getRemark1() 
+    public String getRemark1()
     {
         return remark1;
     }
 
-    public void setRemark2(String remark2) 
+    public void setRemark2(String remark2)
     {
         this.remark2 = remark2;
     }
 
-    public String getRemark2() 
+    public String getRemark2()
     {
         return remark2;
     }
@@ -381,32 +423,35 @@ public class BjAgvStatus extends BaseEntity
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("id", getId())
-            .append("agvNo", getAgvNo())
-            .append("taskNo", getTaskNo())
-            .append("signNo", getSignNo())
-            .append("taskStatus", getTaskStatus())
-            .append("agvStatus", getAgvStatus())
-            .append("batteryLevel", getBatteryLevel())
-            .append("currentPosition", getCurrentPosition())
-            .append("uavNo", getUavNo())
-            .append("uavStatus", getUavStatus())
-            .append("oilQuantity", getOilQuantity())
-            .append("oilType", getOilType())
-            .append("model1", getModel1())
-            .append("quantity1", getQuantity1())
-            .append("model2", getModel2())
-            .append("quantity2", getQuantity2())
-            .append("model3", getModel3())
-            .append("quantity3", getQuantity3())
-            .append("model4", getModel4())
-            .append("quantity4", getQuantity4())
-            .append("model5", getModel5())
-            .append("quantity5", getQuantity5())
-            .append("containerNo", getContainerNo())
-            .append("containerStatus", getContainerStatus())
-            .append("remark1", getRemark1())
-            .append("remark2", getRemark2())
-            .toString();
+                .append("id", getId())
+                .append("agvNo", getAgvNo())
+                .append("taskNo", getTaskNo())
+                .append("signNo", getSignNo())
+                .append("taskStatus", getTaskStatus())
+                .append("agvStatus", getAgvStatus())
+                .append("batteryLevel", getBatteryLevel())
+                .append("currentPosition", getCurrentPosition())
+                .append("uavNo", getUavNo())
+                .append("uavStatus", getUavStatus())
+                .append("workStatus", getWorkStatus())
+                .append("elecStatus", getElecStatus())
+                .append("zpStatus", getZpStatus())
+                .append("oilQuantity", getOilQuantity())
+                .append("oilType", getOilType())
+                .append("model1", getModel1())
+                .append("quantity1", getQuantity1())
+                .append("model2", getModel2())
+                .append("quantity2", getQuantity2())
+                .append("model3", getModel3())
+                .append("quantity3", getQuantity3())
+                .append("model4", getModel4())
+                .append("quantity4", getQuantity4())
+                .append("model5", getModel5())
+                .append("quantity5", getQuantity5())
+                .append("containerNo", getContainerNo())
+                .append("containerStatus", getContainerStatus())
+                .append("remark1", getRemark1())
+                .append("remark2", getRemark2())
+                .toString();
     }
 }

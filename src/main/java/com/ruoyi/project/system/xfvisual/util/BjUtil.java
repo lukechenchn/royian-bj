@@ -50,7 +50,7 @@ public class BjUtil {
             "010", "015", "020", "025",
             "030", "035", "040", "045",
             "050", "055", "060", "065",
-            "070", "075", "080"
+            "070", "075", "080", "085"
     );
 
     public static String getPreviousTaskNo(String currentTaskNo) {

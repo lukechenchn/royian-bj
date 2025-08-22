@@ -44,6 +44,12 @@ public class RyTask
     }
 
 
+
+
+
+
+
+
 //定时反馈任务状态
     public void ryParams()
     {

@@ -26,6 +26,7 @@ public class UpdateInfoController {
 
 
 
+/**最终接口2：任务状态修改*/
 //    提供接口给航保修改AR眼镜的任务的状态修改
     @PostMapping("/updateTask")
     public Map deleteTasks(@RequestBody Map<String, String> data) {

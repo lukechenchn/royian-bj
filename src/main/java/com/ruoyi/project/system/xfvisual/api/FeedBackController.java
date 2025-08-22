@@ -6,6 +6,7 @@ import com.ruoyi.project.system.status.service.IBjAgvStatusService;
 import com.ruoyi.project.system.status.service.impl.BjAgvStatusServiceImpl;
 import com.ruoyi.project.system.task.domain.BjTask;
 import com.ruoyi.project.system.task.service.impl.BjTaskServiceImpl;
+import com.ruoyi.project.system.xfvisual.service.ApiTaskServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,8 +20,12 @@ import java.util.stream.Collectors;
 @RequestMapping("/api")
 @CrossOrigin(origins = "*") // 允许跨域请求
 public class FeedBackController {
+//    @Autowired
+//    private BjTaskServiceImpl taskService;
+
+
     @Autowired
-    private BjTaskServiceImpl taskService;
+    private ApiTaskServiceImpl taskService;
 
     @Autowired
     private BjAgvStatusServiceImpl agvService;
@@ -29,6 +34,7 @@ public class FeedBackController {
     TaskAndAgvStatusController tcontroller;
 
 
+    /**最终接口4：任务状态反馈*/
     //反馈任务信息
     @PostMapping("/taskInfo")
     public List feedTaskInfo(@RequestBody Map<String, String> data) {
@@ -54,6 +60,8 @@ public class FeedBackController {
     }
 
 
+
+    /**最终接口5：AGV状态反馈*/
     //反馈AGV信息
     @PostMapping("/agvInfo")
     public List feedagvInfo(@RequestBody Map<String, String> data) {
@@ -64,7 +72,7 @@ public class FeedBackController {
         }
 
         List<BjAgvStatus> agvs =
-                agvService.feedAgvInfo(agvInfo);
+                taskService.feedAgvInfo(agvInfo);
 
         return agvs.stream()
                 .map(task -> {
@@ -97,6 +105,16 @@ public class FeedBackController {
                     result.put("quantity4", task.getQuantity4());
                     result.put("quantity5", task.getQuantity5());
                     result.put("container_status", task.getContainerStatus());
+
+                    // 添加 remark1 字段，当值为0时返回"否"
+//                    Object remark1Value = task.getRemark1();
+//                    if (remark1Value != null && "0".equals(remark1Value.toString())) {
+//                        result.put("remark1", "未出库");
+//                    } else {
+//                        result.put("remark1", "已出库");
+//                    }
+
+
                     return result;
                 })
                 .collect(Collectors.toList());

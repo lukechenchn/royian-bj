@@ -11,13 +11,13 @@ import com.ruoyi.framework.web.domain.BaseEntity;
  * bj任务对象 bj_task
  *
  * @author ruoyi
- * @date 2025-07-16
+ * @date 2025-08-22
  */
 public class BjTask extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
-    /**  */
+    /** $column.columnComment */
     private Long id;
 
     /** 任务号 */
@@ -68,6 +68,22 @@ public class BjTask extends BaseEntity
     /** 备注2 */
     @Excel(name = "备注2")
     private String remark2;
+
+    /** 油类型 */
+    @Excel(name = "油类型")
+    private String oilType;
+
+    /** 油数量 */
+    @Excel(name = "油数量")
+    private String oilNum;
+
+    /** 弹类型 */
+    @Excel(name = "弹类型")
+    private String dType;
+
+    /** 弹数量 */
+    @Excel(name = "弹数量")
+    private String dNum;
 
     public void setId(Long id)
     {
@@ -199,6 +215,46 @@ public class BjTask extends BaseEntity
         return remark2;
     }
 
+    public void setOilType(String oilType)
+    {
+        this.oilType = oilType;
+    }
+
+    public String getOilType()
+    {
+        return oilType;
+    }
+
+    public void setOilNum(String oilNum)
+    {
+        this.oilNum = oilNum;
+    }
+
+    public String getOilNum()
+    {
+        return oilNum;
+    }
+
+    public void setdType(String dType)
+    {
+        this.dType = dType;
+    }
+
+    public String getdType()
+    {
+        return dType;
+    }
+
+    public void setdNum(String dNum)
+    {
+        this.dNum = dNum;
+    }
+
+    public String getdNum()
+    {
+        return dNum;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
@@ -219,6 +275,10 @@ public class BjTask extends BaseEntity
                 .append("isFeedback", getIsFeedback())
                 .append("remark1", getRemark1())
                 .append("remark2", getRemark2())
+                .append("oilType", getOilType())
+                .append("oilNum", getOilNum())
+                .append("dType", getdType())
+                .append("dNum", getdNum())
                 .toString();
     }
 }

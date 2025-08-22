@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.system.tsinfo.mapper.BjTsSystemInfoMapper">
+    
+    <resultMap type="BjTsSystemInfo" id="BjTsSystemInfoResult">
+        <result property="id"    column="id"    />
+        <result property="status"    column="status"    />
+        <result property="num"    column="num"    />
+        <result property="battery"    column="battery"    />
+    </resultMap>
+
+    <sql id="selectBjTsSystemInfoVo">
+        select id, status, num, battery from bj_ts_system_info
+    </sql>
+
+    <select id="selectBjTsSystemInfoList" parameterType="BjTsSystemInfo" resultMap="BjTsSystemInfoResult">
+        <include refid="selectBjTsSystemInfoVo"/>
+        <where>  
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="num != null "> and num = #{num}</if>
+            <if test="battery != null  and battery != ''"> and battery = #{battery}</if>
+        </where>
+    </select>
+    
+    <select id="selectBjTsSystemInfoById" parameterType="Long" resultMap="BjTsSystemInfoResult">
+        <include refid="selectBjTsSystemInfoVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertBjTsSystemInfo" parameterType="BjTsSystemInfo" useGeneratedKeys="true" keyProperty="id">
+        insert into bj_ts_system_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="status != null">status,</if>
+            <if test="num != null">num,</if>
+            <if test="battery != null">battery,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="status != null">#{status},</if>
+            <if test="num != null">#{num},</if>
+            <if test="battery != null">#{battery},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBjTsSystemInfo" parameterType="BjTsSystemInfo">
+        update bj_ts_system_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="status != null">status = #{status},</if>
+            <if test="num != null">num = #{num},</if>
+            <if test="battery != null">battery = #{battery},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBjTsSystemInfoById" parameterType="Long">
+        delete from bj_ts_system_info where id = #{id}
+    </delete>
+
+    <delete id="deleteBjTsSystemInfoByIds" parameterType="String">
+        delete from bj_ts_system_info where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

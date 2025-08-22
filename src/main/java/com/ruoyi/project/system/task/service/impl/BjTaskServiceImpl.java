@@ -22,10 +22,7 @@ public class BjTaskServiceImpl implements IBjTaskService
     private BjTaskMapper bjTaskMapper;
 
 
-    public BjTask test(Long id)
-    {
-        return bjTaskMapper.selectBjTaskById(id);
-    }
+
 
 
     /**
@@ -101,6 +98,13 @@ public class BjTaskServiceImpl implements IBjTaskService
     {
         return bjTaskMapper.deleteBjTaskById(id);
     }
+
+
+    public BjTask test(Long id)
+    {
+        return bjTaskMapper.selectBjTaskById(id);
+    }
+
 
     public void finishTask(String taskNo) {
         bjTaskMapper.finishTask(taskNo);

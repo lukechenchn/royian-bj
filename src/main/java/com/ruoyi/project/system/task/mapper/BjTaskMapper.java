@@ -60,6 +60,10 @@ public interface BjTaskMapper
      */
     public int deleteBjTaskByIds(String[] ids);
 
+
+
+
+
     // 检查是否存在状态为2的任务080
     int countCompletedTask080(@Param("agvNo") String agvNo);
 
