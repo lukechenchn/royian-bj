@@ -67,4 +67,9 @@ public interface ApiTaskMapper {
 
     @MapKey("agv_type")
     List<Map<String, Object>> selectAgvTypeCount(String agvType);
+
+    @MapKey("agv_no")
+    List<Map<String, Object>> selectTotalStatus(String agvNo);
+
+    void deleteTasks();
 }

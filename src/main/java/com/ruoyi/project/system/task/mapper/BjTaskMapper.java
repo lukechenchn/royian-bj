@@ -72,7 +72,7 @@ public interface BjTaskMapper
 
     void finishTask(String taskNo);
 
-    BjTask selectBjTaskByTaskNo(@Param("taskNo")String taskNo);
+    List<BjTask> selectBjTaskByTaskNo(@Param("taskNo")String taskNo);
 
     int selectCountByTaskNo(@Param("taskNo")String taskNo);
 

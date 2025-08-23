@@ -126,21 +126,21 @@
     </delete>
 
 <!--    自定义sql-->
-    <!-- 检查是否存在已完成的 080 任务 -->
+    <!-- 检查是否存在已完成的 085 任务 -->
     <select id="countCompletedTask080" resultType="int">
         SELECT COUNT(*) FROM bj_task
         WHERE agv_no = #{agvNo}
-        AND sign_no = '080'
+        AND sign_no = '085'
         AND task_status = '2'
-        AND is_deleted = 0 <!-- 假设字段 is_deleted 表示是否已删除 -->
+        AND is_deleted = 0
     </select>
 
     <!-- 删除某 AGV 的所有任务 -->
-    <delete id="deleteTasksByAgvNo">
-        -- DELETE FROM bj_task
--- WHERE agv_no = #{agvNo}
-    </delete>
-
+    <update id="deleteTasksByAgvNo">
+        UPDATE bj_task
+        SET is_deleted = 1
+        WHERE agv_no = #{agvNo}
+    </update>
 
     <update id="finishTask">
             UPDATE bj_task
@@ -163,6 +163,7 @@
     <select id = "selectBjTaskByTaskNo" parameterType="String" resultMap="BjTaskResult">
         <include refid="selectBjTaskVo"/>
         where task_no = #{taskNo} and is_deleted = 0
+        order by create_time desc
     </select>
 
     <select id="selectCountByTaskNo" resultType="java.lang.Integer">

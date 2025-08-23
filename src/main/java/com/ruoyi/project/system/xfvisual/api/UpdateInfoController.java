@@ -35,15 +35,16 @@ public class UpdateInfoController {
         }
         String taskNo = data.get("task_no");
         //获取任务详细信息
-        BjTask task = taskService.selectBjTaskByTaskNo(taskNo);
-        if(task != null){
+        List<BjTask> task = taskService.selectBjTaskByTaskNo(taskNo);
+        if(task.size()>0){
+
             String taskStatus = data.get("task_status");
             //1.将任务状态更新
             taskService.updateTaskInfo(taskNo,taskStatus);
             if(taskStatus.equals("2")){
 //检查上个任务是否为执行完成状态
                 try {
-                boolean canExecute =  tcontroller.canExecuteCurrentTask(task.getAgvNo(),task.getSignNo());
+                boolean canExecute =  tcontroller.canExecuteCurrentTask(task.get(0).getAgvNo(),task.get(0).getSignNo());
 //                暂时放开任务执行状态检查
                     canExecute = true;
                 if(canExecute){
@@ -76,7 +77,7 @@ public class UpdateInfoController {
                 Map<String, Object> feedbackData = new HashMap<>();
                 feedbackData.put("task_no", taskNo); // 任务号
                 feedbackData.put("task_status", "2"); // 任务执行状态: 已完成
-                feedbackData.put("start_time", task.getCreateTime()); // 可以从数据库或其他逻辑中获取实际开始时间
+                feedbackData.put("start_time", task.get(0).getCreateTime()); // 可以从数据库或其他逻辑中获取实际开始时间
                 feedbackData.put("finish_time", new Date()); // 结束时间，当前时间
                 list.add(feedbackData);
 

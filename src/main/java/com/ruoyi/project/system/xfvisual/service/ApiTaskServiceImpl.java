@@ -1,5 +1,7 @@
 package com.ruoyi.project.system.xfvisual.service;
 
+import cn.hutool.core.lang.Console;
+import com.ruoyi.project.system.info.domain.BjZlSystemInfo;
 import com.ruoyi.project.system.status.domain.BjAgvStatus;
 import com.ruoyi.project.system.task.domain.BjTask;
 import com.ruoyi.project.system.task.mapper.BjTaskMapper;
@@ -111,5 +113,111 @@ public class ApiTaskServiceImpl {
         result.put("type_count", typeCountList);
 
         return result;
+    }
+
+
+
+    private static final String[] MISSILE_NAMES = {
+            "1导弹",   // quantity1对应导弹名称
+            "2导弹",   // quantity2对应导弹名称
+            "3导弹",   // quantity3对应导弹名称
+            "4导弹",   // quantity4对应导弹名称
+            "5导弹"    // quantity5对应导弹名称
+    };
+
+    public List<Map<String, Object>> getTotalStatus(String agvNo) {
+        // 调用Mapper查询指定AGV的总状态信息
+
+//        return bjTaskMapper.selectTotalStatus(agvNo);
+        // 1. 查询基础数据（包含quantity1到quantity5）
+        List<Map<String, Object>> statusList = bjTaskMapper.selectTotalStatus(agvNo);
+
+        // 2. 处理每条记录的quantity_status拼接
+        Console.log(statusList);
+
+        for (Map<String, Object> status : statusList) {
+            StringBuilder quantityStatus = new StringBuilder();
+            boolean hasMissile = false;
+
+            // 处理quantity1-5拼接，不改变原始字段的空值状态
+            for (int i = 1; i <= 5; i++) {
+                String key = "quantity" + i;
+                Object valueObj = status.get(key); // 即使为null也正常获取
+
+                // 仅处理非空且有效的值，空值直接跳过
+                if (valueObj != null) {
+                    try {
+                        int quantity = Integer.parseInt(valueObj.toString().trim());
+                        if (quantity > 0) {
+                            hasMissile = true;
+                            String desc = quantity + "枚" + MISSILE_NAMES[i-1];
+                            if (quantityStatus.length() > 0) {
+                                quantityStatus.append("，");
+                            }
+                            quantityStatus.append(desc);
+                        }
+                    } catch (NumberFormatException e) {
+                        // 非数字格式也视为无效值，不参与拼接
+                        continue;
+                    }
+                }
+            }
+
+            // 设置拼接后的挂弹状态
+            status.put("quantity_status", hasMissile ? quantityStatus.toString() : "未挂弹");
+
+            // 只移除quantity1-5这5个字段，其他所有字段（包括空值）全部保留
+            for (int i = 1; i <= 5; i++) {
+                status.remove("quantity" + i);
+            }
+        }
+
+//        for (Map<String, Object> status : statusList) {
+//            StringBuilder quantityStatus = new StringBuilder();
+//            boolean hasMissile = false; // 标记是否有非零的导弹数量
+//
+//            // 循环处理quantity1到quantity5
+//            for (int i = 1; i <= 5; i++) {
+//                String key = "quantity" + i;
+//                Object valueObj = status.get(key);
+//
+//                // 检查值是否有效（非空且大于0）
+//                if (valueObj != null) {
+//                    try {
+//                        int quantity = Integer.parseInt(valueObj.toString().trim());
+//                        if (quantity > 0) {
+//                            hasMissile = true; // 标记存在有效导弹数量
+//                            // 拼接格式：XX枚XXX导弹
+//                            String missileDesc = quantity + "枚" + MISSILE_NAMES[i-1];
+//
+//                            // 如果已有内容，先加逗号分隔
+//                            if (quantityStatus.length() > 0) {
+//                                quantityStatus.append("，");
+//                            }
+//                            quantityStatus.append(missileDesc);
+//                        }
+//                    } catch (NumberFormatException e) {
+//                        // 处理数字转换异常（如非数字格式）
+//                        continue;
+//                    }
+//                }
+//            }
+//
+//            // 3. 处理全零情况，否则使用拼接结果
+//            String finalStatus = hasMissile ? quantityStatus.toString() : "未挂弹";
+//            status.put("quantity_status", finalStatus);
+//
+//            // 移除quantity1到quantity5这5个字段，避免返回
+//            for (int i = 1; i <= 5; i++) {
+//                status.remove("quantity" + i);
+//            }
+//        }
+
+        return statusList;
+    }
+
+
+    public void deleteTasks() {
+        bjTaskMapper.deleteTasks();
     }
 }

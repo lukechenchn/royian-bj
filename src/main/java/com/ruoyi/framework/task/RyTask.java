@@ -38,40 +38,18 @@ public class RyTask
     public void ryNoParamsBj()
     {
         //检查bj_task表中任务的执行状态,更新为已完成  (可先手动修改数据库)
-//        List<BjTask> list=  bjTaskMapper.selectBjTaskList( null);
-        System.out.println("bj定时任务");
-//        System.out.println(list.toString());
+        deleteTasks();
+        System.out.println("bj定时任务：deleteTasks");
+
     }
-
-
-
-
-
-
-
-
-//定时反馈任务状态
-    public void ryParams()
-    {
-        //检查在执行中的任务
-
-        System.out.println("bj定时任务");
-//        System.out.println(list.toString());
-    }
-
-
-
-
-
-
-
 
 
 
 
     public void deleteTasks() {
-        //agv一共有01、02、03、04、05、06、07、08、09、10这十个,检查bj_task表中是否存在某个AGV的任务是080且已经执行完成(状态为2),且未被删除,如果存在则执行删除当前AGV的所有任务
-        String[] agvs = {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10"};
+        //agv一共有01、02、03、04、05、06、07、08、09、10这十个,
+        // 检查bj_task表中是否存在某个AGV的任务是080且已经执行完成(状态为2),且未被删除,如果存在则执行删除当前AGV的所有任务
+        String[] agvs = {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10","11","12","13"};
         for (String agv : agvs) {
             if (checkIfTaskExists(agv)) {
                 deleteTasksByAgv(agv);
@@ -80,7 +58,7 @@ public class RyTask
         System.out.println("bj定时任务");
     }
 
-    // 检查是否存在已完成的 080 任务
+    // 检查是否存在已完成的 080 任务   20250824改成085
     private boolean checkIfTaskExists(String agvNo) {
         return bjTaskMapper.countCompletedTask080(agvNo) > 0;
     }
@@ -99,5 +77,34 @@ public class RyTask
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //定时反馈任务状态
+    public void ryParams()
+    {
+        //检查在执行中的任务
+        //todo   暂时想不起来这个定时任务是干嘛的
+
+        System.out.println("bj定时任务");
+//        System.out.println(list.toString());
+    }
 
 }

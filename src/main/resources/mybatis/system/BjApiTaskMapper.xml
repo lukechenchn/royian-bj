@@ -162,6 +162,12 @@
     </delete>
 
 
+    <update id="deleteTasks">
+        update bj_task
+        set is_deleted = 1
+    </update>
+
+
     <update id="finishTask">
             UPDATE bj_task
             SET task_status = '2', is_feedback = '1' , finish_time = now()
@@ -220,17 +226,30 @@
 
 
     <select id="getDroneTypeCount" resultType="java.util.HashMap">
+--         SELECT
+--             remark2 AS droneType,
+--             COUNT(*) AS totalCount
+--         FROM
+--             bj_agv_status
+--         WHERE
+--             remark2 IN ('AAA', 'BBB', 'CCC')
+--         GROUP BY
+--             remark2
+--         ORDER BY
+--             remark2
+
         SELECT
             remark2 AS droneType,
             COUNT(*) AS totalCount
         FROM
             bj_agv_status
         WHERE
-            remark2 IN ('AAA', 'BBB', 'CCC')
+            remark2 IS NOT NULL  -- 仅排除NULL值，不限制具体类型
         GROUP BY
-            remark2
+            remark2  -- 按实际存在的remark2值自动分组
         ORDER BY
-            remark2
+            remark2  -- 按类型名称自然排序（也可改为按数量排序：ORDER BY totalCount DESC）
+
     </select>
 
 
@@ -312,9 +331,35 @@
     </select>
 
 
+    <!-- 查询总状态信息（无人机状态+AGV状态） -->
+    <select id="selectTotalStatus" parameterType="String" resultType="java.util.Map">
+        SELECT
+            agv_no,
+--             zp_status,
+            COALESCE(zp_status, '0') as zp_status,
+            oil_quantity as oil_status,
+--             task_status,
+            COALESCE(task_status, '就绪') as task_status,
+            current_position,
+            --    quantity_status,
+            quantity1,
+            quantity2,
+            quantity3,
+            quantity4,
+            quantity5,
+            task_no as task_message,
+--             elec_status,
 
+            COALESCE(elec_status, '电检状态正常') as elec_status,
 
-
+            work_status,
+            current_position as agv_location,
+            battery_level as equi_status
+        FROM
+            bj_agv_status
+        WHERE
+            agv_no = #{agvNo}
+    </select>
 
 
 

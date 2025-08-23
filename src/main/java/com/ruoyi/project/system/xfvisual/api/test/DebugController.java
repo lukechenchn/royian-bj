@@ -51,12 +51,12 @@ public class DebugController {
 //        结束时间
 //                finish_time
 
-        BjTask task = taskService.selectBjTaskByTaskNo(taskNo);
+        List<BjTask> task = taskService.selectBjTaskByTaskNo(taskNo);
         List<Map> list= new ArrayList<>();
         Map<String, Object> feedbackData = new HashMap<>();
         feedbackData.put("task_no", taskNo); // 任务号
         feedbackData.put("task_status", "2"); // 任务执行状态: 已完成
-        feedbackData.put("start_time", task.getCreateTime()); // 可以从数据库或其他逻辑中获取实际开始时间
+        feedbackData.put("start_time", task.get(0).getCreateTime()); // 可以从数据库或其他逻辑中获取实际开始时间
         feedbackData.put("finish_time", new Date()); // 结束时间，当前时间
         list.add(feedbackData);
 

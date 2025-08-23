@@ -2,7 +2,11 @@ package com.ruoyi.project.system.xfvisual.api;
 
 
 import com.ruoyi.framework.aspectj.lang.annotation.Anonymous;
+import com.ruoyi.project.system.info.domain.BjZlSystemInfo;
+import com.ruoyi.project.system.info.service.IBjZlSystemInfoService;
 import com.ruoyi.project.system.task.domain.BjTask;
+import com.ruoyi.project.system.tsinfo.domain.BjTsSystemInfo;
+import com.ruoyi.project.system.tsinfo.service.IBjTsSystemInfoService;
 import com.ruoyi.project.system.xfvisual.service.ApiTaskServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -134,6 +138,11 @@ public class FeedBack2Controller {
 
 
     /**最终接口9：总状态反馈（无人机状态+agv状态）*/
+    @GetMapping("/statusFeedback")
+    public List<Map<String, Object>> getStatusFeedback(@RequestParam("agv_no") String agvNo) {
+        // 调用服务层查询状态信息
+        return taskService.getTotalStatus(agvNo);
+    }
 
 
 
@@ -143,6 +152,124 @@ public class FeedBack2Controller {
             @RequestParam(required = false) String agv_type) {
 
         // 调用服务层查询数据，直接返回Map集合（会自动序列化为所需JSON）
+
         return taskService.getAgvTotalNum(agv_type);
     }
+
+
+
+    /**写个接口，清空所有任务*/
+    @GetMapping("/deleteTasks")
+    public Map deleteTasks() {
+    taskService.deleteTasks();
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("code", 200);
+        response.put("msg", "清空完成");
+        return response;
+    }
+
+
+    /**写个定时任务，如果存在085任务已经完成，那么就删除创建时间小于这个任务的当前这个agv的所有任务
+     *  延用原来的定时任务  这里先放着，后续可以删除*/
+
+//    try {
+//        // 查找所有已完成的085任务
+//        BjTask queryTask = new BjTask();
+//        queryTask.setSignNo("085");
+//        queryTask.setTaskStatus("2"); // 假设"2"表示任务已完成
+//
+//        List<BjTask> completed085Tasks = taskService.selectBjTaskList(queryTask);
+//
+//        // 遍历每个已完成的085任务
+//        for (BjTask completedTask : completed085Tasks) {
+//            String agvNo = completedTask.getAgvNo();
+//            // 获取该任务的创建时间
+//            Date completedTaskCreateTime = completedTask.getCreateTime();
+//
+//            if (agvNo != null && completedTaskCreateTime != null) {
+//                // 删除该AGV创建时间早于completedTaskCreateTime的所有任务
+//                taskService.deleteTasksByAgvAndCreateTimeBefore(agvNo, completedTaskCreateTime);
+//            }
+//        }
+//    } catch (Exception e) {
+//        // 记录错误日志
+//        System.err.println("定时任务执行失败: " + e.getMessage());
+//        e.printStackTrace();
+//    }
+
+//    // 在对应的Mapper接口中添加方法
+//    int deleteTasksByAgvAndCreateTimeBefore(@Param("agvNo") String agvNo, @Param("createTime") Date createTime);
+
+
+//            <!-- 删除指定AGV创建时间早于指定时间的所有任务 -->
+//<delete id="deleteTasksByAgvAndCreateTimeBefore">
+//    DELETE FROM bj_task
+//    WHERE agv_no = #{agvNo}
+//    AND create_time &lt; #{createTime}
+//</delete>
+
+    @Autowired
+    private IBjZlSystemInfoService bjZlSystemInfoService;
+    /**ZL系统查询*/
+    @GetMapping("/zlQuery")
+    public Map zlQuery() {
+        BjZlSystemInfo info =     bjZlSystemInfoService.selectBjZlSystemInfoById(1L);
+        Map<String, Object> result = new HashMap<>();
+        if (info != null) {
+            result.put("status", info.getStatus());
+            result.put("speed", info.getSpeed());
+            result.put("num", info.getNum());
+            result.put("weight", info.getWeight());
+        }
+        return result;
+    }
+
+    /**ZL系统保存*/
+    @PostMapping("/zlUpdate")
+    public Map zlUpdate(@RequestBody Map<String, String> data) {
+        BjZlSystemInfo bjZlSystemInfo = new BjZlSystemInfo();
+        bjZlSystemInfo.setId(1L);
+        bjZlSystemInfo.setStatus(data.get("status"));
+        bjZlSystemInfo.setSpeed(Long.valueOf(data.get("speed")));
+        bjZlSystemInfo.setNum(Long.valueOf(data.get("num")));
+        bjZlSystemInfoService.updateBjZlSystemInfo(bjZlSystemInfo);
+        Map<String, Object> response = new HashMap<>();
+        response.put("code", 200);
+        response.put("msg", "ZL系统信接收成功");
+        return  response;
+    }
+
+
+    /**TS系统查询*/
+    @Autowired
+    private IBjTsSystemInfoService bjTsSystemInfoService ;
+    @GetMapping("/tsQuery")
+    public Map tsQuery() {
+        BjTsSystemInfo info =   bjTsSystemInfoService.selectBjTsSystemInfoById(1L);
+        Map<String, Object> result = new HashMap<>();
+        if (info != null) {
+            result.put("status", info.getStatus());
+            result.put("battery", info.getBattery());
+            result.put("num", info.getNum());
+        }
+        return result;
+    }
+
+    /**TS系统保存*/
+    @PostMapping("/tsUpdate")
+    public Map tsUpdate(@RequestBody Map<String, String> data) {
+        BjTsSystemInfo bjTsSystemInfo = new BjTsSystemInfo();
+        bjTsSystemInfo.setId(1L);
+        bjTsSystemInfo.setStatus(data.get("status"));
+        bjTsSystemInfo.setBattery(data.get("battery"));
+        bjTsSystemInfo.setNum(Integer.parseInt(data.get("num")));
+        bjTsSystemInfoService.updateBjTsSystemInfo(bjTsSystemInfo);
+        Map<String, Object> response = new HashMap<>();
+        response.put("code", 200);
+        response.put("msg", "TS系统信接收成功");
+        return  response;
+    }
+
+
 }

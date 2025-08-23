@@ -110,8 +110,8 @@ public class BjTaskServiceImpl implements IBjTaskService
         bjTaskMapper.finishTask(taskNo);
     }
 
-    public BjTask selectBjTaskByTaskNo(String taskNo) {
-        BjTask task = bjTaskMapper.selectBjTaskByTaskNo(taskNo);
+    public List<BjTask> selectBjTaskByTaskNo(String taskNo) {
+        List<BjTask> task = bjTaskMapper.selectBjTaskByTaskNo(taskNo);
         return task;
     }
 
