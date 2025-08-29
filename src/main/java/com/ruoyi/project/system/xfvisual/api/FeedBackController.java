@@ -115,6 +115,21 @@ public class FeedBackController {
 //                    }
 
 
+//     “task_status”:”01-020.X” //  (新增返回字段) 无人机 当前 所执行的任务
+
+                    /** 20250829增加逻辑，返回agv当前正在执行的任务   */
+                    Map nowTask = taskService.getTargetTaskByAgvNo(task.getAgvNo());
+                    if (nowTask != null) {
+
+                        // 有任务：返回任务详情+状态说明
+                        result.put("task_status",nowTask.get("task_no")+"."+nowTask.get("task_status"));
+                    } else {
+                        // 无任务：返回提示（按业务需求调整）
+                        result.put("task_status","该AGV暂无任务记录");
+                    }
+
+
+
                     return result;
                 })
                 .collect(Collectors.toList());

@@ -11,6 +11,7 @@ import com.ruoyi.project.system.xfvisual.service.ApiTaskServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -111,6 +112,7 @@ public class FeedBack2Controller {
 
 
     /**最终接口8：修改油弹箱信息*/
+
     @PostMapping("/upDataRefuelAmmoInfo")
     public Map<String, Object> updateRefuelAmmoInfo(@RequestBody Map<String, Object> params) {
         Map<String, Object> result = new HashMap<>();
@@ -138,10 +140,28 @@ public class FeedBack2Controller {
 
 
     /**最终接口9：总状态反馈（无人机状态+agv状态）*/
+//    @GetMapping("/statusFeedback")
+//    public List<Map<String, Object>> getStatusFeedback(@RequestParam("agv_no") String agvNo) {
+//        // 调用服务层查询状态信息
+//        return taskService.getTotalStatus(agvNo);
+//    }
+    /**最终接口9：总状态反馈（无人机状态+agv状态）*/
     @GetMapping("/statusFeedback")
-    public List<Map<String, Object>> getStatusFeedback(@RequestParam("agv_no") String agvNo) {
-        // 调用服务层查询状态信息
-        return taskService.getTotalStatus(agvNo);
+    public List<Map<String, Object>> getStatusFeedback(@RequestParam(required = false) String agv_no) {
+        List<Map<String, Object>> result = new ArrayList<>();
+
+        if (agv_no != null && !agv_no.isEmpty()) {
+            // 如果提供了agv_no参数，查询指定AGV的状态
+            return taskService.getTotalStatus(agv_no);
+        } else {
+            // 如果没有提供agv_no参数，循环查询01到13的AGV状态
+            for (int i = 1; i <= 13; i++) {
+                String agvNo = String.format("%02d", i); // 格式化为两位数，如01, 02, ..., 13
+                List<Map<String, Object>> agvStatus = taskService.getTotalStatus(agvNo);
+                result.addAll(agvStatus);
+            }
+            return result;
+        }
     }
 
 
@@ -231,6 +251,7 @@ public class FeedBack2Controller {
         BjZlSystemInfo bjZlSystemInfo = new BjZlSystemInfo();
         bjZlSystemInfo.setId(1L);
         bjZlSystemInfo.setStatus(data.get("status"));
+        bjZlSystemInfo.setWeight(Long.valueOf(data.get("weight")));
         bjZlSystemInfo.setSpeed(Long.valueOf(data.get("speed")));
         bjZlSystemInfo.setNum(Long.valueOf(data.get("num")));
         bjZlSystemInfoService.updateBjZlSystemInfo(bjZlSystemInfo);

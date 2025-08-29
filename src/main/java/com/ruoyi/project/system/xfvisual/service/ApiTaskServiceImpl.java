@@ -220,4 +220,9 @@ public class ApiTaskServiceImpl {
     public void deleteTasks() {
         bjTaskMapper.deleteTasks();
     }
+
+    public Map getTargetTaskByAgvNo(String agvNo) {
+        // 直接调用Mapper执行SQL，SQL已保证优先级逻辑
+        return bjTaskMapper.selectTargetTaskByAgvNo(agvNo);
+    }
 }

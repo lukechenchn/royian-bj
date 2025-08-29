@@ -362,6 +362,31 @@
     </select>
 
 
+    <select id="selectTargetTaskByAgvNo" resultType="java.util.HashMap">
+        SELECT
+            task_no as task_no,
+            agv_no as agv_no,
+            task_status as task_status,
+            create_time as create_time
+        FROM
+            bj_task
+        WHERE
+    agv_no = #{agvNo}
+
+          and is_deleted = 0
+        ORDER BY
+
+            CASE task_status
+                WHEN 1 THEN 3
+                WHEN 0 THEN 2
+                WHEN 2 THEN 1
+                END DESC,
+            create_time DESC
+            LIMIT 1;
+        -- 优先级：1-执行中(权重3) > 0-未开始(权重2) > 2-已完成(权重1)
+        -- 同状态下取最新创建的任务
+        -- 只取最符合条件的1条
+    </select>
 
 
 
@@ -435,7 +460,6 @@
             <if test="remark2 != null  and remark2 != ''"> and remark2 = #{remark2}</if>
         </where>
     </select>
-
 
 
     <update id="updateBjAgvWithOilStatus" parameterType="BjAgvStatus">

@@ -182,71 +182,66 @@ public class TaskAndAgvStatusController {
             errorResponse.put("error", "Missing required fields (task_no)");
             return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
         }
-
-
         System.out.println("[服务器日志] 客户端发送的 JSON 数据: " + data);
-
+        String signNo = BjUtil.splitTaskNo(data.get("task_no")).get("sign_no");
+        if(signNo.equals("040") ||  signNo.equals("045")){
+            return addBjTaskDbData(data);
+        }
         //检查当前AGV任务有没有重复
-//        int count  = taskService.selectCountByTaskNo(data.get("task_no"));
-//        if (count == 0){
-            //任务没有重复  20250822去掉检查此任务是否重复，因为加油挂弹任务需要重复下发
-
-            Map<String, String> taskFields = BjUtil.splitTaskNo(data.get("task_no"));
-            System.out.println("agv_no: " + taskFields.get("agv_no")); // 输出: 01
-            System.out.println("task_no: " + taskFields.get("task_no")); // 输出: 001
-
+        int count  = taskService.selectCountByTaskNo(data.get("task_no"));
+        if (count == 0){
+            return addBjTaskDbData(data);
+        }else {
             Map<String, Object> response = new HashMap<>();
-            response.put("status_code", "01");
-            response.put("message", "接收收到");
+            response.put("status_code", "error");
+            response.put("message", "任务已经重复,不可重复下发");
             response.put("task_no", data.get("task_no")+".1");
-
-            long currentTimestamp = System.currentTimeMillis();
-            Map<String, Object> taskResponse = new HashMap<>();
-            //todo 废弃  检查当前AGV存不存在执行中的任务,存在则状态为0,不存在才返回1执行中
-            taskResponse.put("task_status", 0);
-            taskResponse.put("time_stamp", currentTimestamp);
-//        taskResponse.put("time_consumption", "20s");
-            taskResponse.put("remark", "未执行");
-
-            //保存到数据库,状态为未执行
-            BjTask bjTask = new BjTask();
-            bjTask.setTaskNo(data.get("task_no"));
-            bjTask.setAgvNo(taskFields.get("agv_no"));
-            bjTask.setUavNo(taskFields.get("agv_no"));
-            bjTask.setContainerNo(taskFields.get("agv_no"));
-            bjTask.setSignNo(taskFields.get("sign_no"));
-            bjTask.setSign(data.get("sign"));
-            bjTask.setTaskStatus(0L);
-
-            //新增加油、挂弹字段
-
-            //“oil_ty”:
-            //“oil_num”:
-            //“D_type”
-            //”D_num”
-
-            bjTask.setOilType(data.get("oil_type"));
-            bjTask.setOilNum(data.get("oil_num"));
-            bjTask.setdType(data.get("d_type"));
-            bjTask.setdNum(data.get("d_num"));
-
-
-            genTaskService.insertBjTask(bjTask);
-
-            response.put("response", taskResponse);
             return new ResponseEntity<>(response, HttpStatus.OK);
-
-//        }else {
-//            Map<String, Object> response = new HashMap<>();
-//            response.put("status_code", "error");
-//            response.put("message", "任务已经重复,不可重复下发");
-//            response.put("task_no", data.get("task_no")+".1");
-//            return new ResponseEntity<>(response, HttpStatus.OK);
-//        }
-
-
+        }
     }
 
+    private ResponseEntity<Map<String, Object>> addBjTaskDbData(Map<String, String> data) {
+        //任务没有重复  20250822去掉检查此任务是否重复，因为加油挂弹任务需要重复下发  20250827又加上了
+
+        Map<String, String> taskFields = BjUtil.splitTaskNo(data.get("task_no"));
+        System.out.println("agv_no: " + taskFields.get("agv_no")); // 输出: 01
+        System.out.println("task_no: " + taskFields.get("task_no")); // 输出: 001
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("status_code", "01");
+        response.put("message", "接收收到");
+        response.put("task_no", data.get("task_no")+".1");
+
+        long currentTimestamp = System.currentTimeMillis();
+        Map<String, Object> taskResponse = new HashMap<>();
+        //todo 废弃  检查当前AGV存不存在执行中的任务,存在则状态为0,不存在才返回1执行中
+        taskResponse.put("task_status", 0);
+        taskResponse.put("time_stamp", currentTimestamp);
+//        taskResponse.put("time_consumption", "20s");
+        taskResponse.put("remark", "未执行");
+
+        //保存到数据库,状态为未执行
+        BjTask bjTask = new BjTask();
+        bjTask.setTaskNo(data.get("task_no"));
+        bjTask.setAgvNo(taskFields.get("agv_no"));
+        bjTask.setUavNo(taskFields.get("agv_no"));
+        bjTask.setContainerNo(taskFields.get("agv_no"));
+        bjTask.setSignNo(taskFields.get("sign_no"));
+        bjTask.setSign(data.get("sign"));
+        bjTask.setTaskStatus(0L);
+        //新增加油、挂弹字段
+        //“oil_ty”:
+        //“oil_num”:
+        //“D_type”
+        //”D_num”
+        bjTask.setOilType(data.get("oil_type"));
+        bjTask.setOilNum(data.get("oil_num"));
+        bjTask.setdType(data.get("d_type"));
+        bjTask.setdNum(data.get("d_num"));
+        genTaskService.insertBjTask(bjTask);
+        response.put("response", taskResponse);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 
 
     // 任务号白名单

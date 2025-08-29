@@ -72,4 +72,7 @@ public interface ApiTaskMapper {
     List<Map<String, Object>> selectTotalStatus(String agvNo);
 
     void deleteTasks();
+
+
+    HashMap selectTargetTaskByAgvNo(String agvNo);
 }
