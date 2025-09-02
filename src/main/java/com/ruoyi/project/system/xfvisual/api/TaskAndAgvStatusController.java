@@ -208,9 +208,9 @@ public class TaskAndAgvStatusController {
 
         Map<String, String> taskFields = BjUtil.splitTaskNo(data.get("task_no"));
         String agvNo = taskFields.get("agv_no");
-        String taskNo = taskFields.get("task_no");
+        String signNo = taskFields.get("sign_no");
         System.out.println("agv_no: " + taskFields.get("agv_no")); // 输出: 01
-        System.out.println("task_no: " + taskFields.get("task_no")); // 输出: 001
+        System.out.println("sign_no: " + taskFields.get("sign_no")); // 输出: 001
 
 
         Map<String, Object> response = new HashMap<>();
@@ -250,10 +250,10 @@ public class TaskAndAgvStatusController {
          *  bj_agv_status 备注1: 是否出库0否1是
          * */
 
-        if(taskNo.equals("001")){
+        if(signNo.equals("001")){
             taskService.updateRemark1OfAgv(agvNo,1);
         }
-        if(taskNo.equals("085")){
+        if(signNo.equals("085")){
             //todo 对接agv 此任务执行完成后更新已回库
             taskService.updateRemark1OfAgv(agvNo,0);
         }
