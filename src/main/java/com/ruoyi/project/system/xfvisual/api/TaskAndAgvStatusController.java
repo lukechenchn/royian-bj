@@ -187,6 +187,7 @@ public class TaskAndAgvStatusController {
         if(signNo.equals("040") ||  signNo.equals("045")){
             return addBjTaskDbData(data);
         }
+
         //检查当前AGV任务有没有重复
         int count  = taskService.selectCountByTaskNo(data.get("task_no"));
         if (count == 0){
@@ -204,8 +205,11 @@ public class TaskAndAgvStatusController {
         //任务没有重复  20250822去掉检查此任务是否重复，因为加油挂弹任务需要重复下发  20250827又加上了
 
         Map<String, String> taskFields = BjUtil.splitTaskNo(data.get("task_no"));
+        String agvNo = taskFields.get("agv_no");
+        String taskNo = taskFields.get("task_no");
         System.out.println("agv_no: " + taskFields.get("agv_no")); // 输出: 01
         System.out.println("task_no: " + taskFields.get("task_no")); // 输出: 001
+
 
         Map<String, Object> response = new HashMap<>();
         response.put("status_code", "01");
@@ -238,6 +242,33 @@ public class TaskAndAgvStatusController {
         bjTask.setOilNum(data.get("oil_num"));
         bjTask.setdType(data.get("d_type"));
         bjTask.setdNum(data.get("d_num"));
+
+
+        /** 任务相关逻辑处理
+         *  bj_agv_status 备注1: 是否出库0否1是
+         * */
+
+        if(taskNo.equals("001")){
+            taskService.updateRemark1OfAgv(agvNo,1);
+        }
+        if(taskNo.equals("085")){
+            //todo 对接agv 此任务执行完成后更新已回库
+            taskService.updateRemark1OfAgv(agvNo,0);
+        }
+
+        /**处理油弹数量逻辑*/
+        String oilType = data.get("oil_type");
+        if (oilType != null && !oilType.isEmpty()) {
+        }
+        String oilNum = data.get("oil_num");
+        if (oilNum != null && !oilNum.isEmpty()) {
+        }
+        String dType = data.get("d_type");
+        if (dType != null && !dType.isEmpty()) {}
+        String dNum = data.get("d_num");
+        if (dNum != null && !dNum.isEmpty()) {}
+
+
 
         genTaskService.insertBjTask(bjTask);
         response.put("response", taskResponse);
@@ -325,5 +356,35 @@ public class TaskAndAgvStatusController {
         // 返回响应...
         return null;
     }
+
+
+
+//"001":"出库"
+//"005":"移至待命区"
+//"010":"自主组装"
+//"015":“电检"
+//"020":"打开油弹库"
+//"025":"油出库"
+//"030":“"弹出库"
+// 035":"油弹移至XX号无人机"
+//"040":"加油XXL"，
+//"045":"挂XX弹X枚"
+//"050":"油弹AGV移出"
+//"055":"移至TS准备区"
+//"060":"举升至TS平台"
+//"065":"移至TS位置"
+//"070":"迁移装置装配"
+//"075":"无人机AGV还原"
+//"080":"移回机库"
+//"085": "TS"
+
+
+    /**
+     在待命区升降模拟组装
+
+     */
+
+
+
 
 }

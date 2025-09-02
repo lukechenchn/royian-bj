@@ -225,4 +225,8 @@ public class ApiTaskServiceImpl {
         // 直接调用Mapper执行SQL，SQL已保证优先级逻辑
         return bjTaskMapper.selectTargetTaskByAgvNo(agvNo);
     }
+
+    public void updateRemark1OfAgv(String agvNo, int i) {
+        bjTaskMapper.updateRemark1OfAgv(agvNo, i);
+    }
 }

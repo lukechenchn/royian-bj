@@ -22,9 +22,6 @@ public class BjTaskServiceImpl implements IBjTaskService
     private BjTaskMapper bjTaskMapper;
 
 
-
-
-
     /**
      * 查询bj任务
      *

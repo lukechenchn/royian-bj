@@ -75,4 +75,6 @@ public interface ApiTaskMapper {
 
 
     HashMap selectTargetTaskByAgvNo(String agvNo);
+
+    void updateRemark1OfAgv(String agvNo, int remark1);
 }

@@ -238,17 +238,32 @@
 --         ORDER BY
 --             remark2
 
-        SELECT
-            remark2 AS droneType,
-            COUNT(*) AS totalCount
-        FROM
-            bj_agv_status
-        WHERE
-            remark2 IS NOT NULL  -- 仅排除NULL值，不限制具体类型
-        GROUP BY
-            remark2  -- 按实际存在的remark2值自动分组
-        ORDER BY
-            remark2  -- 按类型名称自然排序（也可改为按数量排序：ORDER BY totalCount DESC）
+--         SELECT
+--             remark2 AS droneType,
+--             COUNT(*) AS totalCount
+--         FROM
+--             bj_agv_status
+--         WHERE
+--             remark2 IS NOT NULL  -- 仅排除NULL值，不限制具体类型
+--         GROUP BY
+--             remark2  -- 按实际存在的remark2值自动分组
+--         ORDER BY
+--             remark2  -- 按类型名称自然排序（也可改为按数量排序：ORDER BY totalCount DESC）
+
+SELECT
+    b.remark2 AS droneTypeCode,  -- 原始编码
+    t.content AS droneType,
+    COUNT(*) AS totalCount
+FROM
+    bj_agv_status b
+-- 关联翻译表，使用remark2匹配code字段
+        LEFT JOIN bj_translation t ON b.remark2 = t.code
+WHERE
+    b.remark2 IS NOT NULL
+GROUP BY
+    b.remark2, t.content  -- 同时按编码和翻译内容分组
+ORDER BY
+    droneTypeCode  -- 按编码排序，也可改为按数量排序：totalCount DESC
 
     </select>
 
@@ -390,6 +405,14 @@
     </select>
 
 
+    <update id="updateRemark1OfAgv">
+        UPDATE bj_agv_status
+        SET remark1 = #{remark1}
+        WHERE agv_no = #{agvNo}
+    </update>
+
+
+
 
 
 
@@ -493,6 +516,7 @@
         </trim>
         where uav_no = #{uavNo}
     </update>
+
 
 
 </mapper>
