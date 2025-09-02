@@ -54,6 +54,12 @@ public class FeedBackController {
                     result.put("start_time", task.getCreateTime());
                     result.put("finish_time",task.getFinishTime());
                     result.put("result", task.getTaskNo()+"."+task.getTaskStatus());
+
+                    //加油挂弹数量
+                    result.put("oil_num", task.getOilNum());
+                    result.put("d_num", task.getdNum());
+                    result.put("oil_type", task.getOilType());
+                    result.put("d_type", task.getdType());
                     return result;
                 })
                 .collect(Collectors.toList());

@@ -238,6 +238,7 @@ public class TaskAndAgvStatusController {
         bjTask.setOilNum(data.get("oil_num"));
         bjTask.setdType(data.get("d_type"));
         bjTask.setdNum(data.get("d_num"));
+
         genTaskService.insertBjTask(bjTask);
         response.put("response", taskResponse);
         return new ResponseEntity<>(response, HttpStatus.OK);

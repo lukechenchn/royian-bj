@@ -9,7 +9,7 @@ import com.ruoyi.framework.web.domain.BaseEntity;
  * AGV状态对象 bj_agv_status
  *
  * @author ruoyi
- * @date 2025-08-23
+ * @date 2025-09-02
  */
 public class BjAgvStatus extends BaseEntity
 {
@@ -127,8 +127,12 @@ public class BjAgvStatus extends BaseEntity
     private String remark1;
 
     /** 备注2:无人机类型A\B\C */
-    @Excel(name = "备注2:无人机类型A B C")
+    @Excel(name = "备注2:无人机类型A/B/C")
     private String remark2;
+
+    /** 小分类 */
+    @Excel(name = "小分类")
+    private String type;
 
     public void setId(Long id)
     {
@@ -420,6 +424,16 @@ public class BjAgvStatus extends BaseEntity
         return remark2;
     }
 
+    public void setType(String type)
+    {
+        this.type = type;
+    }
+
+    public String getType()
+    {
+        return type;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
@@ -452,6 +466,7 @@ public class BjAgvStatus extends BaseEntity
                 .append("containerStatus", getContainerStatus())
                 .append("remark1", getRemark1())
                 .append("remark2", getRemark2())
+                .append("type", getType())
                 .toString();
     }
 }

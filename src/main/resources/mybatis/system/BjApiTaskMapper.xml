@@ -304,7 +304,8 @@
         SELECT
         agv_no AS "agv_no",  -- 别名映射为JSON中的agv_no
         remark2 AS "agv_type",  -- 表中remark2映射为agv_type
-        work_status AS "work_status"  -- 保持字段名一致
+        work_status AS "work_status",  -- 保持字段名一致
+        type as "sub_type"
         FROM
         bj_agv_status
         <where>

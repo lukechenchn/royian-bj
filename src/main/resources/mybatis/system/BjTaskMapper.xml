@@ -70,6 +70,11 @@
             <if test="isFeedback != null">is_feedback,</if>
             <if test="remark1 != null">remark1,</if>
             <if test="remark2 != null">remark2,</if>
+            <if test="oilType != null">oil_type,</if>
+            <if test="oilNum != null">oil_num,</if>
+            <if test="dType != null">d_type,</if>
+            <if test="dNum != null">d_num,</if>
+
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="taskNo != null">#{taskNo},</if>
@@ -88,6 +93,10 @@
             <if test="isFeedback != null">#{isFeedback},</if>
             <if test="remark1 != null">#{remark1},</if>
             <if test="remark2 != null">#{remark2},</if>
+            <if test="oilType != null">#{oilType},</if>
+            <if test="oilNum != null">#{oilNum},</if>
+            <if test="dType != null">#{dType},</if>
+            <if test="dNum != null">#{dNum},</if>
         </trim>
     </insert>
 

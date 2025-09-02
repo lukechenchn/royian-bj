@@ -35,6 +35,10 @@ public class RyTask
         System.out.println("执行无参方法");
     }
 
+
+
+
+    /** bj定时任务,处理085任务完成后使用*/
     public void ryNoParamsBj()
     {
         //检查bj_task表中任务的执行状态,更新为已完成  (可先手动修改数据库)
