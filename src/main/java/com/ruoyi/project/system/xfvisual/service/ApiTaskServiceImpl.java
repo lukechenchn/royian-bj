@@ -9,6 +9,7 @@ import com.ruoyi.project.system.xfvisual.mapper.ApiTaskMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -228,5 +229,21 @@ public class ApiTaskServiceImpl {
 
     public void updateRemark1OfAgv(String agvNo, int i) {
         bjTaskMapper.updateRemark1OfAgv(agvNo, i);
+    }
+
+    public void updateOilContainerOilByTask(BigDecimal oilNum) {
+        bjTaskMapper.updateOilContainerOilByTask(oilNum);
+    }
+
+    public void updateOilContainerD1ByTask(int dNum) {
+        bjTaskMapper.updateOilContainerD1ByTask(dNum);
+    }
+
+    public void updateOilContainerD2ByTask(int dNum) {
+        bjTaskMapper.updateOilContainerD2ByTask(dNum);
+    }
+
+    public void updateOilContainerD3ByTask(int dNum) {
+        bjTaskMapper.updateOilContainerD3ByTask(dNum);
     }
 }

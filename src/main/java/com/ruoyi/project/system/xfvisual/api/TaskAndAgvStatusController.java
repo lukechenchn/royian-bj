@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 import static com.ruoyi.project.system.xfvisual.util.BjUtil.getPreviousTaskNo;
@@ -260,13 +262,37 @@ public class TaskAndAgvStatusController {
         String oilType = data.get("oil_type");
         if (oilType != null && !oilType.isEmpty()) {
         }
-        String oilNum = data.get("oil_num");
-        if (oilNum != null && !oilNum.isEmpty()) {
+        String oilNumStr = data.get("oil_num");
+        BigDecimal oilNum = null;
+        if (oilNumStr != null && !oilNumStr.isEmpty()) {
+            // 先转换为BigDecimal，避免精度丢失
+            BigDecimal originalNum = new BigDecimal(oilNumStr);
+            // 保留两位小数（四舍五入）
+            oilNum = originalNum.setScale(2, BigDecimal.ROUND_HALF_UP);
+            //更新油弹库总数
+            taskService.updateOilContainerOilByTask(oilNum);
         }
+
         String dType = data.get("d_type");
-        if (dType != null && !dType.isEmpty()) {}
-        String dNum = data.get("d_num");
-        if (dNum != null && !dNum.isEmpty()) {}
+        if (dType != null && !dType.isEmpty()) {
+
+            String dNumStr = data.get("d_num");
+            if (dNumStr != null && !dNumStr.isEmpty()) {
+               int dNum =   Integer.parseInt(dNumStr);
+            if (dType.equals("AR-1")) {
+                //更新挂弹库总数
+                taskService.updateOilContainerD1ByTask(dNum);
+            } else if (dType.equals("LT-2")) {
+                //更新挂弹库总数
+                taskService.updateOilContainerD2ByTask(dNum);
+            } else if (dType.equals("PL-16")) {
+                //更新挂弹库总数
+                taskService.updateOilContainerD3ByTask(dNum);
+            }
+
+            }
+        }
+
 
 
 
@@ -380,9 +406,10 @@ public class TaskAndAgvStatusController {
 
 
     /**
-     在待命区升降模拟组装
-
+      20250902  在待命区升降模拟组装
      */
+
+
 
 
 

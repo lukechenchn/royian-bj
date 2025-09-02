@@ -412,6 +412,35 @@ ORDER BY
     </update>
 
 
+    <!--更新油弹库 油-->
+    <update id="updateOilContainerOilByTask">
+        UPDATE bj_oil_container
+        SET oil_quantity1 =
+                ROUND(oil_quantity1 - #{oilNum}, 2)
+        WHERE id = 1
+        -- 确保结果也保留两位小数（防止运算后精度异常）
+    </update>
+
+    <!--更新油弹库 弹1-->
+    <update id="updateOilContainerD1ByTask">
+        UPDATE bj_oil_container
+        SET quantity1 = quantity1 - #{oilNum}
+        WHERE id = 1
+    </update>
+
+    <!--更新油弹库 弹2-->
+    <update id="updateOilContainerD2ByTask">
+        UPDATE bj_oil_container
+        SET quantity2 = quantity2 - #{oilNum}
+        WHERE id = 1
+    </update>
+
+    <!--更新油弹库 弹3-->
+    <update id="updateOilContainerD3ByTask">
+        UPDATE bj_oil_container
+        SET quantity3 = quantity3 - #{oilNum}
+        WHERE id = 1
+    </update>
 
 
 

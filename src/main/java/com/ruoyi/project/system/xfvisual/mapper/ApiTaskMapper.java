@@ -5,6 +5,7 @@ import com.ruoyi.project.system.task.domain.BjTask;
 import org.apache.ibatis.annotations.MapKey;
 import org.apache.ibatis.annotations.Param;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -77,4 +78,12 @@ public interface ApiTaskMapper {
     HashMap selectTargetTaskByAgvNo(String agvNo);
 
     void updateRemark1OfAgv(String agvNo, int remark1);
+
+    void updateOilContainerOilByTask(BigDecimal oilNum);
+
+    void updateOilContainerD1ByTask(int dNum);
+
+    void updateOilContainerD2ByTask(int dNum);
+
+    void updateOilContainerD3ByTask(int dNum);
 }
