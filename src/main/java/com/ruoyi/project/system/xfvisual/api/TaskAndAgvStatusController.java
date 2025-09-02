@@ -407,6 +407,9 @@ public class TaskAndAgvStatusController {
 
     /**
       20250902  在待命区升降模拟组装
+     升降信号对接
+     任务下发   工位
+     任务反馈，配置url
      */
 
 
