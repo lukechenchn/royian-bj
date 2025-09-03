@@ -479,38 +479,83 @@ ORDER BY
         <result property="remark2"    column="remark2"    />
     </resultMap>
 
+
+
     <sql id="selectBjAgvStatusVo">
-        select id, agv_no, task_no, sign_no, task_status, agv_status, battery_level, current_position, uav_no, uav_status, oil_quantity, oil_type, model1, quantity1, model2, quantity2, model3, quantity3, model4, quantity4, model5, quantity5, container_no, container_status, remark1, remark2 from bj_agv_status
+        select id, agv_no, task_no, sign_no, task_status, agv_status, battery_level,
+               current_position, uav_no, uav_status, oil_quantity, oil_type, model1,
+               quantity1, model2, quantity2, model3, quantity3, model4, quantity4, model5,
+               quantity5, container_no, container_status, remark1, remark2 from bj_agv_status
     </sql>
 
+<!--    <select id="selectBjAgvStatusListFeed" parameterType="BjAgvStatus" resultMap="BjAgvStatusResult">-->
+<!--        <include refid="selectBjAgvStatusVo"/>-->
+<!--        <where>-->
+<!--            <if test="agvNo != null  and agvNo != ''"> and agv_no = #{agvNo}</if>-->
+<!--            <if test="taskNo != null  and taskNo != ''"> and task_no = #{taskNo}</if>-->
+<!--            <if test="signNo != null  and signNo != ''"> and sign_no = #{signNo}</if>-->
+<!--            <if test="taskStatus != null  and taskStatus != ''"> and task_status = #{taskStatus}</if>-->
+<!--            <if test="agvStatus != null  and agvStatus != ''"> and agv_status = #{agvStatus}</if>-->
+<!--            <if test="batteryLevel != null  and batteryLevel != ''"> and battery_level = #{batteryLevel}</if>-->
+<!--            <if test="currentPosition != null  and currentPosition != ''"> and current_position = #{currentPosition}</if>-->
+<!--            <if test="uavNo != null  and uavNo != ''"> and uav_no = #{uavNo}</if>-->
+<!--            <if test="uavStatus != null  and uavStatus != ''"> and uav_status = #{uavStatus}</if>-->
+<!--            <if test="oilQuantity != null  and oilQuantity != ''"> and oil_quantity = #{oilQuantity}</if>-->
+<!--            <if test="oilType != null  and oilType != ''"> and oil_type = #{oilType}</if>-->
+<!--            <if test="model1 != null  and model1 != ''"> and model1 = #{model1}</if>-->
+<!--            <if test="quantity1 != null  and quantity1 != ''"> and quantity1 = #{quantity1}</if>-->
+<!--            <if test="model2 != null  and model2 != ''"> and model2 = #{model2}</if>-->
+<!--            <if test="quantity2 != null  and quantity2 != ''"> and quantity2 = #{quantity2}</if>-->
+<!--            <if test="model3 != null  and model3 != ''"> and model3 = #{model3}</if>-->
+<!--            <if test="quantity3 != null  and quantity3 != ''"> and quantity3 = #{quantity3}</if>-->
+<!--            <if test="model4 != null  and model4 != ''"> and model4 = #{model4}</if>-->
+<!--            <if test="quantity4 != null  and quantity4 != ''"> and quantity4 = #{quantity4}</if>-->
+<!--            <if test="model5 != null  and model5 != ''"> and model5 = #{model5}</if>-->
+<!--            <if test="quantity5 != null  and quantity5 != ''"> and quantity5 = #{quantity5}</if>-->
+<!--            <if test="containerNo != null  and containerNo != ''"> and container_no = #{containerNo}</if>-->
+<!--            <if test="containerStatus != null  and containerStatus != ''"> and container_status = #{containerStatus}</if>-->
+<!--            <if test="remark1 != null  and remark1 != ''"> and remark1 = #{remark1}</if>-->
+<!--            <if test="remark2 != null  and remark2 != ''"> and remark2 = #{remark2}</if>-->
+<!--        </where>-->
+<!--    </select>-->
+
     <select id="selectBjAgvStatusListFeed" parameterType="BjAgvStatus" resultMap="BjAgvStatusResult">
-        <include refid="selectBjAgvStatusVo"/>
+        select
+        a.id,  -- 明确指定id来自bj_agv_status表（使用别名a）
+        a.agv_no,
+        a.task_no,
+        a.sign_no,
+        a.task_status,
+        a.agv_status,
+        a.battery_level,
+        a.current_position,
+        a.uav_no,
+        a.uav_status,
+        a.oil_quantity,
+        a.oil_type,
+        a.model1,
+        a.quantity1,
+        a.model2,
+        a.quantity2,
+        a.model3,
+        a.quantity3,
+        a.model4,
+        a.quantity4,
+        a.model5,
+        a.quantity5,
+        a.container_no,
+        a.container_status,
+        a.remark1,
+--         a.remark2,
+        t.content AS remark2
+        from
+        bj_agv_status a
+        LEFT JOIN
+        bj_translation t ON a.remark2 = t.code
         <where>
-            <if test="agvNo != null  and agvNo != ''"> and agv_no = #{agvNo}</if>
-            <if test="taskNo != null  and taskNo != ''"> and task_no = #{taskNo}</if>
-            <if test="signNo != null  and signNo != ''"> and sign_no = #{signNo}</if>
-            <if test="taskStatus != null  and taskStatus != ''"> and task_status = #{taskStatus}</if>
-            <if test="agvStatus != null  and agvStatus != ''"> and agv_status = #{agvStatus}</if>
-            <if test="batteryLevel != null  and batteryLevel != ''"> and battery_level = #{batteryLevel}</if>
-            <if test="currentPosition != null  and currentPosition != ''"> and current_position = #{currentPosition}</if>
-            <if test="uavNo != null  and uavNo != ''"> and uav_no = #{uavNo}</if>
-            <if test="uavStatus != null  and uavStatus != ''"> and uav_status = #{uavStatus}</if>
-            <if test="oilQuantity != null  and oilQuantity != ''"> and oil_quantity = #{oilQuantity}</if>
-            <if test="oilType != null  and oilType != ''"> and oil_type = #{oilType}</if>
-            <if test="model1 != null  and model1 != ''"> and model1 = #{model1}</if>
-            <if test="quantity1 != null  and quantity1 != ''"> and quantity1 = #{quantity1}</if>
-            <if test="model2 != null  and model2 != ''"> and model2 = #{model2}</if>
-            <if test="quantity2 != null  and quantity2 != ''"> and quantity2 = #{quantity2}</if>
-            <if test="model3 != null  and model3 != ''"> and model3 = #{model3}</if>
-            <if test="quantity3 != null  and quantity3 != ''"> and quantity3 = #{quantity3}</if>
-            <if test="model4 != null  and model4 != ''"> and model4 = #{model4}</if>
-            <if test="quantity4 != null  and quantity4 != ''"> and quantity4 = #{quantity4}</if>
-            <if test="model5 != null  and model5 != ''"> and model5 = #{model5}</if>
-            <if test="quantity5 != null  and quantity5 != ''"> and quantity5 = #{quantity5}</if>
-            <if test="containerNo != null  and containerNo != ''"> and container_no = #{containerNo}</if>
-            <if test="containerStatus != null  and containerStatus != ''"> and container_status = #{containerStatus}</if>
-            <if test="remark1 != null  and remark1 != ''"> and remark1 = #{remark1}</if>
-            <if test="remark2 != null  and remark2 != ''"> and remark2 = #{remark2}</if>
+            <if test="agvNo != null  and agvNo != ''"> and a.agv_no = #{agvNo}</if>
+            <if test="taskNo != null  and taskNo != ''"> and a.task_no = #{taskNo}</if>
+            <if test="signNo != null  and signNo != ''"> and a.sign_no = #{signNo}</if>
         </where>
     </select>
 

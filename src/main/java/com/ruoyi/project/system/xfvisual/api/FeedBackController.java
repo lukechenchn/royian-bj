@@ -85,21 +85,7 @@ public class FeedBackController {
                     Map<String, Object> result = new HashMap<>();
 //                    result.put("task_no", task.getTaskNo());
 
-//                    agv_status
-//                            battery_level
-//                    current_position
-//                            oil_quantity
-//                    oil_type
-//                            model1
-//                    quantity1
-//                            model2
-//                    quantity2
-//                            model3
-//                    quantity3
-//                            model4
-//                    quantity4
-//                            model5
-//                    quantity5
+
                     result.put("agv_no", task.getAgvNo());
                     result.put("agv_status", task.getAgvStatus());
                     result.put("battery_level", task.getBatteryLevel());
@@ -111,6 +97,12 @@ public class FeedBackController {
                     result.put("quantity4", task.getQuantity4());
                     result.put("quantity5", task.getQuantity5());
                     result.put("container_status", task.getContainerStatus());
+
+
+
+                    result.put("agv_type", task.getRemark2());
+
+
 
                     // 添加 remark1 字段，当值为0时返回"否"
 //                    Object remark1Value = task.getRemark1();
