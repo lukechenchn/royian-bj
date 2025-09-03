@@ -103,7 +103,6 @@ public class FeedBackController {
                     result.put("agv_type", task.getRemark2());
 
 
-
                     // 添加 remark1 字段，当值为0时返回"否"
 //                    Object remark1Value = task.getRemark1();
 //                    if (remark1Value != null && "0".equals(remark1Value.toString())) {

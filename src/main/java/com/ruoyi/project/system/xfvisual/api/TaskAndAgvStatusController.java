@@ -186,7 +186,13 @@ public class TaskAndAgvStatusController {
         }
         System.out.println("[服务器日志] 客户端发送的 JSON 数据: " + data);
         String signNo = BjUtil.splitTaskNo(data.get("task_no")).get("sign_no");
-        if(signNo.equals("040") ||  signNo.equals("045")){
+
+        /* 020 - 050的任务都可以重复下发 */
+
+        if(signNo.equals("020") || signNo.equals("025") || signNo.equals("030")
+                || signNo.equals("035") || signNo.equals("040") ||
+                signNo.equals("045") || signNo.equals("050")
+        ){
             return addBjTaskDbData(data);
         }
 
