@@ -119,9 +119,9 @@ public class ApiTaskServiceImpl {
 
 
     private static final String[] MISSILE_NAMES = {
-            "1导弹",   // quantity1对应导弹名称
-            "2导弹",   // quantity2对应导弹名称
-            "3导弹",   // quantity3对应导弹名称
+            "AR-1",   // quantity1对应导弹名称
+            "LT-2",   // quantity2对应导弹名称
+            "PL-16",   // quantity3对应导弹名称
             "4导弹",   // quantity4对应导弹名称
             "5导弹"    // quantity5对应导弹名称
     };

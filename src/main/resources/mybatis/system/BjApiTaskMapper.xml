@@ -370,9 +370,11 @@ ORDER BY
 
             work_status,
             current_position as agv_location,
-            battery_level as equi_status
+            battery_level as equi_status,
+            COALESCE(t.content, b.remark2) as agv_type
         FROM
-            bj_agv_status
+            bj_agv_status b
+                LEFT JOIN bj_translation t ON b.remark2 = t.code
         WHERE
             agv_no = #{agvNo}
     </select>
