@@ -251,9 +251,33 @@ public class FeedBack2Controller {
         BjZlSystemInfo bjZlSystemInfo = new BjZlSystemInfo();
         bjZlSystemInfo.setId(1L);
         bjZlSystemInfo.setStatus(data.get("status"));
-        bjZlSystemInfo.setWeight(Long.valueOf(data.get("weight")));
-        bjZlSystemInfo.setSpeed(Long.valueOf(data.get("speed")));
-        bjZlSystemInfo.setNum(Long.valueOf(data.get("num")));
+        String weightStr = data.get("weight");
+        String speedStr = data.get("speed");
+        String numStr = data.get("num");
+
+        if (weightStr != null && !weightStr.isEmpty()) {
+            try {
+                bjZlSystemInfo.setWeight(Long.valueOf(weightStr));
+            } catch (NumberFormatException e) {
+                // 忽略转换异常，保持原值或默认值
+            }
+        }
+
+        if (speedStr != null && !speedStr.isEmpty()) {
+            try {
+                bjZlSystemInfo.setSpeed(Long.valueOf(speedStr));
+            } catch (NumberFormatException e) {
+                // 忽略转换异常，保持原值或默认值
+            }
+        }
+
+        if (numStr != null && !numStr.isEmpty()) {
+            try {
+                bjZlSystemInfo.setNum(Long.valueOf(numStr));
+            } catch (NumberFormatException e) {
+                // 忽略转换异常，保持原值或默认值
+            }
+        }
         bjZlSystemInfoService.updateBjZlSystemInfo(bjZlSystemInfo);
         Map<String, Object> response = new HashMap<>();
         response.put("code", 200);
@@ -282,9 +306,28 @@ public class FeedBack2Controller {
     public Map tsUpdate(@RequestBody Map<String, String> data) {
         BjTsSystemInfo bjTsSystemInfo = new BjTsSystemInfo();
         bjTsSystemInfo.setId(1L);
-        bjTsSystemInfo.setStatus(data.get("status"));
-        bjTsSystemInfo.setBattery(data.get("battery"));
-        bjTsSystemInfo.setNum(Integer.parseInt(data.get("num")));
+//        bjTsSystemInfo.setStatus(data.get("status"));
+//        bjTsSystemInfo.setBattery(data.get("battery"));
+//        bjTsSystemInfo.setNum(Integer.parseInt(data.get("num")));
+        // 仅当参数存在时才更新对应的字段
+        if (data.containsKey("status")) {
+            bjTsSystemInfo.setStatus(data.get("status"));
+        }
+        if (data.containsKey("battery")) {
+            bjTsSystemInfo.setBattery(data.get("battery"));
+        }
+        if (data.containsKey("num")) {
+            // 处理数字转换可能出现的异常
+            try {
+                bjTsSystemInfo.setNum(Integer.parseInt(data.get("num")));
+            } catch (NumberFormatException e) {
+                Map<String, Object> errorResponse = new HashMap<>();
+                errorResponse.put("code", 400);
+                errorResponse.put("msg", "num参数格式错误，必须为整数");
+                return errorResponse;
+            }
+        }
+
         bjTsSystemInfoService.updateBjTsSystemInfo(bjTsSystemInfo);
         Map<String, Object> response = new HashMap<>();
         response.put("code", 200);

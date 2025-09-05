@@ -12,7 +12,7 @@
 
     <name>royian</name>
     <url>http://www.baidu.com</url>
-    <description>若依管理系统</description>
+    <description>调度系统</description>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
