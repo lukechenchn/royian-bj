@@ -1,5 +1,8 @@
 package com.ruoyi.project.system.xfvisual.api;
 
+import cn.hutool.core.lang.Console;
+import cn.hutool.http.HttpRequest;
+import cn.hutool.json.JSONObject;
 import com.ruoyi.framework.aspectj.lang.annotation.Anonymous;
 import com.ruoyi.project.system.task.domain.BjTask;
 import com.ruoyi.project.system.task.service.impl.BjTaskServiceImpl;
@@ -10,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -300,17 +304,87 @@ public class TaskAndAgvStatusController {
         }
 
 
+        int taskId = genTaskService.insertBjTask(bjTask);
+        taskId = Integer.parseInt(bjTask.getId()+"");
+        //需要下发给AGV的情况
+        if(signNo.equals("001") || signNo.equals("005") || signNo.equals("010")
+                || signNo.equals("055") || signNo.equals("060")|| signNo.equals("075")
+                || signNo.equals("080")
+        ){
+            String url = "http://192.168.2.2:8086/api/HD/NewTaskDistribution";
+            JSONObject paramMap = new JSONObject();
+//        {
+//            "MissionUid": "xxxxxxx",     //任务ID
+//                "StationName": "xxxxxx",   //目标工位名称
+//                "AGVNum": 1,   //指定车辆，0：不指定，1-4指定车辆
+//                "Balance": true      //是否调平
+//        }
+//        L0准备区  L1/L2起飞区  L3/L4弹射位   L5机库
 
+            paramMap.put("MissionUid", taskId);
 
-        genTaskService.insertBjTask(bjTask);
+            if(signNo.equals("001")){
+                paramMap.put("StationName", "L0");
+                paramMap.put("Balance", false);
+            }
+            if(signNo.equals("005")){
+                paramMap.put("StationName", "L1");
+                paramMap.put("Balance", false);
+            }
+            if(signNo.equals("010")){
+                paramMap.put("StationName", "L2");
+                paramMap.put("Balance", true);
+            }
+            if(signNo.equals("055")){
+                paramMap.put("StationName", "L3");
+                paramMap.put("Balance", false);
+            }
+            if(signNo.equals("060")){
+                paramMap.put("StationName", "L4");
+                paramMap.put("Balance", true);
+            }
+            if(signNo.equals("075")){
+                paramMap.put("StationName", "L0");
+                paramMap.put("Balance", true);
+            }
+            if(signNo.equals("080")){
+                paramMap.put("StationName", "L5");
+                paramMap.put("Balance", false);
+            }
+            paramMap.put("AGVNum", 1);
+
+            String result2 = null;
+            try {
+
+                result2 = BjUtil.postJson(url,paramMap.toString());
+//                 result2 = HttpRequest.post(url)
+//                        .body(paramMap.toString())
+//                        .execute()
+//                        .body();
+
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            Console.log("result2====================",result2);
+
+        }
+
         response.put("response", taskResponse);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 
     // 任务号白名单
+//    private static final Set<String> VALID_TASK_NUMBERS = new HashSet<>(Arrays.asList(
+//            "001", "002", "003", "005",
+//            "010", "015", "020", "025",
+//            "030", "035", "040", "045",
+//            "050", "055", "060", "065",
+//            "070", "075", "080", "085"
+//    ));
+
     private static final Set<String> VALID_TASK_NUMBERS = new HashSet<>(Arrays.asList(
-            "001", "002", "003", "005",
+            "001", "005",
             "010", "015", "020", "025",
             "030", "035", "040", "045",
             "050", "055", "060", "065",

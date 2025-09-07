@@ -35,7 +35,7 @@ public class AgvMissionReportController {
     /**调用接口，获取AGV实时状态*/
     @GetMapping("/OmarkAgvState")
     public Map<String, Object> getOmarkAgvState() {
-        String url = "http://ip:port/api/HD/QueryAGVsystem";
+        String url = "http://192.168.2.2:8086/api/HD/QueryAGVsystem";
         Map paramMap = new HashMap<>();
         paramMap.put("Task", "AGVInfo");
         String result2 = HttpRequest.post(url)
@@ -78,6 +78,9 @@ public class AgvMissionReportController {
             Integer x = position.get("x");
             Integer y = position.get("y");
             Integer z = position.get("z");
+            String positionDb = "(" + x + ", " + y + ", " + z + ")";
+            System.out.println("(" + x + ", y=" + y + ", z=" + z+")");
+
 
             // 打印AGV信息
             System.out.println("\nAGV车号：" + vehicleName);
@@ -86,7 +89,12 @@ public class AgvMissionReportController {
             System.out.println("故障码：" + faultCode);
             System.out.println("告警码：" + alarmCode);
             System.out.println("坐标：x=" + x + ", y=" + y + ", z=" + z);
-    }
+
+            String agvNo = "01";
+
+            // 更新AGV状态
+            taskService.updateAgvState(agvNo, positionDb,energyLevel);
+        }
         Map map = new HashMap<>();
         map.put("msg",result2);
         return  null;
@@ -96,7 +104,7 @@ public class AgvMissionReportController {
 
     @GetMapping("/newTaskDistribution")
     public Map<String, Object> newTaskDistribution() {
-        String url = "http://ip:port/api/HD/newTaskDistribution";
+        String url = "http://192.168.2.2:8086/api/HD/newTaskDistribution";
         Map paramMap = new HashMap<>();
 //        {
 //            "MissionUid": "xxxxxxx",     //任务ID
@@ -123,26 +131,26 @@ public class AgvMissionReportController {
     /**
      * AGV任务状态上报接口
      */
-    @PostMapping("/MissionState")
-    public ApiResponse reportMissionState(@RequestBody AgvMissionRequest request) {
+    @PostMapping("/missionState")
+    public ApiResponse reportMissionState(@RequestBody String jsonString) {
         try {
+            System.out.println("接收到的JSON数据：" + jsonString);
+            // 将JSON字符串转换为实体类
+            AgvMissionRequest request = JSONUtil.toBean(jsonString, AgvMissionRequest.class);
+            
             // 1. 打印接收的上报信息（实际应用中可根据需要处理）
             System.out.println("收到AGV任务上报 - 任务ID: " + request.getMissionUid() + 
                                ", 当前位置: " + request.getCurrentLocation() + 
                                ", 状态: " + request.getState());
 
-            // 2. 业务逻辑处理（根据实际需求实现）
-            // 例如：更新数据库中的任务状态
-            // 这里可以添加你的业务代码
-
-//           根据MissionUid更新任务状态   State
-//            taskService.updateTaskState(request.getMissionUid(), request.getState());
-
-
+            // 2. 业务逻辑处理
+//           根据MissionUid更新任务状态
+            taskService.updateAgvTaskState(request.getMissionUid(), request.getState());
 
             // 3. 构建成功响应
             Map<String, String> resultMap = new HashMap<>();
             resultMap.put("上报成功", "任务状态已更新");
+            Console.log(resultMap);
             return new ApiResponse(0, "", resultMap);
             
         } catch (Exception e) {
@@ -150,24 +158,6 @@ public class AgvMissionReportController {
             return new ApiResponse(1, "处理失败: " + e.getMessage(), null);
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -252,6 +242,8 @@ public class AgvMissionReportController {
      * 请求参数内部类
      */
     static class AgvMissionRequest {
+
+
         @NotBlank(message = "MissionUid不能为空")
         private String MissionUid;
 

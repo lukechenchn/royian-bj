@@ -171,6 +171,20 @@ public class ApiTaskServiceImpl {
             for (int i = 1; i <= 5; i++) {
                 status.remove("quantity" + i);
             }
+            status.remove("task_message");
+            /** 20250829增加逻辑，返回agv当前正在执行的任务   */
+
+            Map nowTask  = bjTaskMapper.selectTargetTaskByAgvNo(agvNo);
+
+            if (nowTask != null) {
+                // 有任务：返回任务详情+状态说明
+                status.put("task_message",nowTask.get("task_no")+"."+nowTask.get("task_status"));
+            } else {
+                // 无任务：返回提示（按业务需求调整）
+                status.put("task_message","该AGV暂无任务记录");
+            }
+
+
         }
 
 //        for (Map<String, Object> status : statusList) {
@@ -246,4 +260,16 @@ public class ApiTaskServiceImpl {
     public void updateOilContainerD3ByTask(int dNum) {
         bjTaskMapper.updateOilContainerD3ByTask(dNum);
     }
+
+    public void updateAgvTaskState(String taskNo, Integer status) {
+        bjTaskMapper.updateAgvTaskState(taskNo, status);
+    }
+
+    public void updateAgvState(String agvNo, String positionDb, Integer energyLevel) {
+        bjTaskMapper.updateAgvState(agvNo, positionDb, energyLevel);
+    }
+
+
+
+
 }

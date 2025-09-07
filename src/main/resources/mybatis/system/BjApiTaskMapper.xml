@@ -594,6 +594,27 @@ ORDER BY
     </update>
 
 
+    <update id="updateAgvTaskState">
+        update bj_task set task_status = #{status} where id = #{taskNo}
+            ORDER BY create_time DESC
+        LIMIT 1;
+    </update>
+
+
+    <update id="updateAgvState">
+
+        UPDATE bj_agv_status
+        SET
+            battery_level = #{energyLevel},
+            current_position = #{positionDb}
+        WHERE
+            agv_no = #{agvNo} ;
+
+
+
+
+    </update>
+
 
 </mapper>
 <!--<if test="true"> and task_status != 2 </if>-->

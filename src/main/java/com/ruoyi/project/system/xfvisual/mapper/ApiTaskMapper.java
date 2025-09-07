@@ -86,4 +86,8 @@ public interface ApiTaskMapper {
     void updateOilContainerD2ByTask(int dNum);
 
     void updateOilContainerD3ByTask(int dNum);
+
+    void updateAgvTaskState(String taskNo, Integer status);
+
+    void updateAgvState(String agvNo, String positionDb, Integer energyLevel);
 }
