@@ -4,6 +4,7 @@ package com.ruoyi.project.system.xfvisual.api;
 import com.ruoyi.framework.aspectj.lang.annotation.Anonymous;
 import com.ruoyi.project.system.task.domain.BjTask;
 import com.ruoyi.project.system.task.service.impl.BjTaskServiceImpl;
+import com.ruoyi.project.system.xfvisual.service.ApiTaskServiceImpl;
 import com.ruoyi.project.system.xfvisual.util.BjUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,13 +22,18 @@ public class UpdateInfoController {
     @Autowired
     private BjTaskServiceImpl taskService;
 
+
+    @Autowired
+    private ApiTaskServiceImpl apiTaskService;
+
+
     @Autowired
     TaskAndAgvStatusController tcontroller;
 
 
 
 /**最终接口2：任务状态修改*/
-//    提供接口给航保修改AR眼镜的任务的状态修改
+/**提供接口给航保修改AR眼镜的任务的状态修改*/
     @PostMapping("/updateTask")
     public Map deleteTasks(@RequestBody Map<String, String> data) {
         Map map = new HashMap();
@@ -47,6 +53,29 @@ public class UpdateInfoController {
                 boolean canExecute =  tcontroller.canExecuteCurrentTask(task.get(0).getAgvNo(),task.get(0).getSignNo());
 //                暂时放开任务执行状态检查
                     canExecute = true;
+                    /** 判断任务 045挂弹，执行完后减去油弹库的数量*/
+                    /**处理油数量逻辑*/
+                    if(task.get(0).getSignNo().equals("045")){
+                    String dType = task.get(0).getdType();
+                    if (dType != null && !dType.isEmpty()) {
+                        String dNumStr = task.get(0).getdNum();
+                        if (dNumStr != null && !dNumStr.isEmpty()) {
+                            int dNum =   Integer.parseInt(dNumStr);
+                            if (dType.equals("AR-1")) {
+                                //更新挂弹库总数
+                                apiTaskService.updateOilContainerD1ByTask(dNum);
+                            } else if (dType.equals("LT-2")) {
+                                //更新挂弹库总数
+                                apiTaskService.updateOilContainerD2ByTask(dNum);
+                            } else if (dType.equals("PL-16")) {
+                                //更新挂弹库总数
+                                apiTaskService.updateOilContainerD3ByTask(dNum);
+                            }
+                        }
+                    }
+                    }
+
+
                 if(canExecute){
                 }else{
                     map.put("msg","请检查上个任务状态");
@@ -63,7 +92,7 @@ public class UpdateInfoController {
                 taskService.finishTask(taskNo);
 
 
-                //2.调用接口反馈已经完成的信息,
+//2.调用接口反馈已经完成的信息,  这块不用调用了  先放着
 //        任务号
 //                task_no
 //        任务执行状态
@@ -80,7 +109,6 @@ public class UpdateInfoController {
                 feedbackData.put("start_time", task.get(0).getCreateTime()); // 可以从数据库或其他逻辑中获取实际开始时间
                 feedbackData.put("finish_time", new Date()); // 结束时间，当前时间
                 list.add(feedbackData);
-
 
 // 发送 POST 请求
 //        String result2 = HttpRequest.post("url")

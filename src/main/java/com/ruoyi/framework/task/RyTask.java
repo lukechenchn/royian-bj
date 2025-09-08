@@ -137,29 +137,18 @@ public class RyTask
 
             // 安全地获取嵌套的position坐标
             Object positionObj = agv.get("position");
-            Integer x = 0, y = 0, z = 0;
+            JSONArray positionArray = JSONUtil.parseArray(positionObj);
 
-            if (positionObj != null) {
-                try {
-                    if (positionObj instanceof Map) {
-                        // 如果position是Map类型
-                        Map<String, Object> position = (Map<String, Object>) positionObj;
-                        x = ((Number) position.get("x")).intValue();
-                        y = ((Number) position.get("y")).intValue();
-                        z = ((Number) position.get("z")).intValue();
-                    } else if (positionObj instanceof List) {
-                        // 如果position是数组类型
-                        List<Object> positionList = (List<Object>) positionObj;
-                        if (positionList.size() >= 3) {
-                            x = ((Number) positionList.get(0)).intValue();
-                            y = ((Number) positionList.get(1)).intValue();
-                            z = ((Number) positionList.get(2)).intValue();
-                        }
-                    }
-                } catch (Exception e) {
-                    System.err.println("解析position数据时出错: " + e.getMessage());
-                }
-            }
+            Console.log("positionObj instanceof List",positionObj instanceof List);
+            Console.log(positionArray);
+
+            JSONObject position = positionArray.getJSONObject(0);
+
+            // 提取 x, y, z 值
+            String x = position.getStr("x");
+            String y = position.getStr("y");
+            String z = position.getStr("z");
+
 
             String positionDb = "(" + x + ", " + y + ", " + z + ")";
             System.out.println(positionDb);
@@ -179,6 +168,14 @@ public class RyTask
         }
     }
 
+
+    /*
+     "MISSIONSTATEAPI":
+  {
+    "IPPORT": "192.168.2.211:8005",
+    "PATH": "/api/missionState"
+  }
+    * */
 
     public static void main(String[] args) throws IOException {
         String url = "http://192.168.2.2:8086/api/HD/QueryAGVsystem";
