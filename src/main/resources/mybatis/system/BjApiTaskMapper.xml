@@ -193,7 +193,9 @@
 
     <select id="selectCountByTaskNo" resultType="java.lang.Integer">
         select count(*) from bj_task
-        where task_no = #{taskNo} and is_deleted = 0 and task_status != '2'
+        where task_no = #{taskNo} and is_deleted = 0
+        -- 没执行的任务也不能重复下
+         -- and task_status != '2'
     </select>
 
     <select id="isTaskCompleted" resultType="java.lang.Integer">
@@ -220,6 +222,7 @@
             <if test="remark2 != null  and remark2 != ''"> and remark2 = #{remark2}</if>
         </where>
         order by create_time desc
+        -- , id DESC
     </select>
 
 
@@ -365,13 +368,13 @@ ORDER BY
             quantity5,
             task_no as task_message,
 --             elec_status,
-
             COALESCE(elec_status, '电检状态正常') as elec_status,
 
             work_status,
             current_position as agv_location,
             battery_level as equi_status,
-            COALESCE(t.content, b.remark2) as agv_type
+            COALESCE(t.content, b.remark2) as agv_type,
+            b.type as sub_type
         FROM
             bj_agv_status b
                 LEFT JOIN bj_translation t ON b.remark2 = t.code
@@ -562,6 +565,32 @@ ORDER BY
     </select>
 
 
+    <select id="getNowTaskByAgvNo" resultType="java.util.HashMap">
+        SELECT
+            *
+        FROM bj_task
+        WHERE agv_no = #{agvNo}
+          and is_deleted = 0
+          and task_status =0
+        ORDER BY  create_time
+        LIMIT 1;
+    </select>
+
+    <select id="haveNoDoingArTask" resultType="java.lang.Integer">
+        SELECT
+           count(*)
+        FROM bj_task
+        WHERE agv_no = #{agvNo}
+          and is_deleted = 0
+          and task_status =1
+          -- 增加任务号判断，只包含指定的任务号
+          AND sign_no IN (
+               '001', '015', '020', '025',
+               '030', '035', '040', '045',
+               '050', '065','070',  '085');
+    </select>
+
+
     <update id="updateBjAgvWithOilStatus" parameterType="BjAgvStatus">
         update bj_agv_status
         <trim prefix="SET" suffixOverrides=",">
@@ -609,11 +638,80 @@ ORDER BY
             current_position = #{positionDb}
         WHERE
             agv_no = #{agvNo} ;
-
-
-
-
     </update>
+
+
+    <update id="updateAgvStateAboutDj">
+        UPDATE bj_agv_status
+        SET
+            elec_status = #{elecStatus}
+        WHERE
+            agv_no = #{agvNo} ;
+    </update>
+
+    <update id="initWrjStatus">
+        UPDATE bj_agv_status
+        SET
+            quantity1 = 0,
+            quantity2 = 0,
+            quantity3 = 0,
+            quantity4 = 0,
+            quantity5 = 0
+
+        where
+            agv_no = #{agvNo};
+    </update>
+
+
+    <update id="updateWrjDNum1ByTask">
+        UPDATE bj_agv_status
+        SET
+
+          quantity1 = #{dNum}
+        WHERE
+            agv_no = #{wrjNo}
+          AND quantity1 IS NOT NULL;
+    </update>
+
+    <update id="updateWrjDNum2ByTask">
+        UPDATE bj_agv_status
+        SET
+
+            quantity2 = #{dNum}
+        WHERE
+            agv_no = #{wrjNo}
+          AND quantity2 IS NOT NULL;
+    </update>
+
+    <update id="updateWrjDNum3ByTask">
+        UPDATE bj_agv_status
+        SET
+
+            quantity3 = #{dNum}
+        WHERE
+            agv_no = #{wrjNo}
+          AND quantity3 IS NOT NULL;
+    </update>
+
+
+
+    <update id="updateWrjOilByTask">
+        UPDATE bj_agv_status
+        SET
+            oil_quantity = LEAST(oil_quantity + #{oilNum}, 100)  -- 叠加后不超过100（上限可自定义）
+        WHERE
+            agv_no = #{wrjNo}
+          AND oil_quantity IS NOT NULL;  -- 额外防护：避免字段为NULL时叠加出错
+    </update>
+
+    <update id="updateZpStatus">
+        UPDATE bj_agv_status
+        SET
+            zp_state = #{zpstate}
+        WHERE
+            agv_no = #{agvNo}
+    </update>
+
 
 
 </mapper>

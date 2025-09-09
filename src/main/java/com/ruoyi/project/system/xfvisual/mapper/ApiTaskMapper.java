@@ -90,4 +90,26 @@ public interface ApiTaskMapper {
     void updateAgvTaskState(String taskNo, Integer status);
 
     void updateAgvState(String agvNo, String positionDb, Integer energyLevel);
+
+
+    /** 更新电检状态*/
+    void updateAgvStateAboutDj(String agvNo, String elecStatus);
+
+    HashMap getNowTaskByAgvNo(String agvNo);
+
+    void updateWrjDNum1ByTask(String wrjNo, String dNum);
+
+    void updateWrjDNum2ByTask(String wrjNo, String dNum);
+
+    void updateWrjDNum3ByTask(String wrjNo, String dNum);
+
+
+
+    void updateWrjOilByTask(String wrjNo, String oilNum);
+
+    void initWrjStatus(String agvNo);
+
+    void updateZpStatus(String agvNo, Integer zpstate);
+
+    int haveNoDoingArTask(String agv);
 }

@@ -120,6 +120,10 @@ public class BjTaskServiceImpl implements IBjTaskService
         bjTaskMapper.updateTaskInfo(taskNo, taskStatus);
     }
 
+    public void updateTaskInfoById(String taskId, String taskStatus) {
+        bjTaskMapper.updateTaskInfoById(taskId, taskStatus);
+    }
+
     public int isTaskCompleted(String agvNo, String previousTaskNo) {
         return bjTaskMapper.isTaskCompleted(agvNo, previousTaskNo);
     }
@@ -129,4 +133,6 @@ public class BjTaskServiceImpl implements IBjTaskService
     {
         return bjTaskMapper.selectBjTaskListFeed(bjTask);
     }
+
+
 }

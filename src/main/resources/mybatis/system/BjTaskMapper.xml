@@ -22,10 +22,23 @@
         <result property="isFeedback"    column="is_feedback"    />
         <result property="remark1"    column="remark1"    />
         <result property="remark2"    column="remark2"    />
+
+
+        <result property="oilType"    column="oil_type"    />
+        <result property="oilNum"    column="oil_num"    />
+        <result property="dType"    column="d_type"    />
+        <result property="dNum"    column="d_num"    />
+
     </resultMap>
 
     <sql id="selectBjTaskVo">
-        select id, task_no, agv_no, uav_no, container_no, sign, sign_no, task_status, is_deleted, create_by, create_time, update_by, update_time, finish_time, is_feedback, remark1, remark2 from bj_task
+        select id, task_no, agv_no, uav_no, container_no,
+               sign, sign_no, task_status, is_deleted,
+               create_by, create_time, update_by, update_time,
+               finish_time, is_feedback, remark1, remark2
+            ,oil_type,oil_num
+            ,d_type,d_num
+        from bj_task
     </sql>
 
     <select id="selectBjTaskList" parameterType="BjTask" resultMap="BjTaskResult">
@@ -166,7 +179,11 @@
     </update>
 
 
-
+    <update id="updateTaskInfoById">
+        UPDATE bj_task
+        SET task_status = #{taskStatus}
+        WHERE id = #{taskId} and is_deleted = 0;
+    </update>
 
 
     <select id = "selectBjTaskByTaskNo" parameterType="String" resultMap="BjTaskResult">

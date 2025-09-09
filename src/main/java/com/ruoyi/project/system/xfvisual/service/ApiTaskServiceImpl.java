@@ -241,6 +241,13 @@ public class ApiTaskServiceImpl {
         return bjTaskMapper.selectTargetTaskByAgvNo(agvNo);
     }
 
+    public Map getNowTaskByAgvNo(String agvNo) {
+        return bjTaskMapper.getNowTaskByAgvNo(agvNo);
+    }
+
+
+
+
     public void updateRemark1OfAgv(String agvNo, int i) {
         bjTaskMapper.updateRemark1OfAgv(agvNo, i);
     }
@@ -269,7 +276,46 @@ public class ApiTaskServiceImpl {
         bjTaskMapper.updateAgvState(agvNo, positionDb, energyLevel);
     }
 
+    public void updateAgvStateAboutDj(String agvNo, String elecStatus) {
+        bjTaskMapper.updateAgvStateAboutDj(agvNo, elecStatus);
+    }
 
 
 
+    public void updateWrjOilByTask(String wrjNo, String oilNum) {
+        bjTaskMapper.updateWrjOilByTask(wrjNo, oilNum);
+    }
+
+
+
+    /**更新wij弹1*/
+    public void updateWrjDNum1ByTask(String wrjNo, String dNum) {
+        bjTaskMapper.updateWrjDNum1ByTask(wrjNo, dNum);
+    }
+
+    /**更新wij弹2*/
+    public void updateWrjDNum2ByTask(String wrjNo, String dNum) {
+        bjTaskMapper.updateWrjDNum2ByTask(wrjNo, dNum);
+    }
+
+    /**更新wij弹3*/
+    public void updateWrjDNum3ByTask(String wrjNo, String dNum) {
+        bjTaskMapper.updateWrjDNum3ByTask(wrjNo, dNum);
+    }
+
+    public void initWrjStatus(String agvNo) {
+        bjTaskMapper.initWrjStatus(agvNo);
+    }
+
+
+    /** 更新wrj装配状态*/
+    public void updateZpStatus(String agvNo, Integer zpstate) {
+        bjTaskMapper.updateZpStatus(agvNo, zpstate);
+    }
+
+
+    /**判断是否存在手持终端正在执行的任务*/
+    public int haveNoDoingArTask(String agv) {
+        return bjTaskMapper.haveNoDoingArTask(agv);
+    }
 }

@@ -6,6 +6,8 @@ import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.ruoyi.framework.aspectj.lang.annotation.Anonymous;
+import com.ruoyi.project.system.task.domain.BjTask;
+import com.ruoyi.project.system.task.service.impl.BjTaskServiceImpl;
 import com.ruoyi.project.system.xfvisual.service.ApiTaskServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -31,6 +33,10 @@ public class AgvMissionReportController {
 
     @Autowired
     private ApiTaskServiceImpl taskService;
+
+    @Autowired
+    private BjTaskServiceImpl bjTaskService;
+
 
     /**调用接口，获取AGV实时状态*/
     @GetMapping("/OmarkAgvState")
@@ -146,6 +152,12 @@ public class AgvMissionReportController {
             // 2. 业务逻辑处理
 //           根据MissionUid更新任务状态
             taskService.updateAgvTaskState(request.getMissionUid(), request.getState());
+
+            //2.5  根据任务id   查出来,如果是010,装置状态改为装配中 1  装配完成2
+            BjTask bjTask = bjTaskService.selectBjTaskById(Long.parseLong(request.getMissionUid().trim()));
+            if(bjTask.getSignNo().equals("010")){
+                taskService.updateZpStatus(bjTask.getAgvNo(), request.getState());
+            }
 
             // 3. 构建成功响应
             Map<String, String> resultMap = new HashMap<>();

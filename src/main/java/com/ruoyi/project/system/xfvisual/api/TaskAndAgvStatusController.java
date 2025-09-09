@@ -70,8 +70,6 @@ public class TaskAndAgvStatusController {
     }
 
     private ResponseEntity<Map<String, Object>> addBjTaskDbData(Map<String, String> data) {
-        //任务没有重复  20250822去掉检查此任务是否重复，因为加油挂弹任务需要重复下发  20250827又加上了
-
         Map<String, String> taskFields = BjUtil.splitTaskNo(data.get("task_no"));
         String agvNo = taskFields.get("agv_no");
         String signNo = taskFields.get("sign_no");
@@ -101,11 +99,6 @@ public class TaskAndAgvStatusController {
         bjTask.setSignNo(taskFields.get("sign_no"));
         bjTask.setSign(data.get("sign"));
         bjTask.setTaskStatus(0L);
-        //新增加油、挂弹字段
-        //“oil_ty”:
-        //“oil_num”:
-        //“D_type”
-        //”D_num”
         bjTask.setOilType(data.get("oil_type"));
         bjTask.setOilNum(data.get("oil_num"));
         bjTask.setdType(data.get("d_type"));
@@ -119,25 +112,25 @@ public class TaskAndAgvStatusController {
         if(signNo.equals("001")){
             taskService.updateRemark1OfAgv(agvNo,1);
         }
-        if(signNo.equals("085")){
-            //todo 对接agv 此任务执行完成后更新已回库
+        if(signNo.equals("080")){
+            //todo 对接agv 此任务执行完成后更新已回库  目前是080任务直接回库  也没什么问题
             taskService.updateRemark1OfAgv(agvNo,0);
         }
 
-        /**处理油数量逻辑*/
-        String oilType = data.get("oil_type");
-        if (oilType != null && !oilType.isEmpty()) {
-        }
-        String oilNumStr = data.get("oil_num");
-        BigDecimal oilNum = null;
-        if (oilNumStr != null && !oilNumStr.isEmpty()) {
-            // 先转换为BigDecimal，避免精度丢失
-            BigDecimal originalNum = new BigDecimal(oilNumStr);
-            // 保留两位小数（四舍五入）
-            oilNum = originalNum.setScale(2, BigDecimal.ROUND_HALF_UP);
-            //更新油弹库总数
-            taskService.updateOilContainerOilByTask(oilNum);
-        }
+//        /**处理油数量逻辑 这块逻辑拿到040*/
+//        String oilType = data.get("oil_type");
+//        if (oilType != null && !oilType.isEmpty()) {
+//        }
+//        String oilNumStr = data.get("oil_num");
+//        BigDecimal oilNum = null;
+//        if (oilNumStr != null && !oilNumStr.isEmpty()) {
+//            // 先转换为BigDecimal，避免精度丢失
+//            BigDecimal originalNum = new BigDecimal(oilNumStr);
+//            // 保留两位小数（四舍五入）
+//            oilNum = originalNum.setScale(2, BigDecimal.ROUND_HALF_UP);
+//            //更新油弹库总数
+//            taskService.updateOilContainerOilByTask(oilNum);
+//        }
 
 //        /**处理油数量逻辑  这块逻辑拿到045 */
 //        String dType = data.get("d_type");
@@ -160,78 +153,14 @@ public class TaskAndAgvStatusController {
 //        }
 
         int taskId = genTaskService.insertBjTask(bjTask);
+        //保存至数据库，并返回数据库的id 注意不是任务号
         taskId = Integer.parseInt(bjTask.getId()+"");
-        //需要下发给AGV的情况
-        if(signNo.equals("001") || signNo.equals("002") || signNo.equals("003") ||
-                signNo.equals("005") || signNo.equals("010")
-                || signNo.equals("055") || signNo.equals("060")|| signNo.equals("075")
-                || signNo.equals("080")
-        ){
-            String url = "http://192.168.2.2:8086/api/HD/NewTaskDistribution";
-            JSONObject paramMap = new JSONObject();
-//        {
-//            "MissionUid": "xxxxxxx",     //任务ID
-//                "StationName": "xxxxxx",   //目标工位名称
-//                "AGVNum": 1,   //指定车辆，0：不指定，1-4指定车辆
-//                "Balance": true      //是否调平
-//        }
-//        L0准备区  L1/L2起飞区  L3/L4弹射位   L5机库
 
-            paramMap.put("MissionUid", taskId);
 
-            //002 判断agv状态
-            if(signNo.equals("002")){
-                //最快的思路  执行一个原地不动的指令，后续改为agv状态自检
-                paramMap.put("StationName", "L5");
-                paramMap.put("Balance", false);
-            }
 
-            if(signNo.equals("003")){
-                paramMap.put("StationName", "L0");
-                paramMap.put("Balance", false);
-            }
+        //先下到数据库，通过定时任务判断当前哪个任务要下发AGV，一条一条发,通过定时任务
 
-            if(signNo.equals("005")){
-                paramMap.put("StationName", "L1");
-                paramMap.put("Balance", false);
-            }
-            if(signNo.equals("010")){
-                paramMap.put("StationName", "L2");
-                paramMap.put("Balance", true);
-            }
-            if(signNo.equals("055")){
-                paramMap.put("StationName", "L3");
-                paramMap.put("Balance", false);
-            }
-            if(signNo.equals("060")){
-                paramMap.put("StationName", "L4");
-                paramMap.put("Balance", true);
-            }
-            if(signNo.equals("075")){
-                paramMap.put("StationName", "L0");
-                paramMap.put("Balance", true);
-            }
-            if(signNo.equals("080")){
-                paramMap.put("StationName", "L5");
-                paramMap.put("Balance", false);
-            }
-            paramMap.put("AGVNum", 1);
 
-            String result2 = null;
-            try {
-
-                result2 = BjUtil.postJson(url,paramMap.toString());
-//                 result2 = HttpRequest.post(url)
-//                        .body(paramMap.toString())
-//                        .execute()
-//                        .body();
-
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            Console.log("result2====================",result2);
-
-        }
 
         response.put("response", taskResponse);
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -247,20 +176,16 @@ public class TaskAndAgvStatusController {
             "070", "075", "080", "085"
     ));
 
-//    private static final Set<String> VALID_TASK_NUMBERS = new HashSet<>(Arrays.asList(
-//            "001", "005",
-//            "010", "015", "020", "025",
-//            "030", "035", "040", "045",
-//            "050", "055", "060", "065",
-//            "070", "075", "080", "085"
-//    ));
+
 
     //判断当前任务是否可以执行
     public boolean canExecuteCurrentTask(String agvNo, String currentTaskNo) {
+        //  VALID_TASK_NUMBERS 这个是所有的任务编号，一个都不能删
         if (!VALID_TASK_NUMBERS.contains(currentTaskNo)) {
             throw new IllegalArgumentException("无效的任务编号: " + currentTaskNo);
         }
 
+        //上个任务编号，任务序列不包含020-050
         String previousTaskNo = getPreviousTaskNo(currentTaskNo);
 
         System.out.println("上个任务短编号: " + previousTaskNo);
@@ -303,29 +228,29 @@ public class TaskAndAgvStatusController {
 
 
 
-    @PostMapping("/deleteTasks")
-    public ResponseEntity<Map<String, Object>> deleteTasks(@RequestBody Map<String, String> data) {
-        if (data.get("task_no") == null || data.get("result") == null) {
-        }
-        String taskNo = data.get("task_no");
-        Map<String, String> fields = BjUtil.splitTaskNo(taskNo);
-        String agvNo = fields.get("agv_no");
-        String taskNoOnly = fields.get("task_no");
-        if (canExecuteCurrentTask(agvNo, taskNoOnly)) {
-            System.out.println("当前任务可以执行");
-
-            // 判断是否是任务 080 且执行成功
-            if ("080".equals(taskNoOnly) && "2".equals(data.get("result"))) {
-                // 删除该 AGV 所有任务
-//                taskService.deleteTasksByAgvNo(agvNo);
-                System.out.println("AGV: " + agvNo + " 的所有任务已删除");
-            }
-        } else {
-            System.out.println("当前任务不能执行，前一个任务未完成");
-        }
-        // 返回响应...
-        return null;
-    }
+//    @PostMapping("/deleteTasks")
+//    public ResponseEntity<Map<String, Object>> deleteTasks(@RequestBody Map<String, String> data) {
+//        if (data.get("task_no") == null || data.get("result") == null) {
+//        }
+//        String taskNo = data.get("task_no");
+//        Map<String, String> fields = BjUtil.splitTaskNo(taskNo);
+//        String agvNo = fields.get("agv_no");
+//        String taskNoOnly = fields.get("task_no");
+//        if (canExecuteCurrentTask(agvNo, taskNoOnly)) {
+//            System.out.println("当前任务可以执行");
+//
+//            // 判断是否是任务 080 且执行成功
+//            if ("080".equals(taskNoOnly) && "2".equals(data.get("result"))) {
+//                // 删除该 AGV 所有任务
+////                taskService.deleteTasksByAgvNo(agvNo);
+//                System.out.println("AGV: " + agvNo + " 的所有任务已删除");
+//            }
+//        } else {
+//            System.out.println("当前任务不能执行，前一个任务未完成");
+//        }
+//        // 返回响应...
+//        return null;
+//    }
 
 
 
@@ -349,15 +274,141 @@ public class TaskAndAgvStatusController {
 //"085": "TS"
 
 
-    /**
-      20250902  在待命区升降模拟组装
-     升降信号对接
-     任务下发   工位
-     任务反馈，配置url
-     */
+    @GetMapping("/send")
+    public Map<String, Object> send() {
+        //循环13个agv号
+        String[] agvs = {"01"};
+        for (String agv : agvs) {
+            //查询当前需要执行的任务
+            Map<String, Object> taskMap = taskService.getNowTaskByAgvNo(agv);
+
+            // 将Map转换为BjTask实体类
+            BjTask nowTask = new BjTask();
+            if (taskMap.get("id") != null) {
+                nowTask.setId(Long.valueOf(taskMap.get("id").toString()));
+            }
+
+            if (taskMap.get("task_no") != null) {
+                nowTask.setTaskNo(taskMap.get("task_no").toString());
+            }
+
+            if (taskMap.get("agv_no") != null) {
+                nowTask.setAgvNo(taskMap.get("agv_no").toString());
+            }
+
+            if (taskMap.get("uav_no") != null) {
+                nowTask.setUavNo(taskMap.get("uav_no").toString());
+            }
+
+            if (taskMap.get("container_no") != null) {
+                nowTask.setContainerNo(taskMap.get("container_no").toString());
+            }
+
+            if (taskMap.get("sign") != null) {
+                nowTask.setSign(taskMap.get("sign").toString());
+            }
+
+            if (taskMap.get("sign_no") != null) {
+                nowTask.setSignNo(taskMap.get("sign_no").toString());
+            }
+
+            if (taskMap.get("task_status") != null) {
+                if (taskMap.get("task_status") instanceof Long) {
+                    nowTask.setTaskStatus((Long) taskMap.get("task_status"));
+                } else {
+                    nowTask.setTaskStatus(Long.valueOf(taskMap.get("task_status").toString()));
+                }
+            }
+
+            if (taskMap.get("remark1") != null) {
+                nowTask.setRemark1(taskMap.get("remark1").toString());
+            }
+
+            if (taskMap.get("remark2") != null) {
+                nowTask.setRemark2(taskMap.get("remark2").toString());
+            }
+
+            if (taskMap.get("oil_type") != null) {
+                nowTask.setOilType(taskMap.get("oil_type").toString());
+            }
+
+            if (taskMap.get("oil_num") != null) {
+                nowTask.setOilNum(taskMap.get("oil_num").toString());
+            }
+
+            if (taskMap.get("d_type") != null) {
+                nowTask.setdType(taskMap.get("d_type").toString());
+            }
+
+            if (taskMap.get("d_num") != null) {
+                nowTask.setdNum(taskMap.get("d_num").toString());
+            }
+
+            if(nowTask == null){
+                continue;
+            }
+            //判断当前任务是否为agv执行任务，如果不是，不处理，如果是，则下发给agv
+            String signNo = nowTask.getSignNo();
+            String taskId = nowTask.getId()+"";
+
+            //todo
+            //对signNo进行判断,修改wrj工作状态    agv任务状态
+
+            //agv   agv_status 待命中0  行驶中1  装配中2
+
+            //wrj   work_status 0:,准备中；1：待命中；2：装配中；3：任务中
 
 
 
+            if(nowTask.getSignNo().equals("002") || nowTask.getSignNo().equals("003") ||
+                    nowTask.getSignNo().equals("005") || nowTask.getSignNo().equals("010")
+                    || nowTask.getSignNo().equals("055") || nowTask.getSignNo().equals("060")
+                    || nowTask.getSignNo().equals("075") || nowTask.getSignNo().equals("080")){
+                String url = "http://192.168.2.2:8086/api/HD/NewTaskDistribution";
+                JSONObject paramMap = new JSONObject();
+                paramMap.put("MissionUid", taskId);
+                //002 判断agv状态
+                if(signNo.equals("002")){
+                    //最快的思路  执行一个原地不动的指令，后续改为agv状态自检
+                    paramMap.put("StationName", "L5");
+                    paramMap.put("Balance", false);
+                }
+
+                if(signNo.equals("003")){
+                    paramMap.put("StationName", "L0");
+                    paramMap.put("Balance", false);
+                }
+
+                if(signNo.equals("005")){
+                    paramMap.put("StationName", "L1");
+                    paramMap.put("Balance", false);
+                }
+                if(signNo.equals("010")){
+                    paramMap.put("StationName", "L2");
+                    paramMap.put("Balance", true);
+                }
+                if(signNo.equals("055")){
+                    paramMap.put("StationName", "L3");
+                    paramMap.put("Balance", false);
+                }
+                if(signNo.equals("060")){
+                    paramMap.put("StationName", "L4");
+                    paramMap.put("Balance", true);
+                }
+                if(signNo.equals("075")){
+                    paramMap.put("StationName", "L0");
+                    paramMap.put("Balance", true);
+                }
+                if(signNo.equals("080")){
+                    paramMap.put("StationName", "L5");
+                    paramMap.put("Balance", false);
+                }
+                paramMap.put("AGVNum", 1);
+                Console.log(paramMap);
+            }
+        }
+        return null;
+        }
 
 
 

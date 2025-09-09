@@ -44,11 +44,13 @@ public class FeedBackController {
         }
         //任务状态不等于2
         bjTask.setIsDeleted(0L);
+
         List<BjTask> tasks =taskService.feedTaskInfo(bjTask);
 
         return tasks.stream()
                 .map(task -> {
                     Map<String, Object> result = new HashMap<>();
+                    result.put("task_id", task.getId());
                     result.put("task_no", task.getTaskNo());
                     result.put("task_status", task.getTaskStatus());
                     result.put("start_time", task.getCreateTime());

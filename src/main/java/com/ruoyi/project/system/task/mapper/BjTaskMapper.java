@@ -82,4 +82,6 @@ public interface BjTaskMapper
 
 
     public List<BjTask> selectBjTaskListFeed(BjTask bjTask);
+
+    void updateTaskInfoById(String taskId, String taskStatus);
 }
