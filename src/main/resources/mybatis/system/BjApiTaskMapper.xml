@@ -271,14 +271,24 @@ ORDER BY
     </select>
 
 
+<!--    <select id="getRemark1Count" resultType="java.util.HashMap">-->
+<!--        SELECT-->
+<!--            SUM(CASE WHEN remark1 = 1 THEN 1 ELSE 0 END) AS total_dispatched,-->
+<!--            SUM(CASE WHEN remark1 = 0 THEN 1 ELSE 0 END) AS total_remaining,-->
+<!--            COUNT(*) AS total_drones-->
+<!--        FROM-->
+<!--            bj_agv_status-->
+<!--    </select>-->
+
     <select id="getRemark1Count" resultType="java.util.HashMap">
         SELECT
-            SUM(CASE WHEN remark1 = 1 THEN 1 ELSE 0 END) AS total_dispatched,
-            SUM(CASE WHEN remark1 = 0 THEN 1 ELSE 0 END) AS total_remaining,
+            SUM(CASE WHEN task_status = 1 THEN 1 ELSE 0 END) AS total_dispatched,
+            SUM(CASE WHEN task_status = 0 THEN 1 ELSE 0 END) AS total_remaining,
             COUNT(*) AS total_drones
         FROM
             bj_agv_status
     </select>
+
 
 
     <!-- 查询油弹箱信息 -->
@@ -358,19 +368,21 @@ ORDER BY
             COALESCE(zp_status, '0') as zp_status,
             oil_quantity as oil_status,
 --             task_status,
-            COALESCE(task_status, '就绪') as task_status,
+
+            COALESCE(task_status, '0') as task_status,
+            work_status,
+
             current_position,
             --    quantity_status,
+            agv_status,
             quantity1,
             quantity2,
             quantity3,
             quantity4,
             quantity5,
             task_no as task_message,
---             elec_status,
-            COALESCE(elec_status, '电检状态正常') as elec_status,
-
-            work_status,
+            elec_status,
+           -- COALESCE(elec_status, '电检状态正常') as elec_status,
             current_position as agv_location,
             battery_level as equi_status,
             COALESCE(t.content, b.remark2) as agv_type,
@@ -402,7 +414,36 @@ ORDER BY
                 WHEN 0 THEN 2
                 WHEN 2 THEN 1
                 END DESC,
-            create_time DESC
+            create_time
+            -- DESC  修改为：同状态取最旧 否则会显示085
+            LIMIT 1;
+        -- 优先级：1-执行中(权重3) > 0-未开始(权重2) > 2-已完成(权重1)
+        -- 同状态下取最新创建的任务
+        -- 只取最符合条件的1条
+    </select>
+
+
+    <select id="selectTargetTaskByAgvNoDesc" resultType="java.util.HashMap">
+        SELECT
+            task_no as task_no,
+            agv_no as agv_no,
+            task_status as task_status,
+            create_time as create_time
+        FROM
+            bj_task
+        WHERE
+            agv_no = #{agvNo}
+
+          and is_deleted = 0
+        ORDER BY
+
+            CASE task_status
+                WHEN 1 THEN 3
+                WHEN 0 THEN 2
+                WHEN 2 THEN 1
+                END DESC,
+            create_time Desc
+            -- DESC  修改为：多任务完成时，显示最新任务    不然会显示开门
             LIMIT 1;
         -- 优先级：1-执行中(权重3) > 0-未开始(权重2) > 2-已完成(权重1)
         -- 同状态下取最新创建的任务
@@ -429,21 +470,21 @@ ORDER BY
     <!--更新油弹库 弹1-->
     <update id="updateOilContainerD1ByTask">
         UPDATE bj_oil_container
-        SET quantity1 = quantity1 - #{oilNum}
+        SET quantity1 = quantity1 - #{dNum}
         WHERE id = 1
     </update>
 
     <!--更新油弹库 弹2-->
     <update id="updateOilContainerD2ByTask">
         UPDATE bj_oil_container
-        SET quantity2 = quantity2 - #{oilNum}
+        SET quantity2 = quantity2 - #{dNum}
         WHERE id = 1
     </update>
 
     <!--更新油弹库 弹3-->
     <update id="updateOilContainerD3ByTask">
         UPDATE bj_oil_container
-        SET quantity3 = quantity3 - #{oilNum}
+        SET quantity3 = quantity3 - #{dNum}
         WHERE id = 1
     </update>
 
@@ -590,6 +631,15 @@ ORDER BY
                '050', '065','070',  '085');
     </select>
 
+    <select id="countCompletedTasks" resultType="java.lang.Integer">
+        SELECT
+           count(*)
+        FROM bj_task
+        WHERE agv_no = #{agvNo}
+          and is_deleted = 0
+          and task_status =2;
+    </select>
+
 
     <update id="updateBjAgvWithOilStatus" parameterType="BjAgvStatus">
         update bj_agv_status
@@ -635,7 +685,8 @@ ORDER BY
         UPDATE bj_agv_status
         SET
             battery_level = #{energyLevel},
-            current_position = #{positionDb}
+            current_position = #{positionDb},
+            agv_status = #{agvStatus}
         WHERE
             agv_no = #{agvNo} ;
     </update>
@@ -656,8 +707,10 @@ ORDER BY
             quantity2 = 0,
             quantity3 = 0,
             quantity4 = 0,
-            quantity5 = 0
-
+            quantity5 = 0,
+            work_status = 0,
+            task_status = 0,
+            zp_status = 0
         where
             agv_no = #{agvNo};
     </update>
@@ -707,11 +760,26 @@ ORDER BY
     <update id="updateZpStatus">
         UPDATE bj_agv_status
         SET
-            zp_state = #{zpstate}
+            zp_status = #{zpstate}
         WHERE
             agv_no = #{agvNo}
     </update>
 
+    <update id="updateTaskStatus">
+        UPDATE bj_agv_status
+        SET
+            task_status = #{number}
+        WHERE
+            agv_no = #{agv}
+    </update>
+
+    <update id="updateWorkStatus">
+        UPDATE bj_agv_status
+        SET
+            work_status = #{number}
+        WHERE
+            agv_no = #{agv}
+    </update>
 
 
 </mapper>

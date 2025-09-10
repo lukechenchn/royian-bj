@@ -6,6 +6,7 @@ import com.ruoyi.project.system.status.domain.BjAgvStatus;
 import com.ruoyi.project.system.task.domain.BjTask;
 import com.ruoyi.project.system.task.mapper.BjTaskMapper;
 import com.ruoyi.project.system.xfvisual.mapper.ApiTaskMapper;
+import com.ruoyi.project.system.xfvisual.util.BjUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +14,8 @@ import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static com.ruoyi.project.system.xfvisual.util.BjUtil.splitTaskNo;
 
 
 @Service
@@ -176,7 +179,26 @@ public class ApiTaskServiceImpl {
 
             Map nowTask  = bjTaskMapper.selectTargetTaskByAgvNo(agvNo);
 
+
+
+
+
+
             if (nowTask != null) {
+
+                //如果查出来的任务号是001，且当前已经执行完成的任务总数大于1，那么重新执行查询
+
+//            task_no 解析为 sign_no
+                Map<String, String>  tmp = splitTaskNo(nowTask.get("task_no").toString());
+                if (nowTask != null && "001".equals(tmp.get("sign_no"))) {
+                    int completedTaskCount = bjTaskMapper.countCompletedTasks(agvNo);
+                    if (completedTaskCount > 1) {
+                        // 重新执行查询或其他处理逻辑
+                        nowTask = bjTaskMapper.selectTargetTaskByAgvNoDesc(agvNo);
+                    }
+                }
+
+
                 // 有任务：返回任务详情+状态说明
                 status.put("task_message",nowTask.get("task_no")+"."+nowTask.get("task_status"));
             } else {
@@ -272,8 +294,8 @@ public class ApiTaskServiceImpl {
         bjTaskMapper.updateAgvTaskState(taskNo, status);
     }
 
-    public void updateAgvState(String agvNo, String positionDb, Integer energyLevel) {
-        bjTaskMapper.updateAgvState(agvNo, positionDb, energyLevel);
+    public void updateAgvState(String agvNo, String positionDb, Integer energyLevel, String agvStatus) {
+        bjTaskMapper.updateAgvState(agvNo, positionDb, energyLevel,agvStatus);
     }
 
     public void updateAgvStateAboutDj(String agvNo, String elecStatus) {
@@ -317,5 +339,17 @@ public class ApiTaskServiceImpl {
     /**判断是否存在手持终端正在执行的任务*/
     public int haveNoDoingArTask(String agv) {
         return bjTaskMapper.haveNoDoingArTask(agv);
+    }
+
+
+
+
+    public void updateWorkStatus(String agv, String number) {
+         bjTaskMapper.updateWorkStatus( agv,  number);
+
+    }
+
+    public void updateTaskStatus(String agv, String number) {
+        bjTaskMapper.updateTaskStatus( agv,  number);
     }
 }

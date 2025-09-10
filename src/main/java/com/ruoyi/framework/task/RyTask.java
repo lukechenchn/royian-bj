@@ -63,7 +63,7 @@ public class RyTask
 
 
     public void deleteTasks() {
-        //agv一共有01、02、03、04、05、06、07、08、09、10这十个,
+        //agv一共有01、02、03、04、05、06、07、08、09、10\11\12\13这13个,
         // 检查bj_task表中是否存在某个AGV的任务是080且已经执行完成(状态为2),且未被删除,如果存在则执行删除当前AGV的所有任务
         String[] agvs = {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10","11","12","13"};
         for (String agv : agvs) {
@@ -86,7 +86,7 @@ public class RyTask
         return bjTaskMapper.countCompletedTask080(agvNo) > 0;
     }
 
-    // 删除该 AGV 的所有任务
+    // 删除该 AGV 的所有任务，重置agv所有状态   085init方法
     private void deleteTasksByAgv(String agvNo) {
         try {
             bjTaskMapper.deleteTasksByAgvNo(agvNo);
@@ -95,7 +95,7 @@ public class RyTask
             //状态变成未电检
             taskService.updateAgvStateAboutDj(agvNo,"未电检");
 
-            //清空弹为0
+            //清空弹为0  wrj变成未出库  agv状态变成0  装配状态变成未装配
             taskService.initWrjStatus(agvNo);
 
 
@@ -184,12 +184,9 @@ public class RyTask
             String agvNo = "01";
 
             // 更新AGV状态
-            taskService.updateAgvState(agvNo, positionDb , energyLevel);
+            taskService.updateAgvState(agvNo, positionDb , energyLevel,faultCode+"");
         }
     }
-
-
-
 
 
 
@@ -284,6 +281,17 @@ public class RyTask
             }
 
             //判断当前任务是否为agv执行任务，如果不是，不处理，如果是，则下发给agv
+            //对signNo进行判断,修改wrj工作状态    agv任务状态
+
+//            无人机工作状态  work_status 全部在这里处理
+//            0未出库（001、002）
+//            1整备中（003/005/010/015/020/025/030/035/040/045/050）
+//            2待飞（055/060/065/070、075/080）
+//            3飞行中（085）  085之后归0   单独处理
+
+//            √AGV任务状态 task_status：
+//            0待命中、1任务执行中
+
             String signNo = nowTask.getSignNo();
             String taskId = nowTask.getId()+"";
             if(nowTask.getSignNo().equals("002") || nowTask.getSignNo().equals("003") ||
@@ -298,11 +306,17 @@ public class RyTask
                     //最快的思路  执行一个原地不动的指令，后续改为agv状态自检
                     paramMap.put("StationName", "L5");
                     paramMap.put("Balance", false);
-                }
 
+                    //更新agv状态为任务执行中1  从002任务开始，agv就一直在执行任务了
+                    taskService.updateTaskStatus(agv, "1");
+                }
+                Console.log(11);
                 if(signNo.equals("003")){
                     paramMap.put("StationName", "L0");
                     paramMap.put("Balance", false);
+
+                    //更新wrj工作状态为整备中
+                    taskService.updateWorkStatus(agv, "1");
                 }
 
                 if(signNo.equals("005")){
@@ -316,6 +330,9 @@ public class RyTask
                 if(signNo.equals("055")){
                     paramMap.put("StationName", "L3");
                     paramMap.put("Balance", false);
+
+                    //更新wrj工作状态为待飞
+                    taskService.updateWorkStatus(agv, "2");
                 }
                 if(signNo.equals("060")){
                     paramMap.put("StationName", "L4");
@@ -336,7 +353,6 @@ public class RyTask
                 try {
 
                     String result2 = BjUtil.postJson(url,paramMap.toString());
-
 
 
                     Console.log(result2);

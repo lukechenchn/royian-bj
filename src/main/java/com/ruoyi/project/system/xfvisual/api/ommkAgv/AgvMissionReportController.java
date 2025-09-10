@@ -39,72 +39,72 @@ public class AgvMissionReportController {
 
 
     /**调用接口，获取AGV实时状态*/
-    @GetMapping("/OmarkAgvState")
-    public Map<String, Object> getOmarkAgvState() {
-        String url = "http://192.168.2.2:8086/api/HD/QueryAGVsystem";
-        Map paramMap = new HashMap<>();
-        paramMap.put("Task", "AGVInfo");
-        String result2 = HttpRequest.post(url)
-//            .header(Header.USER_AGENT, "Hutool http")//头信息，多个头信息多次调用此方法即可
-                .form(paramMap)//表单内容
-                .timeout(20000)//超时，毫秒
-                .execute().body();
-        Console.log(result2);
-        // 核心：将JSON字符串解析为JSONObject（Hutool的Map增强实现）
-        JSONObject jsonObject = JSONUtil.parseObj(result2);
-        jsonObject.get("data");
-
-        // 1. 获取顶层字段
-        String msg = jsonObject.getStr("Msg");
-        String code = jsonObject.getStr("Code");
-        String result = jsonObject.getStr("Result");
-
-        System.out.println("=== 系统状态信息 ===");
-        System.out.println("消息：" + msg);
-        System.out.println("状态码：" + code);
-        System.out.println("结果标识：" + result);
-
-        // 2. 获取data数组（AGV列表）
-        JSONArray dataArray = jsonObject.getJSONArray("data");
-
-        // 转换为List<Map>方便遍历
-        List<Map> agvList = dataArray.toList(Map.class);
-
-        System.out.println("\n=== AGV车辆列表 ===");
-        for (Map<String, Object> agv : agvList) {
-            // 获取AGV基本信息
-            String vehicleName = (String) agv.get("vehicleName");
-            Integer angle = (Integer) agv.get("Angle");
-            Integer energyLevel = (Integer) agv.get("energyLevel");
-            Integer faultCode = (Integer) agv.get("faultCode");
-            Integer alarmCode = (Integer) agv.get("alarmCode");
-
-            // 获取嵌套的position坐标（也是一个Map）
-            Map<String, Integer> position = (Map<String, Integer>) agv.get("position");
-            Integer x = position.get("x");
-            Integer y = position.get("y");
-            Integer z = position.get("z");
-            String positionDb = "(" + x + ", " + y + ", " + z + ")";
-            System.out.println("(" + x + ", y=" + y + ", z=" + z+")");
-
-
-            // 打印AGV信息
-            System.out.println("\nAGV车号：" + vehicleName);
-            System.out.println("角度：" + angle + "°");
-            System.out.println("电量：" + energyLevel + "%");
-            System.out.println("故障码：" + faultCode);
-            System.out.println("告警码：" + alarmCode);
-            System.out.println("坐标：x=" + x + ", y=" + y + ", z=" + z);
-
-            String agvNo = "01";
-
-            // 更新AGV状态
-            taskService.updateAgvState(agvNo, positionDb,energyLevel);
-        }
-        Map map = new HashMap<>();
-        map.put("msg",result2);
-        return  null;
-    }
+//    @GetMapping("/OmarkAgvState")
+//    public Map<String, Object> getOmarkAgvState() {
+//        String url = "http://192.168.2.2:8086/api/HD/QueryAGVsystem";
+//        Map paramMap = new HashMap<>();
+//        paramMap.put("Task", "AGVInfo");
+//        String result2 = HttpRequest.post(url)
+////            .header(Header.USER_AGENT, "Hutool http")//头信息，多个头信息多次调用此方法即可
+//                .form(paramMap)//表单内容
+//                .timeout(20000)//超时，毫秒
+//                .execute().body();
+//        Console.log(result2);
+//        // 核心：将JSON字符串解析为JSONObject（Hutool的Map增强实现）
+//        JSONObject jsonObject = JSONUtil.parseObj(result2);
+//        jsonObject.get("data");
+//
+//        // 1. 获取顶层字段
+//        String msg = jsonObject.getStr("Msg");
+//        String code = jsonObject.getStr("Code");
+//        String result = jsonObject.getStr("Result");
+//
+//        System.out.println("=== 系统状态信息 ===");
+//        System.out.println("消息：" + msg);
+//        System.out.println("状态码：" + code);
+//        System.out.println("结果标识：" + result);
+//
+//        // 2. 获取data数组（AGV列表）
+//        JSONArray dataArray = jsonObject.getJSONArray("data");
+//
+//        // 转换为List<Map>方便遍历
+//        List<Map> agvList = dataArray.toList(Map.class);
+//
+//        System.out.println("\n=== AGV车辆列表 ===");
+//        for (Map<String, Object> agv : agvList) {
+//            // 获取AGV基本信息
+//            String vehicleName = (String) agv.get("vehicleName");
+//            Integer angle = (Integer) agv.get("Angle");
+//            Integer energyLevel = (Integer) agv.get("energyLevel");
+//            Integer faultCode = (Integer) agv.get("faultCode");
+//            Integer alarmCode = (Integer) agv.get("alarmCode");
+//
+//            // 获取嵌套的position坐标（也是一个Map）
+//            Map<String, Integer> position = (Map<String, Integer>) agv.get("position");
+//            Integer x = position.get("x");
+//            Integer y = position.get("y");
+//            Integer z = position.get("z");
+//            String positionDb = "(" + x + ", " + y + ", " + z + ")";
+//            System.out.println("(" + x + ", y=" + y + ", z=" + z+")");
+//
+//
+//            // 打印AGV信息
+//            System.out.println("\nAGV车号：" + vehicleName);
+//            System.out.println("角度：" + angle + "°");
+//            System.out.println("电量：" + energyLevel + "%");
+//            System.out.println("故障码：" + faultCode);
+//            System.out.println("告警码：" + alarmCode);
+//            System.out.println("坐标：x=" + x + ", y=" + y + ", z=" + z);
+//
+//            String agvNo = "01";
+//
+//            // 更新AGV状态
+//            taskService.updateAgvState(agvNo, positionDb,energyLevel);
+//        }
+//        Map map = new HashMap<>();
+//        map.put("msg",result2);
+//        return  null;
+//    }
 
 
 
@@ -155,6 +155,7 @@ public class AgvMissionReportController {
 
             //2.5  根据任务id   查出来,如果是010,装置状态改为装配中 1  装配完成2
             BjTask bjTask = bjTaskService.selectBjTaskById(Long.parseLong(request.getMissionUid().trim()));
+
             if(bjTask.getSignNo().equals("010")){
                 taskService.updateZpStatus(bjTask.getAgvNo(), request.getState());
             }

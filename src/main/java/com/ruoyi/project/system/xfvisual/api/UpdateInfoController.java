@@ -3,8 +3,11 @@ package com.ruoyi.project.system.xfvisual.api;
 
 import cn.hutool.core.lang.Console;
 import com.ruoyi.framework.aspectj.lang.annotation.Anonymous;
+import com.ruoyi.framework.task.RyTask;
 import com.ruoyi.project.system.task.domain.BjTask;
+import com.ruoyi.project.system.task.mapper.BjTaskMapper;
 import com.ruoyi.project.system.task.service.impl.BjTaskServiceImpl;
+import com.ruoyi.project.system.xfvisual.mapper.ApiTaskMapper;
 import com.ruoyi.project.system.xfvisual.service.ApiTaskServiceImpl;
 import com.ruoyi.project.system.xfvisual.util.BjUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,19 +28,23 @@ public class UpdateInfoController {
     private BjTaskServiceImpl taskService;
 
 
+
     @Autowired
     private ApiTaskServiceImpl apiTaskService;
 
-
     @Autowired
     TaskAndAgvStatusController tcontroller;
+
+
+    @Autowired
+    private RyTask ryTask;
 
 
 
 /**最终接口2：任务状态修改*/
 /**提供接口给航保修改AR眼镜的任务的状态修改*/
     @PostMapping("/updateTask")
-    public Map deleteTasks(@RequestBody Map<String, String> data) {
+    public Map updateTask(@RequestBody Map<String, String> data) {
         //返回值
         Map map = new HashMap();
         if (data.get("task_no") == null || data.get("result") == null) {
@@ -60,6 +67,12 @@ public class UpdateInfoController {
         String taskStatus = data.get("task_status");
         if(taskStatus.equals("1")){
             taskService.updateTaskInfoById(taskId,taskStatus);
+
+            //特殊处理：085 wrj飞行中
+            if(task.get(0).getSignNo().equals("085")){
+                //更新wrj工作状态为飞行中
+                apiTaskService.updateWorkStatus(task.get(0).getAgvNo(), "3");
+            }
         }
 
         if(taskStatus.equals("2")){
@@ -125,7 +138,7 @@ public class UpdateInfoController {
                     }
                 }
 
-                //“010-组装无人机”，无人机信息-任务状态-装配状态随010任务状态更新--陆工 这个在AGV反馈的时候
+                //“010-组装无人机”，无人机信息-任务状态-装配状态随010任务状态更新--陆工 这个在AGV反馈的接口里处理，已完成
 
 
                 //“015-电检”，无人机信息-电检信息-电检状态，随015任务状态更新--陆工
@@ -133,6 +146,10 @@ public class UpdateInfoController {
                     apiTaskService.updateAgvStateAboutDj(task.get(0).getAgvNo(),"电检正常");
                 }
 
+                //085  直接删除   可以不需要定时任务   定时任务暂时不关，防止有问题 :)
+                if(task.get(0).getSignNo().equals("085")) {
+                    deleteTasksByAgv(wrjNo);
+                }
 
 
 
@@ -154,6 +171,26 @@ public class UpdateInfoController {
         map.put("code",200);
 
         return map;
+    }
+
+
+    @Autowired
+    private BjTaskMapper bjTaskMapper;
+
+
+    private void deleteTasksByAgv(String agvNo) {
+        try {
+            bjTaskMapper.deleteTasksByAgvNo(agvNo);
+
+            //状态变成未电检
+            apiTaskService.updateAgvStateAboutDj(agvNo,"未电检");
+
+            //清空弹为0  wrj变成未出库  agv状态变成0  装配状态变成未装配
+            apiTaskService.initWrjStatus(agvNo);
+
+        } catch (Exception e) {
+            System.err.println("删除 AGV " + agvNo + " 的任务失败：" + e.getMessage());
+        }
     }
 
 

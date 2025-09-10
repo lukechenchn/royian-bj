@@ -77,6 +77,14 @@ public interface ApiTaskMapper {
 
     HashMap selectTargetTaskByAgvNo(String agvNo);
 
+
+    //解决显示开门的问题
+    int countCompletedTasks(String agvNo);
+
+    HashMap selectTargetTaskByAgvNoDesc(String agvNo);
+
+
+
     void updateRemark1OfAgv(String agvNo, int remark1);
 
     void updateOilContainerOilByTask(BigDecimal oilNum);
@@ -89,7 +97,7 @@ public interface ApiTaskMapper {
 
     void updateAgvTaskState(String taskNo, Integer status);
 
-    void updateAgvState(String agvNo, String positionDb, Integer energyLevel);
+    void updateAgvState(String agvNo, String positionDb, Integer energyLevel, String agvStatus);
 
 
     /** 更新电检状态*/
@@ -112,4 +120,10 @@ public interface ApiTaskMapper {
     void updateZpStatus(String agvNo, Integer zpstate);
 
     int haveNoDoingArTask(String agv);
+
+    void updateTaskStatus(String agv, String number);
+
+    void updateWorkStatus(String agv, String number);
+
+
 }
