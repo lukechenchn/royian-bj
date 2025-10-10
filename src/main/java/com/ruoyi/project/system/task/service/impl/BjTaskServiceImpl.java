@@ -22,12 +22,6 @@ public class BjTaskServiceImpl implements IBjTaskService
     private BjTaskMapper bjTaskMapper;
 
 
-    public BjTask test(Long id)
-    {
-        return bjTaskMapper.selectBjTaskById(id);
-    }
-
-
     /**
      * 查询bj任务
      *
@@ -102,12 +96,19 @@ public class BjTaskServiceImpl implements IBjTaskService
         return bjTaskMapper.deleteBjTaskById(id);
     }
 
+
+    public BjTask test(Long id)
+    {
+        return bjTaskMapper.selectBjTaskById(id);
+    }
+
+
     public void finishTask(String taskNo) {
         bjTaskMapper.finishTask(taskNo);
     }
 
-    public BjTask selectBjTaskByTaskNo(String taskNo) {
-        BjTask task = bjTaskMapper.selectBjTaskByTaskNo(taskNo);
+    public List<BjTask> selectBjTaskByTaskNo(String taskNo) {
+        List<BjTask> task = bjTaskMapper.selectBjTaskByTaskNo(taskNo);
         return task;
     }
 
@@ -119,6 +120,10 @@ public class BjTaskServiceImpl implements IBjTaskService
         bjTaskMapper.updateTaskInfo(taskNo, taskStatus);
     }
 
+    public void updateTaskInfoById(String taskId, String taskStatus) {
+        bjTaskMapper.updateTaskInfoById(taskId, taskStatus);
+    }
+
     public int isTaskCompleted(String agvNo, String previousTaskNo) {
         return bjTaskMapper.isTaskCompleted(agvNo, previousTaskNo);
     }
@@ -128,6 +133,8 @@ public class BjTaskServiceImpl implements IBjTaskService
     {
         return bjTaskMapper.selectBjTaskListFeed(bjTask);
     }
+
+
 
     public void BatchDeletedOldTasks() {
         bjTaskMapper.BatchDeletedOldTasks();

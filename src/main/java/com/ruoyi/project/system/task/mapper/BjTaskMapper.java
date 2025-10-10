@@ -60,6 +60,10 @@ public interface BjTaskMapper
      */
     public int deleteBjTaskByIds(String[] ids);
 
+
+
+
+
     // 检查是否存在状态为2的任务080
     int countCompletedTask080(@Param("agvNo") String agvNo);
 
@@ -68,7 +72,7 @@ public interface BjTaskMapper
 
     void finishTask(String taskNo);
 
-    BjTask selectBjTaskByTaskNo(@Param("taskNo")String taskNo);
+    List<BjTask> selectBjTaskByTaskNo(@Param("taskNo")String taskNo);
 
     int selectCountByTaskNo(@Param("taskNo")String taskNo);
 
@@ -78,6 +82,8 @@ public interface BjTaskMapper
 
 
     public List<BjTask> selectBjTaskListFeed(BjTask bjTask);
+
+    void updateTaskInfoById(String taskId, String taskStatus);
 
     void BatchDeletedOldTasks();
 }

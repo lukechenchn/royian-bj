@@ -1,0 +1,786 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.system.xfvisual.mapper.ApiTaskMapper">
+
+    <resultMap type="BjTask" id="BjTaskResult">
+        <result property="id"    column="id"    />
+        <result property="taskNo"    column="task_no"    />
+        <result property="agvNo"    column="agv_no"    />
+        <result property="uavNo"    column="uav_no"    />
+        <result property="containerNo"    column="container_no"    />
+        <result property="sign"    column="sign"    />
+        <result property="signNo"    column="sign_no"    />
+        <result property="taskStatus"    column="task_status"    />
+        <result property="isDeleted"    column="is_deleted"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="finishTime"    column="finish_time"    />
+        <result property="isFeedback"    column="is_feedback"    />
+        <result property="remark1"    column="remark1"    />
+        <result property="remark2"    column="remark2"    />
+        <result property="oilType"    column="oil_type"    />
+        <result property="oilNum"    column="oil_num"    />
+        <result property="dType"    column="d_type"    />
+        <result property="dNum"    column="d_num"    />
+    </resultMap>
+
+    <sql id="selectBjTaskVo">
+        select id, task_no, agv_no, uav_no, container_no, sign, sign_no, task_status, is_deleted, create_by, create_time, update_by, update_time, finish_time, is_feedback, remark1, remark2, oil_type, oil_num, d_type, d_num from bj_task
+    </sql>
+
+    <select id="selectBjTaskList" parameterType="BjTask" resultMap="BjTaskResult">
+        <include refid="selectBjTaskVo"/>
+        <where>
+            <if test="taskNo != null  and taskNo != ''"> and task_no = #{taskNo}</if>
+            <if test="agvNo != null  and agvNo != ''"> and agv_no = #{agvNo}</if>
+            <if test="uavNo != null  and uavNo != ''"> and uav_no = #{uavNo}</if>
+            <if test="containerNo != null  and containerNo != ''"> and container_no = #{containerNo}</if>
+            <if test="sign != null  and sign != ''"> and sign = #{sign}</if>
+            <if test="signNo != null  and signNo != ''"> and sign_no = #{signNo}</if>
+            <if test="taskStatus != null "> and task_status = #{taskStatus}</if>
+            <if test="isDeleted != null "> and is_deleted = #{isDeleted}</if>
+            <if test="finishTime != null "> and finish_time = #{finishTime}</if>
+            <if test="isFeedback != null "> and is_feedback = #{isFeedback}</if>
+            <if test="remark1 != null  and remark1 != ''"> and remark1 = #{remark1}</if>
+            <if test="remark2 != null  and remark2 != ''"> and remark2 = #{remark2}</if>
+            <if test="oilType != null  and oilType != ''"> and oil_type = #{oilType}</if>
+            <if test="oilNum != null  and oilNum != ''"> and oil_num = #{oilNum}</if>
+            <if test="dType != null  and dType != ''"> and d_type = #{dType}</if>
+            <if test="dNum != null  and dNum != ''"> and d_num = #{dNum}</if>
+        </where>
+    </select>
+
+    <select id="selectBjTaskById" parameterType="Long" resultMap="BjTaskResult">
+        <include refid="selectBjTaskVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertBjTask" parameterType="BjTask" useGeneratedKeys="true" keyProperty="id">
+        insert into bj_task
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="taskNo != null">task_no,</if>
+            <if test="agvNo != null">agv_no,</if>
+            <if test="uavNo != null">uav_no,</if>
+            <if test="containerNo != null">container_no,</if>
+            <if test="sign != null">sign,</if>
+            <if test="signNo != null">sign_no,</if>
+            <if test="taskStatus != null">task_status,</if>
+            <if test="isDeleted != null">is_deleted,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="finishTime != null">finish_time,</if>
+            <if test="isFeedback != null">is_feedback,</if>
+            <if test="remark1 != null">remark1,</if>
+            <if test="remark2 != null">remark2,</if>
+            <if test="oilType != null">oil_type,</if>
+            <if test="oilNum != null">oil_num,</if>
+            <if test="dType != null">d_type,</if>
+            <if test="dNum != null">d_num,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="taskNo != null">#{taskNo},</if>
+            <if test="agvNo != null">#{agvNo},</if>
+            <if test="uavNo != null">#{uavNo},</if>
+            <if test="containerNo != null">#{containerNo},</if>
+            <if test="sign != null">#{sign},</if>
+            <if test="signNo != null">#{signNo},</if>
+            <if test="taskStatus != null">#{taskStatus},</if>
+            <if test="isDeleted != null">#{isDeleted},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="finishTime != null">#{finishTime},</if>
+            <if test="isFeedback != null">#{isFeedback},</if>
+            <if test="remark1 != null">#{remark1},</if>
+            <if test="remark2 != null">#{remark2},</if>
+            <if test="oilType != null">#{oilType},</if>
+            <if test="oilNum != null">#{oilNum},</if>
+            <if test="dType != null">#{dType},</if>
+            <if test="dNum != null">#{dNum},</if>
+        </trim>
+    </insert>
+
+    <update id="updateBjTask" parameterType="BjTask">
+        update bj_task
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="taskNo != null">task_no = #{taskNo},</if>
+            <if test="agvNo != null">agv_no = #{agvNo},</if>
+            <if test="uavNo != null">uav_no = #{uavNo},</if>
+            <if test="containerNo != null">container_no = #{containerNo},</if>
+            <if test="sign != null">sign = #{sign},</if>
+            <if test="signNo != null">sign_no = #{signNo},</if>
+            <if test="taskStatus != null">task_status = #{taskStatus},</if>
+            <if test="isDeleted != null">is_deleted = #{isDeleted},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="finishTime != null">finish_time = #{finishTime},</if>
+            <if test="isFeedback != null">is_feedback = #{isFeedback},</if>
+            <if test="remark1 != null">remark1 = #{remark1},</if>
+            <if test="remark2 != null">remark2 = #{remark2},</if>
+            <if test="oilType != null">oil_type = #{oilType},</if>
+            <if test="oilNum != null">oil_num = #{oilNum},</if>
+            <if test="dType != null">d_type = #{dType},</if>
+            <if test="dNum != null">d_num = #{dNum},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBjTaskById" parameterType="Long">
+        delete from bj_task where id = #{id}
+    </delete>
+
+    <delete id="deleteBjTaskByIds" parameterType="String">
+        delete from bj_task where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+<!--    自定义sql-->
+    <!-- 检查是否存在已完成的 080 任务 -->
+    <select id="countCompletedTask080" resultType="int">
+        SELECT COUNT(*) FROM bj_task
+        WHERE agv_no = #{agvNo}
+        AND sign_no = '080'
+        AND task_status = '2'
+        AND is_deleted = 0 <!-- 假设字段 is_deleted 表示是否已删除 -->
+    </select>
+
+    <!-- 删除某 AGV 的所有任务 -->
+    <delete id="deleteTasksByAgvNo">
+        -- DELETE FROM bj_task
+-- WHERE agv_no = #{agvNo}
+    </delete>
+
+
+    <update id="deleteTasks">
+        update bj_task
+        set is_deleted = 1
+    </update>
+
+
+    <update id="finishTask">
+            UPDATE bj_task
+            SET task_status = '2', is_feedback = '1' , finish_time = now()
+        WHERE task_no = #{taskNo} and is_deleted = 0;
+    </update>
+
+
+
+    <update id="updateTaskInfo">
+        UPDATE bj_task
+        SET task_status = #{taskStatus}
+        WHERE task_no = #{taskNo} and is_deleted = 0;
+    </update>
+
+
+
+
+
+    <select id = "selectBjTaskByTaskNo" parameterType="String" resultMap="BjTaskResult">
+        <include refid="selectBjTaskVo"/>
+        where task_no = #{taskNo} and is_deleted = 0
+    </select>
+
+    <select id="selectCountByTaskNo" resultType="java.lang.Integer">
+        select count(*) from bj_task
+        where task_no = #{taskNo} and is_deleted = 0
+        -- 没执行的任务也不能重复下
+         -- and task_status != '2'
+    </select>
+
+    <select id="isTaskCompleted" resultType="java.lang.Integer">
+        select count(*) from bj_task
+        where agv_no = #{agvNo} and task_status = '2' and sign_no = #{signNo} and is_deleted = 0
+    </select>
+
+
+
+    <select id="selectBjTaskListFeed" parameterType="BjTask" resultMap="BjTaskResult">
+        <include refid="selectBjTaskVo"/>
+        <where>
+            <if test="taskNo != null  and taskNo != ''"> and task_no = #{taskNo}</if>
+            <if test="agvNo != null  and agvNo != ''"> and agv_no = #{agvNo}</if>
+            <if test="uavNo != null  and uavNo != ''"> and uav_no = #{uavNo}</if>
+            <if test="containerNo != null  and containerNo != ''"> and container_no = #{containerNo}</if>
+            <if test="sign != null  and sign != ''"> and sign = #{sign}</if>
+            <if test="signNo != null  and signNo != ''"> and sign_no = #{signNo}</if>
+
+            <if test="isDeleted != null "> and is_deleted = #{isDeleted}</if>
+            <if test="finishTime != null "> and finish_time = #{finishTime}</if>
+            <if test="isFeedback != null "> and is_feedback = #{isFeedback}</if>
+            <if test="remark1 != null  and remark1 != ''"> and remark1 = #{remark1}</if>
+            <if test="remark2 != null  and remark2 != ''"> and remark2 = #{remark2}</if>
+        </where>
+        order by create_time desc
+        -- , id DESC
+    </select>
+
+
+
+
+    <select id="getDroneTypeCount" resultType="java.util.HashMap">
+--         SELECT
+--             remark2 AS droneType,
+--             COUNT(*) AS totalCount
+--         FROM
+--             bj_agv_status
+--         WHERE
+--             remark2 IN ('AAA', 'BBB', 'CCC')
+--         GROUP BY
+--             remark2
+--         ORDER BY
+--             remark2
+
+--         SELECT
+--             remark2 AS droneType,
+--             COUNT(*) AS totalCount
+--         FROM
+--             bj_agv_status
+--         WHERE
+--             remark2 IS NOT NULL  -- 仅排除NULL值，不限制具体类型
+--         GROUP BY
+--             remark2  -- 按实际存在的remark2值自动分组
+--         ORDER BY
+--             remark2  -- 按类型名称自然排序（也可改为按数量排序：ORDER BY totalCount DESC）
+
+SELECT
+    b.remark2 AS droneTypeCode,  -- 原始编码
+    t.content AS droneType,
+    COUNT(*) AS totalCount
+FROM
+    bj_agv_status b
+-- 关联翻译表，使用remark2匹配code字段
+        LEFT JOIN bj_translation t ON b.remark2 = t.code
+WHERE
+    b.remark2 IS NOT NULL
+GROUP BY
+    b.remark2, t.content  -- 同时按编码和翻译内容分组
+ORDER BY
+    droneTypeCode  -- 按编码排序，也可改为按数量排序：totalCount DESC
+
+    </select>
+
+
+<!--    <select id="getRemark1Count" resultType="java.util.HashMap">-->
+<!--        SELECT-->
+<!--            SUM(CASE WHEN remark1 = 1 THEN 1 ELSE 0 END) AS total_dispatched,-->
+<!--            SUM(CASE WHEN remark1 = 0 THEN 1 ELSE 0 END) AS total_remaining,-->
+<!--            COUNT(*) AS total_drones-->
+<!--        FROM-->
+<!--            bj_agv_status-->
+<!--    </select>-->
+
+    <select id="getRemark1Count" resultType="java.util.HashMap">
+        SELECT
+            SUM(CASE WHEN task_status = 1 THEN 1 ELSE 0 END) AS total_dispatched,
+            SUM(CASE WHEN task_status = 0 THEN 1 ELSE 0 END) AS total_remaining,
+            COUNT(*) AS total_drones
+        FROM
+            bj_agv_status
+    </select>
+
+
+
+    <!-- 查询油弹箱信息 -->
+    <select id="selectOilContainerInfo" resultType="java.util.HashMap">
+        SELECT
+            oil_quantity1,
+            oil_quantity2,
+            oil_quantity3,
+            quantity1,
+            quantuty2 as quantity2,
+            quantity3
+        FROM
+            bj_oil_container
+
+                LIMIT 1
+    </select>
+
+
+    <!-- 动态更新油弹箱信息，只更新传入的非空字段 -->
+    <update id="updateOilContainer" parameterType="java.util.Map">
+        UPDATE bj_oil_container
+        <set>
+            <if test="oil_quantity1 != null">oil_quantity1 = #{oil_quantity1},</if>
+            <if test="oil_quantity2 != null">oil_quantity2 = #{oil_quantity2},</if>
+            <if test="oil_quantity3 != null">oil_quantity3 = #{oil_quantity3},</if>
+            <if test="quantity1 != null">quantity1 = #{quantity1},</if>
+            <if test="quantity2 != null">quantuty2 = #{quantity2},</if>
+            <if test="quantity3 != null">quantity3 = #{quantity3},</if>
+            <!-- 可以添加更新时间字段，记录最后更新时间 -->
+            quantity5 = 0
+        </set>
+        <!-- 根据实际业务添加更新条件，例如更新特定ID的记录 -->
+        WHERE id = 1  <!-- 假设表中只有一条油弹箱信息记录，或根据实际情况修改条件 -->
+    </update>
+
+
+
+
+    <!-- 查询AGV状态列表，返回Map集合 -->
+    <select id="selectAgvStatusByType" resultType="java.util.Map">
+        SELECT
+        agv_no AS "agv_no",  -- 别名映射为JSON中的agv_no
+        remark2 AS "agv_type",  -- 表中remark2映射为agv_type
+        work_status AS "work_status",  -- 保持字段名一致
+        type as "sub_type"
+        FROM
+        bj_agv_status
+        <where>
+            <!-- 动态条件：当传入agv_type时才添加筛选条件 -->
+            <if test="agvType != null and agvType != ''">
+                AND remark2 = #{agvType}
+            </if>
+        </where>
+    </select>
+
+    <!-- 查询每种agv_type的总数 -->
+    <select id="selectAgvTypeCount" resultType="java.util.Map">
+        SELECT
+        remark2 AS "agv_type",
+        COUNT(*) AS "total_count"
+        FROM
+        bj_agv_status
+<!--        <where>-->
+<!--            <if test="agvType != null and agvType != ''">-->
+<!--                AND remark2 = #{agvType}-->
+<!--            </if>-->
+<!--        </where>-->
+        GROUP BY remark2
+    </select>
+
+
+    <!-- 查询总状态信息（无人机状态+AGV状态） -->
+    <select id="selectTotalStatus" parameterType="String" resultType="java.util.Map">
+        SELECT
+            agv_no,
+--             zp_status,
+            COALESCE(zp_status, '0') as zp_status,
+            oil_quantity as oil_status,
+--             task_status,
+
+            COALESCE(task_status, '0') as task_status,
+            work_status,
+
+            current_position,
+            --    quantity_status,
+            agv_status,
+            quantity1,
+            quantity2,
+            quantity3,
+            quantity4,
+            quantity5,
+            task_no as task_message,
+            elec_status,
+           -- COALESCE(elec_status, '电检状态正常') as elec_status,
+            current_position as agv_location,
+            battery_level as equi_status,
+            COALESCE(t.content, b.remark2) as agv_type,
+            b.type as sub_type
+        FROM
+            bj_agv_status b
+                LEFT JOIN bj_translation t ON b.remark2 = t.code
+        WHERE
+            agv_no = #{agvNo}
+    </select>
+
+
+    <select id="selectTargetTaskByAgvNo" resultType="java.util.HashMap">
+        SELECT
+            task_no as task_no,
+            agv_no as agv_no,
+            task_status as task_status,
+            create_time as create_time
+        FROM
+            bj_task
+        WHERE
+    agv_no = #{agvNo}
+
+          and is_deleted = 0
+        ORDER BY
+
+            CASE task_status
+                WHEN 1 THEN 3
+                WHEN 0 THEN 2
+                WHEN 2 THEN 1
+                END DESC,
+            create_time
+            -- DESC  修改为：同状态取最旧 否则会显示085
+            LIMIT 1;
+        -- 优先级：1-执行中(权重3) > 0-未开始(权重2) > 2-已完成(权重1)
+        -- 同状态下取最新创建的任务
+        -- 只取最符合条件的1条
+    </select>
+
+
+    <select id="selectTargetTaskByAgvNoDesc" resultType="java.util.HashMap">
+        SELECT
+            task_no as task_no,
+            agv_no as agv_no,
+            task_status as task_status,
+            create_time as create_time
+        FROM
+            bj_task
+        WHERE
+            agv_no = #{agvNo}
+
+          and is_deleted = 0
+        ORDER BY
+
+            CASE task_status
+                WHEN 1 THEN 3
+                WHEN 0 THEN 2
+                WHEN 2 THEN 1
+                END DESC,
+            create_time Desc
+            -- DESC  修改为：多任务完成时，显示最新任务    不然会显示开门
+            LIMIT 1;
+        -- 优先级：1-执行中(权重3) > 0-未开始(权重2) > 2-已完成(权重1)
+        -- 同状态下取最新创建的任务
+        -- 只取最符合条件的1条
+    </select>
+
+
+    <update id="updateRemark1OfAgv">
+        UPDATE bj_agv_status
+        SET remark1 = #{remark1}
+        WHERE agv_no = #{agvNo}
+    </update>
+
+
+    <!--更新油弹库 油-->
+    <update id="updateOilContainerOilByTask">
+        UPDATE bj_oil_container
+        SET oil_quantity1 =
+                ROUND(oil_quantity1 - #{oilNum}, 2)
+        WHERE id = 1
+        -- 确保结果也保留两位小数（防止运算后精度异常）
+    </update>
+
+    <!--更新油弹库 弹1-->
+    <update id="updateOilContainerD1ByTask">
+        UPDATE bj_oil_container
+        SET quantity1 = quantity1 - #{dNum}
+        WHERE id = 1
+    </update>
+
+    <!--更新油弹库 弹2-->
+    <update id="updateOilContainerD2ByTask">
+        UPDATE bj_oil_container
+        SET quantity2 = quantity2 - #{dNum}
+        WHERE id = 1
+    </update>
+
+    <!--更新油弹库 弹3-->
+    <update id="updateOilContainerD3ByTask">
+        UPDATE bj_oil_container
+        SET quantity3 = quantity3 - #{dNum}
+        WHERE id = 1
+    </update>
+
+
+
+
+
+
+
+
+
+    <resultMap type="BjAgvStatus" id="BjAgvStatusResult">
+        <result property="id"    column="id"    />
+        <result property="agvNo"    column="agv_no"    />
+        <result property="taskNo"    column="task_no"    />
+        <result property="signNo"    column="sign_no"    />
+        <result property="taskStatus"    column="task_status"    />
+        <result property="agvStatus"    column="agv_status"    />
+        <result property="batteryLevel"    column="battery_level"    />
+        <result property="currentPosition"    column="current_position"    />
+        <result property="uavNo"    column="uav_no"    />
+        <result property="uavStatus"    column="uav_status"    />
+        <result property="oilQuantity"    column="oil_quantity"    />
+        <result property="oilType"    column="oil_type"    />
+        <result property="model1"    column="model1"    />
+        <result property="quantity1"    column="quantity1"    />
+        <result property="model2"    column="model2"    />
+        <result property="quantity2"    column="quantity2"    />
+        <result property="model3"    column="model3"    />
+        <result property="quantity3"    column="quantity3"    />
+        <result property="model4"    column="model4"    />
+        <result property="quantity4"    column="quantity4"    />
+        <result property="model5"    column="model5"    />
+        <result property="quantity5"    column="quantity5"    />
+        <result property="containerNo"    column="container_no"    />
+        <result property="containerStatus"    column="container_status"    />
+        <result property="remark1"    column="remark1"    />
+        <result property="remark2"    column="remark2"    />
+    </resultMap>
+
+
+
+    <sql id="selectBjAgvStatusVo">
+        select id, agv_no, task_no, sign_no, task_status, agv_status, battery_level,
+               current_position, uav_no, uav_status, oil_quantity, oil_type, model1,
+               quantity1, model2, quantity2, model3, quantity3, model4, quantity4, model5,
+               quantity5, container_no, container_status, remark1, remark2 from bj_agv_status
+    </sql>
+
+<!--    <select id="selectBjAgvStatusListFeed" parameterType="BjAgvStatus" resultMap="BjAgvStatusResult">-->
+<!--        <include refid="selectBjAgvStatusVo"/>-->
+<!--        <where>-->
+<!--            <if test="agvNo != null  and agvNo != ''"> and agv_no = #{agvNo}</if>-->
+<!--            <if test="taskNo != null  and taskNo != ''"> and task_no = #{taskNo}</if>-->
+<!--            <if test="signNo != null  and signNo != ''"> and sign_no = #{signNo}</if>-->
+<!--            <if test="taskStatus != null  and taskStatus != ''"> and task_status = #{taskStatus}</if>-->
+<!--            <if test="agvStatus != null  and agvStatus != ''"> and agv_status = #{agvStatus}</if>-->
+<!--            <if test="batteryLevel != null  and batteryLevel != ''"> and battery_level = #{batteryLevel}</if>-->
+<!--            <if test="currentPosition != null  and currentPosition != ''"> and current_position = #{currentPosition}</if>-->
+<!--            <if test="uavNo != null  and uavNo != ''"> and uav_no = #{uavNo}</if>-->
+<!--            <if test="uavStatus != null  and uavStatus != ''"> and uav_status = #{uavStatus}</if>-->
+<!--            <if test="oilQuantity != null  and oilQuantity != ''"> and oil_quantity = #{oilQuantity}</if>-->
+<!--            <if test="oilType != null  and oilType != ''"> and oil_type = #{oilType}</if>-->
+<!--            <if test="model1 != null  and model1 != ''"> and model1 = #{model1}</if>-->
+<!--            <if test="quantity1 != null  and quantity1 != ''"> and quantity1 = #{quantity1}</if>-->
+<!--            <if test="model2 != null  and model2 != ''"> and model2 = #{model2}</if>-->
+<!--            <if test="quantity2 != null  and quantity2 != ''"> and quantity2 = #{quantity2}</if>-->
+<!--            <if test="model3 != null  and model3 != ''"> and model3 = #{model3}</if>-->
+<!--            <if test="quantity3 != null  and quantity3 != ''"> and quantity3 = #{quantity3}</if>-->
+<!--            <if test="model4 != null  and model4 != ''"> and model4 = #{model4}</if>-->
+<!--            <if test="quantity4 != null  and quantity4 != ''"> and quantity4 = #{quantity4}</if>-->
+<!--            <if test="model5 != null  and model5 != ''"> and model5 = #{model5}</if>-->
+<!--            <if test="quantity5 != null  and quantity5 != ''"> and quantity5 = #{quantity5}</if>-->
+<!--            <if test="containerNo != null  and containerNo != ''"> and container_no = #{containerNo}</if>-->
+<!--            <if test="containerStatus != null  and containerStatus != ''"> and container_status = #{containerStatus}</if>-->
+<!--            <if test="remark1 != null  and remark1 != ''"> and remark1 = #{remark1}</if>-->
+<!--            <if test="remark2 != null  and remark2 != ''"> and remark2 = #{remark2}</if>-->
+<!--        </where>-->
+<!--    </select>-->
+
+    <select id="selectBjAgvStatusListFeed" parameterType="BjAgvStatus" resultMap="BjAgvStatusResult">
+        select
+        a.id,  -- 明确指定id来自bj_agv_status表（使用别名a）
+        a.agv_no,
+        a.task_no,
+        a.sign_no,
+        a.task_status,
+        a.agv_status,
+        a.battery_level,
+        a.current_position,
+        a.uav_no,
+        a.uav_status,
+        a.oil_quantity,
+        a.oil_type,
+        a.model1,
+        a.quantity1,
+        a.model2,
+        a.quantity2,
+        a.model3,
+        a.quantity3,
+        a.model4,
+        a.quantity4,
+        a.model5,
+        a.quantity5,
+        a.container_no,
+        a.container_status,
+        a.remark1,
+--         a.remark2,
+        t.content AS remark2
+        from
+        bj_agv_status a
+        LEFT JOIN
+        bj_translation t ON a.remark2 = t.code
+        <where>
+            <if test="agvNo != null  and agvNo != ''"> and a.agv_no = #{agvNo}</if>
+            <if test="taskNo != null  and taskNo != ''"> and a.task_no = #{taskNo}</if>
+            <if test="signNo != null  and signNo != ''"> and a.sign_no = #{signNo}</if>
+        </where>
+    </select>
+
+
+    <select id="getNowTaskByAgvNo" resultType="java.util.HashMap">
+        SELECT
+            *
+        FROM bj_task
+        WHERE agv_no = #{agvNo}
+          and is_deleted = 0
+          and task_status =0
+        ORDER BY  create_time
+        LIMIT 1;
+    </select>
+
+    <select id="haveNoDoingArTask" resultType="java.lang.Integer">
+        SELECT
+           count(*)
+        FROM bj_task
+        WHERE agv_no = #{agvNo}
+          and is_deleted = 0
+          and task_status =1
+          -- 增加任务号判断，只包含指定的任务号
+          AND sign_no IN (
+               '001', '015', '020', '025',
+               '030', '035', '040', '045',
+               '050', '065','070',  '085');
+    </select>
+
+    <select id="countCompletedTasks" resultType="java.lang.Integer">
+        SELECT
+           count(*)
+        FROM bj_task
+        WHERE agv_no = #{agvNo}
+          and is_deleted = 0
+          and task_status =2;
+    </select>
+
+
+    <update id="updateBjAgvWithOilStatus" parameterType="BjAgvStatus">
+        update bj_agv_status
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="agvNo != null">agv_no = #{agvNo},</if>
+            <if test="taskNo != null">task_no = #{taskNo},</if>
+            <if test="signNo != null">sign_no = #{signNo},</if>
+            <if test="taskStatus != null">task_status = #{taskStatus},</if>
+            <if test="agvStatus != null">agv_status = #{agvStatus},</if>
+            <if test="batteryLevel != null">battery_level = #{batteryLevel},</if>
+            <if test="currentPosition != null">current_position = #{currentPosition},</if>
+            <if test="uavStatus != null">uav_status = #{uavStatus},</if>
+            <if test="oilQuantity != null">oil_quantity = #{oilQuantity},</if>
+            <if test="oilType != null">oil_type = #{oilType},</if>
+            <if test="model1 != null">model1 = #{model1},</if>
+            <if test="quantity1 != null">quantity1 = #{quantity1},</if>
+            <if test="model2 != null">model2 = #{model2},</if>
+            <if test="quantity2 != null">quantity2 = #{quantity2},</if>
+            <if test="model3 != null">model3 = #{model3},</if>
+            <if test="quantity3 != null">quantity3 = #{quantity3},</if>
+            <if test="model4 != null">model4 = #{model4},</if>
+            <if test="quantity4 != null">quantity4 = #{quantity4},</if>
+            <if test="model5 != null">model5 = #{model5},</if>
+            <if test="quantity5 != null">quantity5 = #{quantity5},</if>
+            <if test="containerNo != null">container_no = #{containerNo},</if>
+            <if test="containerStatus != null">container_status = #{containerStatus},</if>
+            <if test="remark1 != null">remark1 = #{remark1},</if>
+            <if test="remark2 != null">remark2 = #{remark2},</if>
+        </trim>
+        where uav_no = #{uavNo}
+    </update>
+
+
+    <update id="updateAgvTaskState">
+        update bj_task set task_status = #{status} where id = #{taskNo}
+            ORDER BY create_time DESC
+        LIMIT 1;
+    </update>
+
+
+    <update id="updateAgvState">
+
+        UPDATE bj_agv_status
+        SET
+            battery_level = #{energyLevel},
+            current_position = #{positionDb},
+            agv_status = #{agvStatus}
+        WHERE
+            agv_no = #{agvNo} ;
+    </update>
+
+
+    <update id="updateAgvStateAboutDj">
+        UPDATE bj_agv_status
+        SET
+            elec_status = #{elecStatus}
+        WHERE
+            agv_no = #{agvNo} ;
+    </update>
+
+    <update id="initWrjStatus">
+        UPDATE bj_agv_status
+        SET
+            quantity1 = 0,
+            quantity2 = 0,
+            quantity3 = 0,
+            quantity4 = 0,
+            quantity5 = 0,
+            work_status = 0,
+            task_status = 0,
+            zp_status = 0
+        where
+            agv_no = #{agvNo};
+    </update>
+
+
+    <update id="updateWrjDNum1ByTask">
+        UPDATE bj_agv_status
+        SET
+
+          quantity1 = #{dNum}
+        WHERE
+            agv_no = #{wrjNo}
+          AND quantity1 IS NOT NULL;
+    </update>
+
+    <update id="updateWrjDNum2ByTask">
+        UPDATE bj_agv_status
+        SET
+
+            quantity2 = #{dNum}
+        WHERE
+            agv_no = #{wrjNo}
+          AND quantity2 IS NOT NULL;
+    </update>
+
+    <update id="updateWrjDNum3ByTask">
+        UPDATE bj_agv_status
+        SET
+
+            quantity3 = #{dNum}
+        WHERE
+            agv_no = #{wrjNo}
+          AND quantity3 IS NOT NULL;
+    </update>
+
+
+
+    <update id="updateWrjOilByTask">
+        UPDATE bj_agv_status
+        SET
+            oil_quantity = LEAST(oil_quantity + #{oilNum}, 100)  -- 叠加后不超过100（上限可自定义）
+        WHERE
+            agv_no = #{wrjNo}
+          AND oil_quantity IS NOT NULL;  -- 额外防护：避免字段为NULL时叠加出错
+    </update>
+
+    <update id="updateZpStatus">
+        UPDATE bj_agv_status
+        SET
+            zp_status = #{zpstate}
+        WHERE
+            agv_no = #{agvNo}
+    </update>
+
+    <update id="updateTaskStatus">
+        UPDATE bj_agv_status
+        SET
+            task_status = #{number}
+        WHERE
+            agv_no = #{agv}
+    </update>
+
+    <update id="updateWorkStatus">
+        UPDATE bj_agv_status
+        SET
+            work_status = #{number}
+        WHERE
+            agv_no = #{agv}
+    </update>
+
+
+</mapper>
+<!--<if test="true"> and task_status != 2 </if>-->
