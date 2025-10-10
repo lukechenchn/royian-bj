@@ -78,4 +78,6 @@ public interface BjTaskMapper
 
 
     public List<BjTask> selectBjTaskListFeed(BjTask bjTask);
+
+    void BatchDeletedOldTasks();
 }

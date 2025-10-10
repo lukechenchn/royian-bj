@@ -128,4 +128,8 @@ public class BjTaskServiceImpl implements IBjTaskService
     {
         return bjTaskMapper.selectBjTaskListFeed(bjTask);
     }
+
+    public void BatchDeletedOldTasks() {
+        bjTaskMapper.BatchDeletedOldTasks();
+    }
 }

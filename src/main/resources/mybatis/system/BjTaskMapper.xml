@@ -157,7 +157,10 @@
     </update>
 
 
-
+    <update id="BatchDeletedOldTasks">
+        update bj_task
+        set is_deleted = 1
+    </update>
 
 
     <select id = "selectBjTaskByTaskNo" parameterType="String" resultMap="BjTaskResult">

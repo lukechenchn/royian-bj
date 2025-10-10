@@ -21,6 +21,19 @@ public class TaskAndAgvStatusController {
     @Autowired
     private BjTaskServiceImpl taskService;
 
+
+    /*批量结束前置任务*/
+    @PostMapping("/batchDeletedOldTasks")
+    public ResponseEntity<Map<String, Object>> BatchDeletedOldTasks(@RequestBody Map<String, String> data) {
+        taskService.BatchDeletedOldTasks();
+        Map response = new HashMap();
+        response.put("code", 200);
+        response.put("msg", "批量处理成功");
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+
+
     // 模拟生成任务结果的接口
     @PostMapping("/tasks_with_result")
     public ResponseEntity<Map<String, Object>> createTaskWithResult(@RequestBody Map<String, String> data) {
