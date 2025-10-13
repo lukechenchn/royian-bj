@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>通信测试</title>
+    <!-- 将layui.css改为在线引用 -->
+    <link rel="stylesheet" href="https://www.layuicdn.com/layui/css/layui.css" media="all">
+</head>
+<body>
+<div class="layui-container" style="padding: 20px;">
+    <fieldset class="layui-elem-field layui-field-title">
+        <legend>AGV任务分配测试</legend>
+    </fieldset>
+
+    <form class="layui-form" action="">
+        <div class="layui-form-item">
+            <label class="layui-form-label">任务ID</label>
+            <div class="layui-input-inline">
+                <input type="text" name="missionUid" value="01-005" placeholder="请输入任务ID"
+                       autocomplete="off" class="layui-input" lay-verify="required">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">目标工位</label>
+            <div class="layui-input-inline">
+                <input type="text" name="stationName" value="L1" placeholder="请输入目标工位名称"
+                       autocomplete="off" class="layui-input" lay-verify="required">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">指定车辆</label>
+            <div class="layui-input-inline">
+                <select name="agvNum" lay-verify="required">
+                    <option value="0">不指定</option>
+                    <option value="1">AGV 1</option>
+                    <option value="2">AGV 2</option>
+                    <option value="3">AGV 3</option>
+                    <option value="4">AGV 4</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">是否调平</label>
+            <div class="layui-input-inline">
+                <input type="checkbox" name="balance" lay-skin="switch" lay-text="是|否" checked>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" lay-submit lay-filter="testApi">测试接口</button>
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+        </div>
+    </form>
+
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+        <legend>测试结果</legend>
+    </fieldset>
+
+    <div id="resultPanel" style="display: none;">
+        <div class="layui-card">
+            <div class="layui-card-header">响应状态</div>
+            <div class="layui-card-body">
+                <span id="statusText"></span>
+            </div>
+        </div>
+
+        <div class="layui-card">
+            <div class="layui-card-header">响应内容</div>
+            <div class="layui-card-body">
+                <pre class="layui-code" id="responseContent"></pre>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 将layui.js改为在线引用 -->
+<script src="https://www.layuicdn.com/layui/layui.js" charset="utf-8"></script>
+<script>
+    layui.use(function(){
+        var form = layui.form;
+        var $ = layui.jquery;
+        var layer = layui.layer;
+
+        // 监听表单提交
+        form.on('submit(testApi)', function(data){
+            var loadingIndex = layer.load(1, {shade: [0.1,'#fff']});
+
+            // 调用测试接口
+            $.get('/api/newTaskDistribution', function(res) {
+                layer.close(loadingIndex);
+
+                // 显示结果面板
+                $('#resultPanel').show();
+
+                // 设置状态文本
+                $('#statusText').text('请求成功');
+                $('#statusText').css('color', 'green');
+
+                // 设置响应内容
+                $('#responseContent').text(JSON.stringify(res, null, 2));
+                layui.code({elem: '#responseContent'});
+
+                layer.msg('接口调用成功', {icon: 1});
+            }).fail(function(xhr, status, error) {
+                layer.close(loadingIndex);
+
+                // 显示结果面板
+                $('#resultPanel').show();
+
+                // 设置状态文本
+                $('#statusText').text('请求失败: ' + error);
+                $('#statusText').css('color', 'red');
+
+                // 设置响应内容
+                $('#responseContent').text('Status: ' + xhr.status + '\nStatus Text: ' + xhr.statusText);
+                layui.code({elem: '#responseContent'});
+
+                layer.msg('接口调用失败', {icon: 2});
+            });
+
+            return false; // 阻止表单默认提交
+        });
+    });
+</script>
+</body>
+</html>

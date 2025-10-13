@@ -244,6 +244,20 @@
             <version>5.8.38</version>
         </dependency>
 
+        <!--HSL-->
+        <dependency>
+            <groupId>io.github.dathlin</groupId>
+            <artifactId>HslCommunication</artifactId>
+            <version>3.9.1</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>com.github.xingshuangs</groupId>
+            <artifactId>iot-communication</artifactId>
+            <version>1.5.5</version>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -256,7 +270,7 @@
                     <fork>true</fork> <!-- 如果没有该配置，devtools不会生效 -->
                 </configuration>
             </plugin>
-            <!-- YUI Compressor (CSS/JS压缩) 
+            <!-- YUI Compressor (CSS/JS压缩)
             <plugin>
                 <groupId>net.alchim31.maven</groupId>
                 <artifactId>yuicompressor-maven-plugin</artifactId>
@@ -293,6 +307,7 @@
     </build>
 
     <repositories>
+        <!-- 现有的阿里云仓库 -->
         <repository>
             <id>public</id>
             <name>aliyun nexus</name>
@@ -301,9 +316,29 @@
                 <enabled>true</enabled>
             </releases>
         </repository>
+
+        <!-- 新增的 Maven 中央仓库 -->
+        <repository>
+            <id>central</id>
+            <name>Maven Central Repository</name>
+            <url>https://repo1.maven.org/maven2</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+
+        <!-- JitPack 仓库 -->
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
     </repositories>
 
     <pluginRepositories>
+        <!-- 现有的阿里云插件仓库 -->
         <pluginRepository>
             <id>public</id>
             <name>aliyun nexus</name>
@@ -315,6 +350,43 @@
                 <enabled>false</enabled>
             </snapshots>
         </pluginRepository>
+
+        <!-- 新增的中央插件仓库 -->
+        <pluginRepository>
+            <id>central</id>
+            <name>Maven Central Plugin Repository</name>
+            <url>https://repo1.maven.org/maven2</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </pluginRepository>
     </pluginRepositories>
+<!--    <repositories>-->
+<!--        <repository>-->
+<!--            <id>public</id>-->
+<!--            <name>aliyun nexus</name>-->
+<!--            <url>https://maven.aliyun.com/repository/public</url>-->
+<!--            <releases>-->
+<!--                <enabled>true</enabled>-->
+<!--            </releases>-->
+<!--        </repository>-->
+<!--    </repositories>-->
+
+<!--    <pluginRepositories>-->
+<!--        <pluginRepository>-->
+<!--            <id>public</id>-->
+<!--            <name>aliyun nexus</name>-->
+<!--            <url>https://maven.aliyun.com/repository/public</url>-->
+<!--            <releases>-->
+<!--                <enabled>true</enabled>-->
+<!--            </releases>-->
+<!--            <snapshots>-->
+<!--                <enabled>false</enabled>-->
+<!--            </snapshots>-->
+<!--        </pluginRepository>-->
+<!--    </pluginRepositories>-->
 
 </project>
