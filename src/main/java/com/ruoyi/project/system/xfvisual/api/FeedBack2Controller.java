@@ -178,7 +178,9 @@ public class FeedBack2Controller {
 
 
 
-    /**写个接口，清空所有任务*/
+    /**写个接口，清空所有任务
+     * 在新疆用我的电脑写的,这个接口用不上.
+     * */
     @GetMapping("/deleteTasks")
     public Map deleteTasks() {
     taskService.deleteTasks();
