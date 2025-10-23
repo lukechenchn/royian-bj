@@ -4,7 +4,7 @@ import com.github.xingshuangs.iot.protocol.s7.enums.EPlcType;
 import com.github.xingshuangs.iot.protocol.s7.service.S7PLC;
 import com.ruoyi.project.system.xfvisual.api.plc.HexConverter;
 
-public class IotTest {
+public class IotTestMain {
     public static void main(String[] args) {
         // 长连接方式，即持久化为true
         S7PLC s7PLC = new S7PLC(EPlcType.S1200, "127.0.0.1");

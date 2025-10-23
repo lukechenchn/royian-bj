@@ -1,10 +1,13 @@
+
+<!--服务器账号密码mk   1-->
+
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
     <title>通信测试</title>
-    <!-- 将layui.css改为在线引用 -->
-    <link rel="stylesheet" href="https://www.layuicdn.com/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="../layui-v2.12.1/layui/css/layui.css" media="all">
+    <script src="../layui-v2.12.1/layui/layui.js" charset="utf-8"></script>
 </head>
 <body>
 <div class="layui-container" style="padding: 20px;">
@@ -45,7 +48,7 @@
         <div class="layui-form-item">
             <label class="layui-form-label">是否调平</label>
             <div class="layui-input-inline">
-                <input type="checkbox" name="balance" lay-skin="switch" lay-text="是|否" checked>
+                <input type="checkbox" name="balance" lay-skin="switch" lay-text="1|0" checked>
             </div>
         </div>
 
@@ -78,8 +81,7 @@
     </div>
 </div>
 
-<!-- 将layui.js改为在线引用 -->
-<script src="https://www.layuicdn.com/layui/layui.js" charset="utf-8"></script>
+
 <script>
     layui.use(function(){
         var form = layui.form;

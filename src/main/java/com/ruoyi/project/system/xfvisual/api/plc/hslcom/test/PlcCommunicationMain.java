@@ -8,7 +8,7 @@ import HslCommunication.Profinet.Siemens.SiemensPLCS;
 import HslCommunication.Profinet.Siemens.SiemensS7Net;
 import com.ruoyi.project.system.xfvisual.api.plc.hslcom.PlcUtil;
 
-public class PlcCommunicationExample {
+public class PlcCommunicationMain {
     public static void main(String[] args) {
         // 使用工具类连接PLC
         SiemensS7Net siemensS7Net = PlcUtil.connectToPlc(SiemensPLCS.S1500, "192.168.0.1");

@@ -1,6 +1,5 @@
 package com.ruoyi.project.system.xfvisual.api.plc.hslcom;
 
-
 import HslCommunication.Core.Types.OperateResult;
 import HslCommunication.Core.Types.OperateResultExOne;
 import HslCommunication.Profinet.Siemens.SiemensPLCS;
