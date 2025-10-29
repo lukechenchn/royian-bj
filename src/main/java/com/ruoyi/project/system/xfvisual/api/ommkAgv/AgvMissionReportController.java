@@ -110,7 +110,7 @@ public class AgvMissionReportController {
 
     @GetMapping("/newTaskDistribution")
     public Map<String, Object> newTaskDistribution() {
-        String url = "http://192.168.2.2:8086/api/HD/newTaskDistribution";
+        String url = "http://192.168.1.98:8086/api/HD/newTaskDistribution";
         Map paramMap = new HashMap<>();
 //        {
 //            "MissionUid": "xxxxxxx",     //任务ID

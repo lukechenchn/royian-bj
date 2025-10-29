@@ -1,4 +1,3 @@
-
 <!--服务器账号密码mk   1-->
 
 <!DOCTYPE html>
@@ -83,17 +82,17 @@
 
 
 <script>
-    layui.use(function(){
+    layui.use(function () {
         var form = layui.form;
         var $ = layui.jquery;
         var layer = layui.layer;
 
         // 监听表单提交
-        form.on('submit(testApi)', function(data){
-            var loadingIndex = layer.load(1, {shade: [0.1,'#fff']});
+        form.on('submit(testApi)', function (data) {
+            var loadingIndex = layer.load(1, {shade: [0.1, '#fff']});
 
             // 调用测试接口
-            $.get('/api/newTaskDistribution', function(res) {
+            $.get('/api/newTaskDistribution', function (res) {
                 layer.close(loadingIndex);
 
                 // 显示结果面板
@@ -108,7 +107,7 @@
                 layui.code({elem: '#responseContent'});
 
                 layer.msg('接口调用成功', {icon: 1});
-            }).fail(function(xhr, status, error) {
+            }).fail(function (xhr, status, error) {
                 layer.close(loadingIndex);
 
                 // 显示结果面板

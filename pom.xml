@@ -270,6 +270,12 @@
             <version>1.5.5</version>
         </dependency>
 
+<!--        串口通信库-->
+        <dependency>
+            <groupId>com.fazecast</groupId>
+            <artifactId>jSerialComm</artifactId>
+            <version>2.10.4</version>
+        </dependency>
 
 
     </dependencies>

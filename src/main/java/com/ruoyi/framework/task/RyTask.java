@@ -31,6 +31,37 @@ public class RyTask
     @Autowired
     private BjTaskMapper bjTaskMapper;
 
+
+    //1#
+    //起始点
+    public static final String P1 = "L5";
+    //出库
+    public static final String CHUKU1 = "L3";
+    //待命区
+    public static final String DAIMINGQU1 = "L1";
+    //弹射区
+    public static final String TANSHEQU1 = "L2";
+
+
+
+    //3#
+    public static final String P3 = "L6";
+    //出库
+    public static final String CHUKU3 = "L7";
+    //待命区
+    public static final String DAIMINGQU3 = "L4";
+    //弹射区
+    public static final String TANSHEQU3 = "L2";
+
+
+
+
+    // 或者通过配置文件读取
+    // @Value("${station.name.l5}")
+    // private String stationNameL5;
+
+
+
     public void ryMultipleParams(String s, Boolean b, Long l, Double d, Integer i)
     {
         System.out.println(StringUtils.format("执行多参方法： 字符串类型{}，布尔类型{}，长整型{}，浮点型{}，整形{}", s, b, l, d, i));
@@ -113,7 +144,7 @@ public class RyTask
     private ApiTaskServiceImpl taskService;
     public void agvStatusQuery()
     {
-        String url = "http://192.168.2.2:8086/api/HD/QueryAGVsystem";
+        String url = "http://192.168.1.98:8086/api/HD/QueryAGVsystem";
         JSONObject paramMap = new JSONObject();
         paramMap.put("Task", "AGVInfo");
 
@@ -194,7 +225,7 @@ public class RyTask
     /**定时查询当前需要执行的任务，如果不是agv执行的任务序列，则不用处理*/
     public void agvTaskSend() {
         //循环13个agv号
-        String[] agvs = {"01"};
+        String[] agvs = {"01","02","03"};
         for (String agv : agvs) {
             //查询当前需要执行的任务
             Map<String, Object> taskMap = taskService.getNowTaskByAgvNo(agv);
@@ -292,60 +323,131 @@ public class RyTask
 //            √AGV任务状态 task_status：
 //            0待命中、1任务执行中
 
+
+
+            /**下述所有的L0、L1、L2、L3点位都要梳理，使用全局变量*/
             String signNo = nowTask.getSignNo();
             String taskId = nowTask.getId()+"";
             if(nowTask.getSignNo().equals("002") || nowTask.getSignNo().equals("003") ||
                     nowTask.getSignNo().equals("005") || nowTask.getSignNo().equals("010")
                     || nowTask.getSignNo().equals("055") || nowTask.getSignNo().equals("060")
                     || nowTask.getSignNo().equals("075") || nowTask.getSignNo().equals("080")){
-                String url = "http://192.168.2.2:8086/api/HD/NewTaskDistribution";
+                String url = "http://192.168.1.98:8086/api/HD/NewTaskDistribution";
                 JSONObject paramMap = new JSONObject();
                 paramMap.put("MissionUid", taskId);
+                String p = null;
+                String chuku = null;
+                String daimingqu = null;
+                String tanshequ = null;
+                int balance = 0;
                 //002 判断agv状态
                 if(signNo.equals("002")){
                     //最快的思路  执行一个原地不动的指令，后续改为agv状态自检
-                    paramMap.put("StationName", "L5");
-                    paramMap.put("Balance", false);
+                    if(agv.equals("01")){
+                        p = P1;
+
+                    }
+                    if(agv.equals("03")){
+                        p = P3;
+                    }
+                    paramMap.put("StationName", p);
+//                    paramMap.put("StationName", "L5");
+//                    paramMap.put("Balance", false);
+                    paramMap.put("Balance", balance);
 
                     //更新agv状态为任务执行中1  从002任务开始，agv就一直在执行任务了
                     taskService.updateTaskStatus(agv, "1");
                 }
-                Console.log(11);
+
                 if(signNo.equals("003")){
-                    paramMap.put("StationName", "L0");
-                    paramMap.put("Balance", false);
+                    if(agv.equals("01")){
+                        p = P1;
+                    }
+                    if(agv.equals("03")){
+                        p = P3;
+                    }
+                    paramMap.put("StationName", p);
+//                    paramMap.put("StationName", "L0");
+//                    paramMap.put("Balance", false);
+                    paramMap.put("Balance", balance);
 
                     //更新wrj工作状态为整备中
                     taskService.updateWorkStatus(agv, "1");
                 }
 
                 if(signNo.equals("005")){
-                    paramMap.put("StationName", "L1");
-                    paramMap.put("Balance", false);
+                    if(agv.equals("01")){
+                        chuku = CHUKU1;
+                    }
+                    if(agv.equals("03")){
+                        chuku = CHUKU3;
+                    }
+                    paramMap.put("StationName", chuku);
+//                    paramMap.put("StationName", "L1");
+//                    paramMap.put("Balance", false);
+                    paramMap.put("Balance", balance);
                 }
                 if(signNo.equals("010")){
-                    paramMap.put("StationName", "L2");
-                    paramMap.put("Balance", true);
+                    if(agv.equals("01")){
+                        daimingqu = DAIMINGQU1;
+                    }
+                    if(agv.equals("03")){
+                        daimingqu = DAIMINGQU3;
+                    }
+                    paramMap.put("StationName", daimingqu);
+//                    paramMap.put("StationName", "L2");
+//                    paramMap.put("Balance", true);
+                    paramMap.put("Balance", balance);
                 }
                 if(signNo.equals("055")){
-                    paramMap.put("StationName", "L3");
-                    paramMap.put("Balance", false);
-
+                    if(agv.equals("01")){
+                        tanshequ = TANSHEQU1;
+                    }
+                    if(agv.equals("03")){
+                        tanshequ = TANSHEQU3;
+                    }
+                    paramMap.put("StationName", tanshequ);
+//                    paramMap.put("StationName", "L3");
+//                    paramMap.put("Balance", false);
+                    paramMap.put("Balance", balance);
                     //更新wrj工作状态为待飞
                     taskService.updateWorkStatus(agv, "2");
                 }
                 if(signNo.equals("060")){
-                    paramMap.put("StationName", "L4");
-                    paramMap.put("Balance", true);
+                    if(agv.equals("01")){
+                        tanshequ = TANSHEQU1;
+                    }
+                    if(agv.equals("03")){
+                        tanshequ = TANSHEQU3;
+                    }
+                    paramMap.put("StationName", tanshequ);
+//                    paramMap.put("StationName", "L4");
+//                    paramMap.put("Balance", true);
+                    paramMap.put("Balance", balance);
                 }
 
                 if(signNo.equals("075")){
-                    paramMap.put("StationName", "L0");
-                    paramMap.put("Balance", false);
+                    if(agv.equals("01")){
+                        chuku = CHUKU1;
+                    }
+                    if(agv.equals("03")){
+                        chuku = CHUKU3;
+                    }
+                    paramMap.put("StationName", chuku);
+//                    paramMap.put("StationName", "L0");
+//                    paramMap.put("Balance", false);
+                    paramMap.put("Balance", balance);
                 }
                 if(signNo.equals("080")){
-                    paramMap.put("StationName", "L5");
-                    paramMap.put("Balance", false);
+                    if(agv.equals("01")){
+                        p = P1;
+                    }
+                    if(agv.equals("03")){
+                        p = P3;
+                    }
+                    paramMap.put("StationName", p);
+//                    paramMap.put("Balance", false);
+                    paramMap.put("Balance", balance);
                 }
                 paramMap.put("AGVNum", 1);
                 Console.log(paramMap);
