@@ -6,6 +6,9 @@ spring:
         druid:
             # 主库数据源
             master:
+                url: jdbc:mysql://localhost:3306/royian-bj?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+                username: root
+                password: 123456
 #                url: jdbc:mysql://127.0.0.1:3306/royian-bj?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
 #                username: royian-bj
 #                password: fG7aFGYFkGm3Dfcb
@@ -14,11 +17,11 @@ spring:
 #                username: royian-bj
 #                password: fG7aFGYFkGm3Dfcb
 
-                url: jdbc:mysql://110.40.229.244:3306/royian-bj?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
-                username: root
-                password: WCpGLUE0UD3bZsFH2GpvCzTAl12qW1qlv3tS+5n9BAAlG1wKj4ehuWFp2FFc09w7PP2jPEOBhYbC6owY2DPhvw==
-                filters: config
-                connection-properties: config.decrypt=true;config.decrypt.key=MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBANOWpJROLdGXpVcGSn0DD7PmRzETZWEjWvtgeaz8LBA7igff+byxB9pXhkzrP0JexYNk6+iSyO0lpwPTOaCp6fcCAwEAAQ==
+#                url: jdbc:mysql://110.40.229.244:3306/royian-bj?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+#                username: root
+#                password: WCpGLUE0UD3bZsFH2GpvCzTAl12qW1qlv3tS+5n9BAAlG1wKj4ehuWFp2FFc09w7PP2jPEOBhYbC6owY2DPhvw==
+#                filters: config
+#                connection-properties: config.decrypt=true;config.decrypt.key=MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBANOWpJROLdGXpVcGSn0DD7PmRzETZWEjWvtgeaz8LBA7igff+byxB9pXhkzrP0JexYNk6+iSyO0lpwPTOaCp6fcCAwEAAQ==
             # 从库数据源
             slave:
                 # 从数据源开关/默认关闭

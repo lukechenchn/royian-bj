@@ -137,7 +137,7 @@ public class AgvMissionReportController {
     /**
      * AGV任务状态上报接口
      */
-    @PostMapping("/missionState")
+    @PostMapping("/MissionState")
     public ApiResponse reportMissionState(@RequestBody String jsonString) {
         try {
             System.out.println("接收到的JSON数据：" + jsonString);
